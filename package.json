@@ -1,0 +1,17 @@
+{
+  "name": "utm-link-builder",
+  "version": "1.0.0",
+  "description": "UTM 追蹤連結產生器 — 前台填寫，送出後寫入 SQLite 資料庫存檔",
+  "type": "module",
+  "main": "server.js",
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "better-sqlite3": "^11.8.0",
+    "express": "^4.21.2"
+  }
+}

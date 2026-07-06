@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>UTM 連結產生器</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <h1>UTM 連結產生器</h1>
+    <p class="subtitle">填寫後送出，連結會寫入資料庫永久存檔</p>
+  </header>
+
+  <main class="container">
+    <!-- 左：表單 -->
+    <section class="card form-card">
+      <h2>新增追蹤連結</h2>
+      <form id="utm-form" autocomplete="off">
+        <label>
+          落地頁網址 <span class="req">*</span>
+          <input type="url" name="landingUrl" id="landingUrl"
+                 placeholder="https://example.com/promo" required />
+        </label>
+
+        <div class="row">
+          <label>
+            來源 utm_source <span class="req">*</span>
+            <input list="source-list" name="source" id="source" placeholder="fb / google / line" required />
+            <datalist id="source-list">
+              <option value="fb">Facebook</option>
+              <option value="ig">Instagram</option>
+              <option value="google">Google Ads</option>
+              <option value="line">LINE Ads</option>
+              <option value="tiktok">TikTok</option>
+              <option value="email">EDM / 電子報</option>
+              <option value="threads">Threads</option>
+            </datalist>
+          </label>
+          <label>
+            媒介 utm_medium <span class="req">*</span>
+            <input list="medium-list" name="medium" id="medium" placeholder="cpc / social / email" required />
+            <datalist id="medium-list">
+              <option value="cpc">付費點擊</option>
+              <option value="social">社群廣告</option>
+              <option value="display">多媒體</option>
+              <option value="video">影音廣告</option>
+              <option value="email">電子郵件</option>
+            </datalist>
+          </label>
+        </div>
+
+        <label>
+          活動代號 utm_campaign <span class="req">*</span>
+          <input name="campaign" id="campaign" placeholder="2026q1_spring_sale" required />
+          <small>建議格式：年月_主題_通路，例如 202603_spring_fb</small>
+        </label>
+
+        <div class="row">
+          <label>
+            素材 utm_content
+            <input name="content" id="content" placeholder="banner_a" />
+          </label>
+          <label>
+            關鍵字 utm_term
+            <input name="term" id="term" placeholder="running_shoes" />
+          </label>
+        </div>
+
+        <label>
+          備註
+          <input name="note" id="note" placeholder="這批連結的用途說明" />
+        </label>
+
+        <div class="preview-box">
+          <span class="preview-label">完整網址預覽</span>
+          <code id="preview">—</code>
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary" id="submit-btn">送出並存檔</button>
+        </div>
+        <p class="error-msg" id="error-msg" hidden></p>
+      </form>
+    </section>
+
+    <!-- 右：已存檔列表 -->
+    <section class="card list-card">
+      <div class="list-head">
+        <h2>已存檔連結 <span class="count" id="count">0</span></h2>
+        <button class="btn btn-ghost" id="refresh-btn" title="重新整理">↻</button>
+      </div>
+      <div id="list" class="list"></div>
+      <div class="load-more-wrap">
+        <button class="btn btn-ghost" id="load-more" hidden>載入更多</button>
+      </div>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>

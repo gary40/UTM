@@ -11,6 +11,13 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
+
+// 預設語系：繁體中文（台灣）
+app.use((req, res, next) => {
+  res.set('Content-Language', 'zh-Hant-TW');
+  next();
+});
+
 app.use(express.static(path.join(__dirname, 'public')));
 
 // 列表（分頁）：GET /api/links?limit=100&offset=0

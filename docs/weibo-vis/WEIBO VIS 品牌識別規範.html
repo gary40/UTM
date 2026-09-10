@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>WEIBO 威柏科技 VIS</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700;900&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    color-scheme: light;
+    --blue: #5252FF;        /* WEIBO Blue 500 — Logo 藍在白底的實際呈現色 */
+    --blue-600: #4242E6;
+    --blue-700: #3333C2;
+    --blue-200: #A8A8FF;
+    --blue-100: #D6D6FF;
+    --blue-50: #EEEEFF;
+    --navy: #1E2A5E;        /* WEIBO Navy — 深底、封面、印刷 */
+    --logo-gray: #979797;   /* Logo 灰在白底的實際呈現色 */
+    --gray-50: #F4F4F8;
+    --gray-200: #E4E4EA;
+    --gray-400: #999999;
+    --gray-600: #666666;
+    --gray-900: #333333;
+    --teal: #4FA8C2;        /* 現行名片用色（待定） */
+    --ok: #1E9E6A; --warn: #E8A317; --bad: #D93A1F; --info: #3C62EF;
+    --font: 'Inter','Noto Sans TC','PingFang TC','Microsoft JhengHei',system-ui,sans-serif;
+  }
+  *, *::before, *::after { box-sizing: border-box; }
+  html { background: #fff; }
+  body { margin: 0; font-family: var(--font); color: var(--gray-900); background: #fff; font-size: 15px; line-height: 1.7; -webkit-font-smoothing: antialiased; }
+  code { font: 500 .92em/1 var(--font); background: var(--gray-50); padding: 1px 6px; border-radius: 4px; color: var(--blue-700); }
+
+  /* ── Cover ── */
+  .cover { background: linear-gradient(150deg, #5252FF 0%, #3333C2 45%, #1E2A5E 100%); min-height: 380px; display: flex; flex-direction: column; justify-content: flex-end; padding: 64px 80px 56px; position: relative; overflow: hidden; }
+  .cover-glow { position: absolute; inset: 0; background: radial-gradient(60% 60% at 80% 20%, rgba(255,255,255,.16), transparent 70%); }
+  /* 橫式 Logo PNG 為 900×900 正方畫布、圖形只在中央帶，用 object-fit: cover 裁掉上下透明區 */
+  .cover img { width: 292px; height: 64px; object-fit: cover; object-position: center; margin-bottom: 36px; position: relative; }
+  .cover h1 { font: 700 54px/1.1 var(--font); color: #fff; margin: 0 0 14px; letter-spacing: -.02em; position: relative; text-wrap: balance; }
+  .cover p { font: 400 18px/1.5 var(--font); color: rgba(255,255,255,.82); margin: 0; position: relative; }
+  .cover-meta { margin-top: 32px; display: flex; gap: 32px; flex-wrap: wrap; color: rgba(255,255,255,.6); font-size: 13px; position: relative; }
+  .cover-meta b { color: rgba(255,255,255,.9); }
+  .draft-badge { position: absolute; top: 28px; right: 32px; background: rgba(255,255,255,.14); border: 1px solid rgba(255,255,255,.4); color: #fff; font: 700 12px/1 var(--font); letter-spacing: .12em; padding: 8px 12px; border-radius: 6px; }
+
+  /* ── Layout ── */
+  .wrap { max-width: 900px; margin: 0 auto; padding: 0 48px 120px; }
+  .toc { background: var(--gray-50); border-radius: 16px; padding: 32px 36px; margin: 52px 0; }
+  .toc h3 { font: 700 13px/1 var(--font); letter-spacing: .12em; color: var(--blue); margin: 0 0 18px; text-transform: uppercase; }
+  .toc ol { margin: 0; padding-left: 20px; columns: 2; gap: 32px; }
+  .toc li { padding: 3px 0; font-size: 14px; color: var(--gray-600); }
+  .toc a { color: inherit; text-decoration: none; }
+  .toc a:hover { color: var(--blue); }
+
+  .section { margin-top: 72px; }
+  .section-label { font: 700 12px/1 var(--font); letter-spacing: .18em; color: var(--blue); text-transform: uppercase; margin-bottom: 8px; }
+  h2 { font: 700 34px/1.15 var(--font); color: var(--gray-900); margin: 0 0 28px; letter-spacing: -.01em; text-wrap: balance; }
+  h3 { font: 700 19px/1.3 var(--font); color: var(--gray-900); margin: 32px 0 10px; }
+  p { margin: 0 0 14px; }
+  .rule { border: none; border-top: 1px solid var(--gray-200); margin: 48px 0 0; }
+
+  .callout { background: var(--blue-50); border-left: 3px solid var(--blue); border-radius: 0 12px 12px 0; padding: 18px 22px; margin: 20px 0; font-size: 14.5px; }
+  .callout b { color: var(--blue-700); }
+  .callout.todo { background: #FFF6E0; border-left-color: var(--warn); }
+  .callout.todo b { color: #8A5A00; }
+  .callout.danger { background: #FDE9E4; border-left-color: var(--bad); }
+  .callout.danger b { color: #A82A14; }
+  .tag { display: inline-block; font: 700 11px/1 var(--font); letter-spacing: .08em; padding: 5px 8px; border-radius: 4px; vertical-align: middle; margin-left: 8px; }
+  .tag.todo { background: #FFF6E0; color: #8A5A00; }
+  .tag.ok { background: #E3F6EE; color: #146B47; }
+
+  .swatches { display: flex; gap: 10px; flex-wrap: wrap; margin: 16px 0; }
+  .sw { display: flex; flex-direction: column; gap: 6px; flex: 1; min-width: 84px; max-width: 120px; }
+  .sw-chip { height: 64px; border-radius: 10px; border: 1px solid rgba(51,51,51,.08); }
+  .sw-name { font: 700 12px/1.2 var(--font); color: var(--gray-900); }
+  .sw-hex { font: 400 11px/1 var(--font); color: var(--gray-400); font-variant-numeric: tabular-nums; }
+  .sw-zh { font: 400 11px/1.3 var(--font); color: var(--gray-600); }
+
+  .ratio-bar { display: flex; height: 52px; border-radius: 10px; overflow: hidden; margin: 16px 0 8px; }
+  .ratio-bar span { display: flex; align-items: center; justify-content: center; font: 700 13px/1 var(--font); }
+
+  .type-row { display: grid; grid-template-columns: 160px 1fr; gap: 12px; align-items: baseline; padding: 12px 0; border-bottom: 1px solid var(--gray-200); }
+  .type-row:last-child { border-bottom: none; }
+  .type-meta { font-size: 12px; color: var(--gray-400); }
+  .type-meta b { display: block; color: var(--gray-600); font-size: 13px; }
+
+  .space-rows { display: flex; flex-direction: column; gap: 8px; margin: 16px 0; }
+  .space-row { display: grid; grid-template-columns: 56px 70px 1fr 180px; align-items: center; gap: 12px; }
+  .space-tok { font: 700 13px/1 var(--font); }
+  .space-px { font: 400 12px/1 var(--font); color: var(--gray-400); }
+  .space-bar { height: 12px; background: var(--blue); border-radius: 2px; max-width: 100%; }
+  .space-use { font: 400 12px/1.4 var(--font); color: var(--gray-600); }
+
+  .radii-row { display: flex; gap: 20px; flex-wrap: wrap; margin: 16px 0; }
+  .radius-item { text-align: center; }
+  .radius-box { width: 80px; height: 56px; background: var(--blue-50); border: 2px solid var(--blue); }
+  .radius-name { font: 700 12px/1 var(--font); margin-top: 8px; }
+  .radius-val { font: 400 11px/1 var(--font); color: var(--gray-400); margin-top: 4px; }
+
+  .logo-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin: 16px 0; }
+  .logo-row.two { grid-template-columns: repeat(2, 1fr); }
+  .logo-tile { border-radius: 14px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; padding: 24px 16px; border: 1px solid var(--gray-200); min-height: 160px; }
+  .logo-tile img { max-width: 86%; max-height: 110px; object-fit: contain; }
+  .logo-tile.h img { width: 300px; max-width: 100%; height: 48px; object-fit: cover; object-position: center; }
+  .logo-cap { font: 500 12.5px/1.4 var(--font); color: var(--gray-600); text-align: center; }
+  .logo-cap small { display: block; color: var(--gray-400); font-size: 11px; font-weight: 400; }
+  .logo-tile.dark { background: var(--gray-900); }
+  .logo-tile.dark .logo-cap { color: #ccc; } .logo-tile.dark .logo-cap small { color: #888; }
+  .logo-tile.navy { background: var(--navy); }
+  .logo-tile.navy .logo-cap { color: #ccc; } .logo-tile.navy .logo-cap small { color: #9aa3c4; }
+
+  .clear-demo { display: flex; justify-content: center; margin: 16px 0; }
+  .clear-box { position: relative; padding: 36px; border: 1px dashed var(--blue-200); border-radius: 8px; background: #fff; }
+  .clear-box img { width: 340px; max-width: 100%; height: 56px; object-fit: cover; object-position: center; display: block; }
+  .clear-box::before { content: '安全距離 = 標誌高 ½（四周）'; position: absolute; top: -10px; left: 12px; background: #fff; padding: 0 6px; font: 500 11px/1.4 var(--font); color: var(--blue); }
+
+  .prohibitions { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin: 16px 0; }
+  .proh-item { background: #FDE9E4; border-radius: 10px; padding: 14px 12px; font: 500 13px/1.4 var(--font); color: #A82A14; display: flex; gap: 10px; align-items: flex-start; }
+  .proh-item::before { content: '✕'; font-weight: 900; flex-shrink: 0; }
+
+  .accent-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 16px 0; }
+  .acc-item { border-radius: 10px; padding: 12px 14px; display: flex; flex-direction: column; gap: 4px; }
+  .acc-name { font: 700 13px/1 var(--font); }
+  .acc-zh { font: 400 12px/1.3 var(--font); opacity: .85; }
+  .acc-hex { font: 400 11px/1 var(--font); opacity: .65; }
+
+  .copy-example { background: var(--gray-50); border-radius: 12px; padding: 20px 24px; margin: 12px 0; }
+  .copy-example .label { font: 700 11px/1 var(--font); letter-spacing: .1em; color: var(--blue); text-transform: uppercase; margin-bottom: 10px; }
+  .copy-example .text { font: 500 17px/1.5 var(--font); color: var(--gray-900); }
+
+  .table-wrap { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 14px; }
+  th { background: var(--blue); color: #fff; font: 700 13px/1.3 var(--font); padding: 12px 16px; text-align: left; }
+  th:first-child { border-radius: 8px 0 0 0; } th:last-child { border-radius: 0 8px 0 0; }
+  td { padding: 11px 16px; border-bottom: 1px solid var(--gray-200); color: var(--gray-600); vertical-align: top; }
+  tr:last-child td { border-bottom: none; }
+  td:first-child { font-weight: 700; color: var(--gray-900); }
+
+  .pillars { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin: 16px 0; }
+  .pillar { border-radius: 14px; padding: 24px; display: flex; flex-direction: column; gap: 8px; border: 1px solid var(--gray-200); }
+  .pillar .eyebrow { font: 700 11px/1 var(--font); letter-spacing: .14em; text-transform: uppercase; }
+  .pillar h4 { font: 700 18px/1.2 var(--font); margin: 0; }
+  .pillar p { font: 400 13.5px/1.55 var(--font); margin: 0; color: var(--gray-600); }
+  .pillar.lead { border: 2px solid var(--blue); background: var(--blue-50); }
+
+  .family { display: grid; grid-template-columns: 1fr; gap: 12px; margin: 16px 0; }
+  .family .parent { border: 2px solid var(--blue); border-radius: 14px; padding: 18px 22px; display: flex; align-items: center; gap: 18px; background: #fff; }
+  .family .parent img { width: 270px; max-width: 45%; height: 44px; object-fit: cover; object-position: center; }
+  .family .children { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+  .family .child { border: 1px solid var(--gray-200); border-radius: 12px; padding: 16px 18px; }
+  .family .child b { display: block; font-size: 15px; }
+  .family .child span { font-size: 12.5px; color: var(--gray-600); }
+
+  .app-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin: 16px 0; }
+  .card-mock { border-radius: 8px; overflow: hidden; border: 1px solid var(--gray-200); aspect-ratio: 9/5; display: flex; flex-direction: column; font-size: 10px; }
+  .card-mock .band { background: var(--navy); color: #fff; padding: 10px 14px; display: flex; align-items: center; justify-content: space-between; }
+  .card-mock .band img { width: 100px; height: 22px; object-fit: cover; object-position: center; }
+  .card-mock .body { flex: 1; padding: 12px 14px; display: flex; flex-direction: column; justify-content: space-between; background: #fff; color: var(--gray-600); }
+  .card-mock .name { font: 700 14px/1.2 var(--font); color: var(--gray-900); }
+  .card-mock .name small { font: 400 10px/1 var(--font); color: var(--gray-400); margin-left: 6px; }
+  .card-mock .line { font-variant-numeric: tabular-nums; }
+  .sig { border: 1px solid var(--gray-200); border-radius: 8px; padding: 14px 16px; font-size: 12.5px; color: var(--gray-600); display: flex; gap: 14px; align-items: center; }
+  .sig img { width: 64px; height: 34px; object-fit: cover; object-position: center; }
+  .sig b { color: var(--gray-900); font-size: 14px; }
+  .sig .sep { width: 1px; align-self: stretch; background: var(--gray-200); }
+
+  .checklist { list-style: none; padding: 0; margin: 16px 0; display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px 24px; }
+  .checklist li { font-size: 14px; color: var(--gray-600); padding-left: 26px; position: relative; }
+  .checklist li::before { content: ''; position: absolute; left: 0; top: 5px; width: 15px; height: 15px; border: 1.5px solid var(--blue); border-radius: 3px; }
+
+  .doc-footer { background: var(--navy); color: rgba(255,255,255,.7); padding: 40px 80px; font-size: 13px; display: flex; justify-content: space-between; align-items: center; gap: 24px; flex-wrap: wrap; margin-top: 80px; }
+  .doc-footer img { width: 60px; height: 42px; object-fit: cover; object-position: center; }
+
+  @media (max-width: 720px) {
+    .cover { padding: 56px 24px 40px; } .cover h1 { font-size: 38px; }
+    .wrap { padding: 0 20px 80px; }
+    .toc ol { columns: 1; }
+    .logo-row, .logo-row.two, .prohibitions, .accent-grid, .pillars, .family .children, .app-grid, .checklist { grid-template-columns: 1fr; }
+    .space-row { grid-template-columns: 48px 56px 1fr; } .space-use { grid-column: 1 / -1; }
+    .type-row { grid-template-columns: 1fr; }
+    .doc-footer { padding: 32px 24px; }
+    .draft-badge { top: 16px; right: 16px; }
+  }
+  @media print {
+    .cover { min-height: 260px; padding: 48px 56px 40px; }
+    .wrap { padding: 0 56px 80px; }
+    .section { page-break-inside: avoid; }
+    h2 { page-break-after: avoid; }
+    .doc-footer { margin-top: 40px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ══ COVER ══════════════════════════════════════════════════ -->
+<div class="cover">
+  <div class="cover-glow"></div>
+  <div class="draft-badge">DRAFT v0.1 · 核對稿</div>
+  <img src="assets/logos/weibo_en_horizontal_white.png" alt="WEIBO">
+  <h1>品牌視覺識別規範<br>WEIBO VIS v1.0</h1>
+  <p>讓科技更貼近生活，讓未來觸手可及</p>
+  <div class="cover-meta">
+    <span><b>品牌</b> WEIBO 威柏科技</span>
+    <span><b>公司</b> 威柏科技貿易有限公司</span>
+    <span><b>文件編號</b> BR-001（待編）</span>
+    <span><b>版本</b> v0.1 核對稿</span>
+    <span><b>日期</b> 2026 年 9 月</span>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <div class="callout todo" style="margin-top:40px;">
+    <b>本稿為核對用草稿。</b>標示 <span class="tag todo" style="margin-left:0;">待定稿</span> 的項目尚未拍板，其餘內容依既有資料（Logo 完稿、營運管理手冊 V1.0、新進人員引導簡報、現行名片）整理。核對無誤後移除標示、升版為 v1.0，再走「威柏 × WEiZ 文件定稿入口」入檔。
+  </div>
+
+  <!-- ══ 目錄 ══════════════════════════════════════════════════ -->
+  <div class="toc">
+    <h3>目錄</h3>
+    <ol>
+      <li><a href="#brand">品牌識別核心</a></li>
+      <li><a href="#family">品牌家族架構（WEI 宇宙）</a></li>
+      <li><a href="#pillars">三大軸心與 WEIBO 的角色</a></li>
+      <li><a href="#logo">Logo 規範</a></li>
+      <li><a href="#colors">色彩系統</a></li>
+      <li><a href="#typography">字體排版</a></li>
+      <li><a href="#spacing">空間與版面</a></li>
+      <li><a href="#visual">視覺設計原則</a></li>
+      <li><a href="#copy">文案撰寫準則</a></li>
+      <li><a href="#iconography">圖示系統</a></li>
+      <li><a href="#photography">影像風格</a></li>
+      <li><a href="#applications">商務應用範例</a></li>
+      <li><a href="#cobrand">共同品牌與並列規範</a></li>
+      <li><a href="#notes">注意事項與備註</a></li>
+      <li><a href="#checklist">設計檢查清單</a></li>
+    </ol>
+  </div>
+
+  <!-- ══ 1. 品牌識別核心 ═══════════════════════════════════════ -->
+  <div class="section" id="brand">
+    <div class="section-label">01</div>
+    <h2>品牌識別核心</h2>
+    <p><strong>WEIBO 威柏科技</strong>（威柏科技貿易有限公司）是專營進出口 3C 電子產品的台灣供應商與品牌總代理，2015 年成立於嘉義。服務對象是全台實體與線上通路的經銷商、國際原廠，以及集團旗下 WEiZ、WEILIFE 兩個品牌。WEIBO 是 <strong>WEI 宇宙的母公司與供應鏈引擎</strong>，對外形象必須專業、穩健、值得信賴。</p>
+
+    <div class="callout">
+      <b>企業標語</b><br>
+      「讓科技更貼近生活，讓未來觸手可及」
+    </div>
+    <div class="callout">
+      <b>品牌核心精神</b><br>
+      WEI — We Empower Innovation｜我們相互賦能，共創價值
+    </div>
+
+    <div class="table-wrap"><table>
+      <tr><th>核心要素</th><th>內容</th></tr>
+      <tr><td>願景</td><td>成為亞洲最具影響力的科技生活創新生態平台</td></tr>
+      <tr><td>WEIBO 使命</td><td>賦能科技品牌，打造台灣最強落地能力。以專業代理、供應鏈管理、全通路營運與資訊系統整合，協助全球科技品牌快速落地台灣市場。</td></tr>
+      <tr><td>核心價值</td><td>自由與責任・顧客至上・成長心態・凡事從簡・永續經營・創造價值</td></tr>
+      <tr><td>服務準則</td><td>用心、放心、貼心</td></tr>
+      <tr><td>品牌個性</td><td>專業・穩健・扎根前線（草根）・數據為本・服務先行</td></tr>
+      <tr><td>語調</td><td>沉穩、清楚、有把握；對合作夥伴說話，不對消費者促銷</td></tr>
+      <tr><td>三項服務</td><td>品牌代理｜禮品訂製｜進口認證（現行名片用語）</td></tr>
+      <tr><td>公司全名</td><td>威柏科技貿易有限公司 ／ WEI BO TECHNOLOGY TRADE CO., LTD</td></tr>
+      <tr><td>官方網站</td><td>www.weiboltd.com</td></tr>
+      <tr><td>公司資訊</td><td>統一編號 55903333 ／ 05-3209919 ／ 嘉義縣太保市健康路 187 號 1 樓 ／ 客服 LINE @weibo</td></tr>
+    </table></div>
+
+    <div class="callout todo">
+      <b>待定稿：標語層級。</b>目前資料裡有三句話在不同場合當標語用。建議定位如下，請確認：<br>
+      ① 企業標語（對外主標）：「讓科技更貼近生活，讓未來觸手可及」<br>
+      ② 核心精神（對內、招募、簡報封面）：「我們相互賦能，共創價值」<br>
+      ③ 業務定位語（提案、原廠簡介）：「台灣最強品牌落地能力」
+    </div>
+  </div>
+
+  <hr class="rule">
+
+  <!-- ══ 2. 品牌家族架構 ═══════════════════════════════════════ -->
+  <div class="section" id="family">
+    <div class="section-label">02</div>
+    <h2>品牌家族架構（WEI 宇宙）</h2>
+    <p>WEIBO 是母品牌，WEiZ 與 WEILIFE 是集團自有的子品牌，代理品牌是合作品牌。三層的關係決定了 Logo 並列時的順序與大小（見第 13 章）。</p>
+
+    <div class="family">
+      <div class="parent">
+        <img src="assets/logos/weibo_corp_horizontal_black.png" alt="WEIBO 威柏科技貿易有限公司">
+        <div><b>母品牌／母公司</b><br><span style="font-size:13px;color:var(--gray-600);">WEIBO 威柏科技 — 科技軸：代理、供應鏈、全通路營運、資訊系統</span></div>
+      </div>
+      <div class="children">
+        <div class="child"><b>WEiZ</b><span>體驗軸 · 自營專櫃與商城 · 對消費者（Gen-Z）· 2019 年創立 · 有獨立 VIS</span></div>
+        <div class="child"><b>WEILIFE</b><span>未來軸 · 台灣原創 3C 品牌 · 自主開發產品 · 2023 年創立 · VIS 待建</span></div>
+        <div class="child"><b>代理品牌</b><span>合作品牌 · WiWU、ACEFAST、SMASMALL 昔馬、FRAMULA 芬乘等，另有 50+ 經銷品牌 · 各自有原廠 CI</span></div>
+      </div>
+    </div>
+
+    <div class="table-wrap"><table>
+      <tr><th>層級</th><th>誰出面</th><th>用哪個識別</th></tr>
+      <tr><td>對原廠、經銷商、通路採購、求職者</td><td>WEIBO</td><td>本規範</td></tr>
+      <tr><td>對一般消費者（專櫃、商城、社群）</td><td>WEiZ</td><td>WEiZ VIS PLUS</td></tr>
+      <tr><td>自有產品、包裝</td><td>WEILIFE</td><td>WEILIFE VIS（待建）</td></tr>
+      <tr><td>法律文件、發票、合約、公文</td><td>威柏科技貿易有限公司</td><td>本規範「公司名稱橫式／直式」Logo</td></tr>
+    </table></div>
+
+    <div class="callout todo"><b>待定稿：</b>WEILIFE 是否比照本文件另立 VIS；以及「WEiZ 商城／專櫃」的對外文件（合約、發票）用 WEIBO 還是 WEiZ 識別。</div>
+  </div>
+
+  <hr class="rule">
+
+  <!-- ══ 3. 三大軸心 ═══════════════════════════════════════════ -->
+  <div class="section" id="pillars">
+    <div class="section-label">03</div>
+    <h2>三大軸心與 WEIBO 的角色</h2>
+    <p>「體驗・科技・未來」是整個集團共用的三軸。WEiZ 的 VIS 把三軸轉成視覺語言；WEIBO 主掌<strong>科技軸</strong>，所以在視覺上要最「準」、最「穩」，留白與結構感重於溫度與玩心。</p>
+    <div class="pillars">
+      <div class="pillar">
+        <div class="eyebrow" style="color:#8A5A00;">體驗 · WEiZ</div>
+        <h4>讓科技變得更友善</h4>
+        <p>溫度、感受、日常。暖色點綴、自然光、人與產品互動。由 WEiZ 表現。</p>
+      </div>
+      <div class="pillar lead">
+        <div class="eyebrow" style="color:var(--blue-700);">科技 · WEIBO</div>
+        <h4 style="color:var(--blue-700);">台灣最強品牌落地能力</h4>
+        <p>精準、系統、可靠。WEIBO Blue、對稱幾何、清楚的資訊層級、表格與數據的整齊感。</p>
+      </div>
+      <div class="pillar">
+        <div class="eyebrow" style="color:#146B47;">未來 · WEILIFE</div>
+        <h4>重新定義生活質感</h4>
+        <p>遠見、想像、可能。由 WEILIFE 表現。</p>
+      </div>
+    </div>
+  </div>
+
+  <hr class="rule">
+
+  <!-- ══ 4. Logo 規範 ══════════════════════════════════════════ -->
+  <div class="section" id="logo">
+    <div class="section-label">04</div>
+    <h2>Logo 規範</h2>
+    <p>WEIBO 標誌由<strong>兩片藍色葉形</strong>與<strong>兩顆灰色圓點</strong>對角交錯組成，交疊處呈半透明，象徵「相互賦能」的兩方在中心交會。字標 <strong>WEIBO</strong> 為粗體大寫，下方配中文全名與英文全名。</p>
+
+    <div class="callout">
+      <b>不變的部分：標誌本體。</b>藍色葉形、灰色圓點的顏色、比例與交疊方式一律不得更動。<br>
+      <b>可變的部分：文字顏色。</b>WEIBO 字標與中英文公司名可依背景選用<strong>黑</strong>或<strong>白</strong>兩色，不得使用其他顏色。
+    </div>
+
+    <h3>六種組合版型</h3>
+    <div class="logo-row">
+      <div class="logo-tile"><img src="assets/logos/weibo_full_stacked_black.png" alt="完整直式"><div class="logo-cap">① 完整直式（主要）<small>標誌＋WEIBO＋中英文全名 · 封面、官網、看板</small></div></div>
+      <div class="logo-tile"><img src="assets/logos/weibo_full_wide_black.png" alt="完整寬版"><div class="logo-cap">② 完整寬版<small>WEIBO 字標放大 · 大尺寸輸出、展場背板</small></div></div>
+      <div class="logo-tile"><img src="assets/logos/weibo_corp_stacked_black.png" alt="公司名直式"><div class="logo-cap">③ 公司名直式<small>標誌＋中英文全名 · 正式文件、證書</small></div></div>
+    </div>
+    <div class="logo-row">
+      <div class="logo-tile h"><img src="assets/logos/weibo_corp_horizontal_black.png" alt="公司名橫式"><div class="logo-cap">④ 公司名橫式<small>文件表頭、名片、信紙、Email 簽名</small></div></div>
+      <div class="logo-tile h"><img src="assets/logos/weibo_zh_horizontal_black.png" alt="中文橫式"><div class="logo-cap">⑤ 中文橫式<small>標誌＋中文全名 · 公文、印鑑旁、封箱貼</small></div></div>
+      <div class="logo-tile h navy"><img src="assets/logos/weibo_en_horizontal_white.png" alt="英文橫式"><div class="logo-cap">⑥ 英文橫式（目前僅反白版）<small>標誌＋WEIBO · 網站 header、簡報頁尾、社群頭像</small></div></div>
+    </div>
+
+    <h3>黑字／白字兩種文字色</h3>
+    <div class="logo-row two">
+      <div class="logo-tile"><img src="assets/logos/weibo_full_stacked_black.png" alt="黑字版"><div class="logo-cap">黑字版<small>白色、淺灰、淺色照片上使用</small></div></div>
+      <div class="logo-tile navy"><img src="assets/logos/weibo_full_stacked_white.png" alt="白字版"><div class="logo-cap">白字版<small>WEIBO Navy、深色、深色照片上使用</small></div></div>
+    </div>
+    <div class="callout">
+      <b>標誌顏色固定，不隨背景反白。</b>標誌的藍（<code>#0000FF</code>@68%）與灰（<code>#666666</code>@68%）帶透明度，因此放在<strong>白底</strong>呈現為 <code>#5252FF</code>／<code>#979797</code>，放在 Navy 上會略暗——這是設計原意，屬正常現象。不得為了「看起來一樣」而改色。
+    </div>
+
+    <h3>名稱書寫規定</h3>
+    <div class="callout danger">
+      <b>英文唯一正確寫法：WEIBO</b>（五個字母全大寫）<br>
+      不可寫成：Weibo、WeiBo、weibo、WEI BO（分開）、ＷＥＩＢＯ（全形）。「WEI BO」只出現在英文公司全名 WEI BO TECHNOLOGY TRADE CO., LTD，其餘一律連寫。<br>
+      <b>中文：</b>正式文件用全名「威柏科技貿易有限公司」；一般溝通用簡稱「威柏科技」或「威柏」。<br>
+      <b>中英並列：</b>「WEIBO 威柏科技」（英前中後，中間半形空格）。
+    </div>
+    <div class="callout todo"><b>待定稿：</b>「Weibo」與中國社群平台微博同名，搜尋與社群帳號會混淆。建議所有對外帳號、網域、Hashtag 一律採 <code>weiboltd</code>／<code>WEIBO 威柏科技</code> 帶中文並列，不單獨使用 WEIBO 五字母當帳號名。</div>
+
+    <h3>安全距離與最小尺寸</h3>
+    <div class="clear-demo"><div class="clear-box"><img src="assets/logos/weibo_corp_horizontal_black.png" alt="安全距離示意"></div></div>
+    <div class="table-wrap"><table>
+      <tr><th>版型</th><th>螢幕最小高度</th><th>印刷最小高度</th><th>安全距離</th></tr>
+      <tr><td>① ② 完整版</td><td>80px</td><td>20mm</td><td rowspan="4">標誌（雙葉圖形）高度的 ½，四周皆同；區域內不得有文字、線條、其他 Logo 或紋樣</td></tr>
+      <tr><td>③ 公司名直式</td><td>64px</td><td>15mm</td></tr>
+      <tr><td>④ ⑤ ⑥ 橫式</td><td>28px</td><td>8mm</td></tr>
+      <tr><td>標誌單獨</td><td>24px</td><td>6mm</td></tr>
+    </table></div>
+    <div class="callout todo"><b>待定稿：標誌單獨使用。</b>目前完稿沒有「只有雙葉標誌」的檔案。建議<strong>允許</strong>單獨用於 favicon、App icon、社群頭像、Loading 動畫，其他場合一律帶字標。若同意，需向設計師索取標誌單獨檔。</div>
+
+    <h3>八大禁止事項</h3>
+    <div class="prohibitions">
+      <div class="proh-item">拉伸、壓縮或改變比例</div>
+      <div class="proh-item">改變標誌的藍與灰、或把文字換成黑白以外的顏色</div>
+      <div class="proh-item">移動或旋轉葉形與圓點的相對位置</div>
+      <div class="proh-item">加外框、描邊、陰影、光暈、漸層</div>
+      <div class="proh-item">放在低對比或花俏的背景、照片主體上</div>
+      <div class="proh-item">拆開標誌與字標另外排版（限本章六種版型）</div>
+      <div class="proh-item">把 WEIBO 字標換成其他字型重打</div>
+      <div class="proh-item">在標誌旁加入吉祥物、圖示或裝飾元素</div>
+    </div>
+  </div>
+
+  <hr class="rule">
+
+  <!-- ══ 5. 色彩系統 ═══════════════════════════════════════════ -->
+  <div class="section" id="colors">
+    <div class="section-label">05</div>
+    <h2>色彩系統 <span class="tag todo">待定稿</span></h2>
+    <p>WEIBO 目前沒有設計師定義的官方色票。以下色票由 Logo 實際呈現色反推，並對齊集團 WEiZ 的 token 結構（同一套變數名稱、不同數值），讓兩品牌素材可以互相套用。</p>
+
+    <div class="callout todo">
+      <b>待定稿：主色方案。</b>兩個選項，請擇一：<br>
+      <b>A（本稿採用）</b>WEIBO Blue <code>#5252FF</code>：直接取 Logo 藍在白底的呈現色，WEIBO 有自己的主色，與 WEiZ <code>#5D59FF</code> 同色系但可辨識。<br>
+      <b>B</b> 與 WEiZ 共用 <code>#5D59FF</code>：集團一致，素材完全可互用，但 Logo 藍與版面主色會有肉眼可辨的微差。
+    </div>
+
+    <h3>使用比例：70 / 20 / 10</h3>
+    <div class="ratio-bar">
+      <span style="flex:70;background:#F4F4F8;color:#666;">70% 中性基底</span>
+      <span style="flex:20;background:#5252FF;color:#fff;">20% WEIBO Blue</span>
+      <span style="flex:10;background:#1E2A5E;color:#fff;">10%</span>
+    </div>
+    <p style="font-size:13px;color:var(--gray-400);">70% = 白／#F4F4F8 等中性色；20% = WEIBO Blue；10% = Navy 或功能色。與 WEiZ 的差別：WEIBO 的 10% 以 <strong>Navy 與灰</strong>為主，不用促銷紅金。</p>
+
+    <h3>品牌核心 8 色</h3>
+    <div class="swatches">
+      <div class="sw"><div class="sw-chip" style="background:#FFFFFF;"></div><div class="sw-name">White</div><div class="sw-hex">#FFFFFF</div><div class="sw-zh">主要背景</div></div>
+      <div class="sw"><div class="sw-chip" style="background:#F4F4F8;"></div><div class="sw-name">Gray 50</div><div class="sw-hex">#F4F4F8</div><div class="sw-zh">次要背景（偏冷）</div></div>
+      <div class="sw"><div class="sw-chip" style="background:#5252FF;"></div><div class="sw-name" style="color:#5252FF;">WEIBO Blue</div><div class="sw-hex">#5252FF</div><div class="sw-zh">主色・CTA・標題強調</div></div>
+      <div class="sw"><div class="sw-chip" style="background:#1E2A5E;"></div><div class="sw-name" style="color:#1E2A5E;">WEIBO Navy</div><div class="sw-hex">#1E2A5E</div><div class="sw-zh">深底・封面・頁尾</div></div>
+      <div class="sw"><div class="sw-chip" style="background:#979797;"></div><div class="sw-name">Logo Gray</div><div class="sw-hex">#979797</div><div class="sw-zh">標誌灰・輔助圖形</div></div>
+      <div class="sw"><div class="sw-chip" style="background:#999999;"></div><div class="sw-name">Gray 400</div><div class="sw-hex">#999999</div><div class="sw-zh">說明文字</div></div>
+      <div class="sw"><div class="sw-chip" style="background:#666666;"></div><div class="sw-name">Gray 600</div><div class="sw-hex">#666666</div><div class="sw-zh">次要文字</div></div>
+      <div class="sw"><div class="sw-chip" style="background:#333333;"></div><div class="sw-name">Gray 900</div><div class="sw-hex">#333333</div><div class="sw-zh">主要文字（不用純黑）</div></div>
+    </div>
+
+    <h3>藍色階（UI 狀態用）</h3>
+    <div class="swatches">
+      <div class="sw"><div class="sw-chip" style="background:#EEEEFF;border:1px solid #ddd;"></div><div class="sw-hex">#EEEEFF</div><div class="sw-zh">50 淡填充</div></div>
+      <div class="sw"><div class="sw-chip" style="background:#D6D6FF;"></div><div class="sw-hex">#D6D6FF</div><div class="sw-zh">100 Hover 底</div></div>
+      <div class="sw"><div class="sw-chip" style="background:#A8A8FF;"></div><div class="sw-hex">#A8A8FF</div><div class="sw-zh">200 次要強調</div></div>
+      <div class="sw"><div class="sw-chip" style="background:#7A7AFF;"></div><div class="sw-hex">#7A7AFF</div><div class="sw-zh">300 過渡</div></div>
+      <div class="sw"><div class="sw-chip" style="background:#5252FF;"></div><div class="sw-hex">#5252FF</div><div class="sw-zh">500 主色</div></div>
+      <div class="sw"><div class="sw-chip" style="background:#4242E6;"></div><div class="sw-hex">#4242E6</div><div class="sw-zh">600 Hover</div></div>
+      <div class="sw"><div class="sw-chip" style="background:#3333C2;"></div><div class="sw-hex">#3333C2</div><div class="sw-zh">700 Press</div></div>
+      <div class="sw"><div class="sw-chip" style="background:#1E2A5E;"></div><div class="sw-hex">#1E2A5E</div><div class="sw-zh">900 Navy</div></div>
+    </div>
+
+    <h3>功能色（B2B 語義，只用在狀態與資訊）</h3>
+    <div class="accent-grid">
+      <div class="acc-item" style="background:#E3F6EE;"><div class="acc-name" style="color:#146B47;">Green</div><div class="acc-zh" style="color:#146B47;">成功・現貨・已完成</div><div class="acc-hex" style="color:#146B47;">#1E9E6A</div></div>
+      <div class="acc-item" style="background:#FFF6E0;"><div class="acc-name" style="color:#8A5A00;">Amber</div><div class="acc-zh" style="color:#8A5A00;">注意・待處理・缺貨中</div><div class="acc-hex" style="color:#8A5A00;">#E8A317</div></div>
+      <div class="acc-item" style="background:#FDE9E4;"><div class="acc-name" style="color:#A82A14;">Red</div><div class="acc-zh" style="color:#A82A14;">錯誤・停產・逾期</div><div class="acc-hex" style="color:#A82A14;">#D93A1F</div></div>
+      <div class="acc-item" style="background:#EAF0FF;"><div class="acc-name" style="color:#1A3D9E;">Info Blue</div><div class="acc-zh" style="color:#1A3D9E;">超連結・資訊</div><div class="acc-hex" style="color:#1A3D9E;">#3C62EF</div></div>
+    </div>
+
+    <div class="callout todo">
+      <b>待定稿：現行名片的 Navy／Teal 配色。</b>名片使用深藍 <code>≈#1E2A5E</code>＋湖水藍 <code>≈#4FA8C2</code> 雙色帶，且標誌被改成不透明的皇家藍——與 Logo 完稿不一致。建議：<strong>保留 Navy</strong>納入核心色（本稿已納入）；<strong>Teal 不納入</strong>主色票，改版名片時回到 Logo 原色。若你希望保留 Teal 作為第二輔色，告訴我，我再補進色階。
+    </div>
+
+    <h3>品牌漸層</h3>
+    <div style="display:flex;gap:16px;margin:16px 0;flex-wrap:wrap;">
+      <div style="flex:1;min-width:240px;height:80px;border-radius:12px;background:linear-gradient(135deg,#5252FF 0%,#1E2A5E 100%);display:flex;align-items:flex-end;padding:12px 16px;">
+        <span style="color:#fff;font:700 12px/1 var(--font);">品牌漸層 — #5252FF → #1E2A5E（僅封面／Hero）</span>
+      </div>
+      <div style="flex:1;min-width:240px;height:80px;border-radius:12px;background:linear-gradient(135deg,#EEEEFF 0%,#D6D6FF 100%);display:flex;align-items:flex-end;padding:12px 16px;">
+        <span style="color:var(--blue-700);font:700 12px/1 var(--font);">輔助淺漸層 — Blue 50 → 100</span>
+      </div>
+    </div>
+    <p style="font-size:13px;color:var(--gray-400);">漸層禁止用在按鈕、文字、Logo 後方，也不得疊在商品照片上。</p>
+  </div>
+
+  <hr class="rule">
+
+  <!-- ══ 6. 字體排版 ═══════════════════════════════════════════ -->
+  <div class="section" id="typography">
+    <div class="section-label">06</div>
+    <h2>字體排版 <span class="tag ok">沿用集團</span></h2>
+    <p>與 WEiZ 共用同一套字型與字級，兩品牌的簡報、文件可以互相引用而不打架。</p>
+    <div class="table-wrap"><table>
+      <tr><th>用途</th><th>字型名稱</th><th>備註</th></tr>
+      <tr><td>英文・數字</td><td>Inter（400 / 500 / 700）</td><td>Google Fonts；數字表格加 <code>tabular-nums</code></td></tr>
+      <tr><td>繁體中文</td><td>Noto Sans TC（思源黑體）300 / 400 / 500 / 700</td><td>Google Fonts</td></tr>
+      <tr><td>後備字型</td><td>PingFang TC → Microsoft JhengHei → system-ui</td><td>Office 文件內建環境用微軟正黑體</td></tr>
+      <tr><td>禁用</td><td>明體／宋體、標楷體、Logo 字標字型</td><td>現行簡報字型未嵌入、顯示成明體，屬錯誤狀態</td></tr>
+    </table></div>
+
+    <h3>字級系統</h3>
+    <div class="type-row"><div class="type-meta"><b>Hero</b>Bold 700 · 48–56px</div><div style="font:700 46px/1.1 var(--font);letter-spacing:-.02em;">WEIBO 威柏科技</div></div>
+    <div class="type-row"><div class="type-meta"><b>H1</b>Bold 700 · 36px</div><div style="font:700 30px/1.15 var(--font);">台灣最強品牌落地能力</div></div>
+    <div class="type-row"><div class="type-meta"><b>H2</b>Medium 500 · 26px</div><div style="font:500 23px/1.3 var(--font);">2026 年度經銷合作方案</div></div>
+    <div class="type-row"><div class="type-meta"><b>Body</b>Regular 400 · 16px</div><div style="font:400 16px/1.6 var(--font);color:var(--gray-600);">威柏科技以專業代理、供應鏈管理與全通路營運，協助全球科技品牌快速落地台灣市場。</div></div>
+    <div class="type-row"><div class="type-meta"><b>Caption</b>Light 300 · 13px</div><div style="font:300 13px/1.4 var(--font);color:var(--gray-400);">＊報價有效期 30 天，含稅未含運。統一編號 55903333</div></div>
+
+    <h3>中英混排規則</h3>
+    <div class="callout">
+      <b>英文前後加半形空格</b>：「WEIBO 威柏科技是 ACEFAST 台灣總代理」<br>
+      <b>型號、規格不加空格</b>：Type-C、20000mAh、USB-A<br>
+      <b>英文眉標全大寫、寬字距 .12em</b>：BRAND PORTFOLIO · DISTRIBUTION<br>
+      <b>數字用 Inter</b>：金額千分位、日期 2026.09.10
+    </div>
+  </div>
+
+  <hr class="rule">
+
+  <!-- ══ 7. 空間與版面 ═══════════════════════════════════════ -->
+  <div class="section" id="spacing">
+    <div class="section-label">07</div>
+    <h2>空間與版面系統 <span class="tag ok">沿用集團</span></h2>
+    <p>所有間距均為基礎單位 <strong>X = 25px</strong> 的倍數，與 WEiZ 相同。</p>
+    <div class="space-rows">
+      <div class="space-row"><div class="space-tok">0.5X</div><div class="space-px">12.5px</div><div><div class="space-bar" style="width:12.5px"></div></div><div class="space-use">圖示與文字間距</div></div>
+      <div class="space-row"><div class="space-tok">1X</div><div class="space-px">25px</div><div><div class="space-bar" style="width:25px"></div></div><div class="space-use">基礎間距</div></div>
+      <div class="space-row"><div class="space-tok">2X</div><div class="space-px">50px</div><div><div class="space-bar" style="width:50px"></div></div><div class="space-use">元件內距、數位邊距</div></div>
+      <div class="space-row"><div class="space-tok">4X</div><div class="space-px">100px</div><div><div class="space-bar" style="width:100px"></div></div><div class="space-use">區塊分隔、A4 邊距</div></div>
+      <div class="space-row"><div class="space-tok">8X</div><div class="space-px">200px</div><div><div class="space-bar" style="width:200px"></div></div><div class="space-use">大面積留白</div></div>
+    </div>
+
+    <h3>版面邊距</h3>
+    <div class="table-wrap"><table>
+      <tr><th>媒體</th><th>規格</th></tr>
+      <tr><td>數位／網頁</td><td>邊距 2X = 50px；容器最大寬 1200px；12 欄格線</td></tr>
+      <tr><td>A4 商務文件（報價單、合約、公文）</td><td>邊距 20mm；表頭放 ④ 公司名橫式 Logo，高 10mm，靠左；頁尾放公司資訊一行</td></tr>
+      <tr><td>簡報 16:9（1920×1080）</td><td>邊距 80px；每頁左上眉標、右下頁碼、左下 ⑥ 英文橫式 Logo 高 28px</td></tr>
+      <tr><td>名片 90×54mm</td><td>出血 3mm；文字距邊 ≥ 5mm</td></tr>
+    </table></div>
+
+    <h3>圓角與陰影</h3>
+    <div class="radii-row">
+      <div class="radius-item"><div class="radius-box" style="border-radius:2px;"></div><div class="radius-name">圖示</div><div class="radius-val">2px</div></div>
+      <div class="radius-item"><div class="radius-box" style="border-radius:8px;"></div><div class="radius-name">表格・輸入框</div><div class="radius-val">8px</div></div>
+      <div class="radius-item"><div class="radius-box" style="border-radius:12px;"></div><div class="radius-name">按鈕</div><div class="radius-val">12px</div></div>
+      <div class="radius-item"><div class="radius-box" style="border-radius:16px;"></div><div class="radius-name">卡片</div><div class="radius-val">16px</div></div>
+    </div>
+    <p style="font-size:13px;color:var(--gray-400);">陰影用中性灰、輕量（sm <code>0 2px 8px rgba(51,51,51,.08)</code>）。WEIBO 不用有色光暈陰影，唯一例外是網站主 CTA。</p>
+  </div>
+
+  <hr class="rule">
+
+  <!-- ══ 8. 視覺設計原則 ══════════════════════════════════════ -->
+  <div class="section" id="visual">
+    <div class="section-label">08</div>
+    <h2>視覺設計原則</h2>
+    <div class="table-wrap"><table>
+      <tr><th>面向</th><th>規範</th></tr>
+      <tr><td>整體版面</td><td>對稱、平衡、結構清楚。資訊用表格與格線整理，而不是用裝飾填滿；留白是專業感的來源</td></tr>
+      <tr><td>Logo 位置</td><td>文件與簡報：左上（表頭）或左下（頁尾）；封面：居中或左下。不放右下（那是 WEiZ 的慣例，避免混淆）</td></tr>
+      <tr><td>背景</td><td>白或 #F4F4F8；封面、章節頁、頁尾用 Navy 或品牌漸層；Logo 後方永遠乾淨</td></tr>
+      <tr><td>輔助圖形</td><td>可取標誌的「雙葉＋圓點」以 8–15% 透明度放大作背景圖形（現行名片已這樣用）；一頁只出現一次，不可與 Logo 同時可見於相近位置</td></tr>
+      <tr><td>卡片與表格</td><td>白底、1px #E4E4EA 邊線、8–16px 圓角；表頭用 WEIBO Blue 底白字</td></tr>
+      <tr><td>吉祥物</td><td><strong>WEIBO 不設吉祥物。</strong>WEiZ 太空人只屬於 WEiZ，不得出現在 WEIBO 文件、簡報、名片</td></tr>
+      <tr><td>動效（網站）</td><td>淡入、位移、縮放；140–360ms；<code>cubic-bezier(.2,.7,.2,1)</code>；禁 3D 翻轉、彈跳、無限循環</td></tr>
+      <tr><td>Emoji</td><td>一律不用（含社群與招募貼文）</td></tr>
+    </table></div>
+  </div>
+
+  <hr class="rule">
+
+  <!-- ══ 9. 文案撰寫準則 ══════════════════════════════════════ -->
+  <div class="section" id="copy">
+    <div class="section-label">09</div>
+    <h2>文案撰寫準則</h2>
+    <div class="table-wrap"><table>
+      <tr><th>面向</th><th>規範</th></tr>
+      <tr><td>對象</td><td>原廠、經銷商、通路採購（MD／PM）、合作夥伴、求職者。不是終端消費者</td></tr>
+      <tr><td>人稱</td><td>「我們／威柏」對「貴公司／您」；招募文案可用「你」</td></tr>
+      <tr><td>語調</td><td>沉穩、具體、有數據；說能做到什麼、怎麼做到；不喊口號、不用促銷語氣、不用驚嘆號堆疊</td></tr>
+      <tr><td>可用的證據</td><td>成立 2015、500+ 連鎖據點、11 個主流電商平台、50+ 經銷品牌、年營收破億、北中南專櫃——用數字取代形容詞</td></tr>
+      <tr><td>三軸描述順序</td><td>對外提案時先講 WEIBO（科技／落地能力），再帶 WEiZ 與 WEILIFE 作為通路與產品實績</td></tr>
+      <tr><td>品牌名稱</td><td>WEIBO 全大寫；代理品牌依原廠寫法（WiWU、ACEFAST、SMASMALL、FRAMULA）</td></tr>
+      <tr><td>禁用</td><td>Emoji、網路流行語、「最強」以外的絕對化形容（「最強落地能力」為既定定位語，可用）</td></tr>
+    </table></div>
+
+    <h3>文案範例</h3>
+    <div class="copy-example"><div class="label">企業標語</div><div class="text">「讓科技更貼近生活，讓未來觸手可及」</div></div>
+    <div class="copy-example"><div class="label">核心精神</div><div class="text">WEI — We Empower Innovation｜我們相互賦能，共創價值</div></div>
+    <div class="copy-example"><div class="label">一句話介紹（原廠提案）</div><div class="text">WEIBO 威柏科技是台灣 3C 品牌總代理，以供應鏈管理、全通路營運與資訊系統整合，協助國際品牌在 500+ 實體據點與 11 個主流電商平台快速落地。</div></div>
+    <div class="copy-example"><div class="label">Email 開場（經銷商）</div><div class="text">您好，我是威柏科技電商通路部的 ○○○。附件是 2026 Q4 ACEFAST 檔期提報表，請於 9/15 前回覆確認。</div></div>
+    <div class="copy-example"><div class="label">招募文案</div><div class="text">在威柏，你會和一群相信「把事情做好」的人一起工作。我們用系統與 AI 加速，但決定方向的永遠是人。</div></div>
+  </div>
+
+  <hr class="rule">
+
+  <!-- ══ 10. 圖示系統 ════════════════════════════════════════ -->
+  <div class="section" id="iconography">
+    <div class="section-label">10</div>
+    <h2>圖示系統 <span class="tag ok">沿用集團</span></h2>
+    <div class="table-wrap"><table>
+      <tr><th>規格項目</th><th>說明</th></tr>
+      <tr><td>風格</td><td>線條型（Outline）、簡潔幾何</td></tr>
+      <tr><td>筆畫 / 圓角</td><td>2px / 2px，圓接頭</td></tr>
+      <tr><td>預設顏色</td><td>WEIBO Blue #5252FF；深底用白色；表格內用 Gray 600</td></tr>
+      <tr><td>尺寸</td><td>16px（內文）→ 24px（按鈕）→ 32px（功能）→ 48px（簡報大圖示）</td></tr>
+      <tr><td>套件</td><td>Lucide Icons，與 WEiZ 相同，尚無官方圖示集</td></tr>
+    </table></div>
+  </div>
+
+  <hr class="rule">
+
+  <!-- ══ 11. 影像風格 ════════════════════════════════════════ -->
+  <div class="section" id="photography">
+    <div class="section-label">11</div>
+    <h2>影像風格 <span class="tag todo">待補素材</span></h2>
+    <div class="callout"><b>核心概念：「看得見的落地能力」</b> — 影像主題是<strong>倉儲、物流、專櫃現場、團隊作業、通路陳列</strong>，不是產品情境照。產品情境照屬於 WEiZ 與各代理品牌。</div>
+    <div class="table-wrap"><table>
+      <tr><th>構圖面向</th><th>規範</th></tr>
+      <tr><td>主題</td><td>太保倉庫貨架與出貨線、專櫃陳列、通路門市 WEIBO 供貨商品、辦公與會議實況、展會攤位</td></tr>
+      <tr><td>人物</td><td>團隊成員工作中的側寫，不看鏡頭；穿著整潔；不用模特兒擺拍</td></tr>
+      <tr><td>光線與色調</td><td>自然光或均勻室內光；中性偏冷、低飽和；對比 +5…+10；不加暖色濾鏡</td></tr>
+      <tr><td>構圖</td><td>水平線要正，多用正面或 45 度俯視展現「整齊、有系統」；避免歪斜與魚眼</td></tr>
+      <tr><td>禁止</td><td>過度 HDR、超飽和、生活風濾鏡、在照片上疊漸層、把代理品牌 Logo 當畫面主體</td></tr>
+    </table></div>
+    <div class="callout todo"><b>待補：</b>目前沒有 WEIBO 自己的現場照片。建議先拍一組 20 張（倉儲 8、專櫃 6、辦公團隊 6），作為官網、104、簡報共用圖庫。</div>
+  </div>
+
+  <hr class="rule">
+
+  <!-- ══ 12. 商務應用範例 ═══════════════════════════════════ -->
+  <div class="section" id="applications">
+    <div class="section-label">12</div>
+    <h2>商務應用範例 <span class="tag todo">待定稿</span></h2>
+    <p>以下是依本規範重排的版型示意，用來核對方向；定稿後另出可直接印製／套用的檔案。</p>
+
+    <h3>名片 90×54mm</h3>
+    <div class="app-grid">
+      <div class="card-mock">
+        <div class="band"><img src="assets/logos/weibo_en_horizontal_white.png" alt="WEIBO"><span style="font:700 9px/1 var(--font);letter-spacing:.1em;">品牌代理 ｜ 禮品訂製 ｜ 進口認證</span></div>
+        <div class="body">
+          <div><div class="name">李柏樟 <small>Sam ｜ 電商業務部</small></div><div class="line">0905 510 923</div></div>
+          <div style="font-size:9.5px;line-height:1.55;"><div class="line">威柏科技貿易有限公司 ｜ 05-3209919 #236 ｜ weibo.sd8@weiboltd.com</div><div>嘉義縣太保市健康路 187 號 1 樓 ｜ 統編 55903333 ｜ www.weiboltd.com</div></div>
+        </div>
+      </div>
+      <div class="card-mock" style="background:var(--navy);border-color:var(--navy);">
+        <div class="body" style="background:transparent;color:rgba(255,255,255,.75);align-items:center;justify-content:center;">
+          <img src="assets/logos/weibo_full_stacked_white.png" alt="WEIBO 威柏科技貿易有限公司" style="height:78%;object-fit:contain;">
+        </div>
+      </div>
+    </div>
+    <p style="font-size:13px;color:var(--gray-400);">正面：Navy 色帶＋英文橫式 Logo；資訊區白底黑字。背面：Navy 滿版＋完整直式白字 Logo。與現行名片的差異：去掉 Teal 色帶、標誌回到原色、資訊改為兩行制式。</p>
+
+    <h3>Email 簽名檔</h3>
+    <div class="sig">
+      <img src="assets/logos/weibo_corp_stacked_black.png" alt="WEIBO">
+      <div class="sep"></div>
+      <div>
+        <b>黃冠博 Gary Huang</b> ｜ 總經理<br>
+        威柏科技貿易有限公司 WEIBO Technology Trade Co., Ltd<br>
+        T 05-3209919 ｜ www.weiboltd.com ｜ 嘉義縣太保市健康路 187 號 1 樓
+      </div>
+    </div>
+    <p style="font-size:13px;color:var(--gray-400);">Logo 高 34px，文字 12.5px，姓名粗體；不放格言、不放社群圖示、不放代理品牌 Logo。</p>
+
+    <h3>其他應用（定稿後產出）</h3>
+    <div class="table-wrap"><table>
+      <tr><th>項目</th><th>規格重點</th></tr>
+      <tr><td>簡報模板 16:9</td><td>封面 Navy 漸層＋白字 Logo；內頁白底、左上眉標（WEIBO Blue 全大寫）、左下 ⑥ Logo、右下頁碼；字型 Noto Sans TC + Inter；取代現行明體顯示的版本</td></tr>
+      <tr><td>報價單／合約表頭</td><td>A4，④ 公司名橫式 Logo 高 10mm 靠左，右側文件編號與日期；表格表頭 WEIBO Blue</td></tr>
+      <tr><td>信封信紙</td><td>信紙左上 ④，頁尾公司資訊一行；信封左上 ④，右下寄件資訊</td></tr>
+      <tr><td>出貨箱貼／封箱膠帶</td><td>⑤ 中文橫式黑字，單色印刷；膠帶用 WEIBO Blue 底白字 Logo 重複排列，間距 = Logo 寬</td></tr>
+      <tr><td>104／LinkedIn 封面</td><td>Navy 底，⑥ 英文橫式白字居中，下方企業標語一行</td></tr>
+      <tr><td>展會背板</td><td>② 完整寬版；Logo 高 ≥ 300mm；背板 70% 白、20% Blue 色塊、10% Navy</td></tr>
+    </table></div>
+  </div>
+
+  <hr class="rule">
+
+  <!-- ══ 13. 共同品牌與並列 ═══════════════════════════════════ -->
+  <div class="section" id="cobrand">
+    <div class="section-label">13</div>
+    <h2>共同品牌與並列規範 <span class="tag todo">待定稿</span></h2>
+    <div class="table-wrap"><table>
+      <tr><th>情境</th><th>順序</th><th>大小與間距</th></tr>
+      <tr><td>WEIBO × 代理品牌（總代理公告、提案）</td><td>代理品牌 Logo 在前（左／上），WEIBO 在後，中間 1px 灰直線</td><td>視覺高度相等；間距 ≥ 較大者高度</td></tr>
+      <tr><td>WEIBO × WEiZ／WEILIFE（集團介紹）</td><td>WEIBO 在前，子品牌依 WEiZ、WEILIFE 排序</td><td>WEIBO 可大 1.2 倍；間距 ≥ WEIBO 高</td></tr>
+      <tr><td>多個代理品牌並列（品牌矩陣頁）</td><td>依合作年資或字母排序，全部等高，灰階或原色統一</td><td>格線排列，每格內留 ≥ 25% 空白</td></tr>
+      <tr><td>發票、合約、公文</td><td>只放 WEIBO ④ 或 ⑤；不放代理品牌</td><td>—</td></tr>
+    </table></div>
+    <div class="callout todo"><b>待確認：</b>各代理品牌的 Logo 使用授權範圍（可否灰階、最小尺寸、可否與其他品牌同頁）。需向原廠取得 Brand Guideline 後補入附錄。</div>
+  </div>
+
+  <hr class="rule">
+
+  <!-- ══ 14. 注意事項與備註 ══════════════════════════════════ -->
+  <div class="section" id="notes">
+    <div class="section-label">14</div>
+    <h2>注意事項與備註</h2>
+    <div class="table-wrap"><table>
+      <tr><th>項目</th><th>說明</th></tr>
+      <tr><td>Logo 檔案</td><td>現有完稿為 900×900 PNG 共 11 檔，無向量檔。螢幕與 A4 內使用足夠；<strong>大圖輸出（展板、招牌、車體）前須向設計師取得 AI／SVG</strong></td></tr>
+      <tr><td>缺少的檔</td><td>⑥ 英文橫式只有白字版，缺黑字版；缺標誌單獨檔</td></tr>
+      <tr><td>Logo 透明度</td><td>標誌藍灰帶 68% 透明，放在非白底會變色，屬設計原意；印刷時請設計師確認 CMYK 換算</td></tr>
+      <tr><td>色票狀態</td><td>本章色票為反推提案，尚無設計師定義的 CMYK／Pantone；印刷前補</td></tr>
+      <tr><td>字型</td><td>現行 Google 簡報未嵌入字型，實際顯示為明體；改用 Noto Sans TC + Inter 後重新輸出</td></tr>
+      <tr><td>WEiZ 對照版本</td><td>本文件結構對照 WEiZ VIS PLUS v3.0；Drive 另有 WEiZ_VIS_4.0（2026-07），若以 4.0 為準需再核一次共用章節</td></tr>
+      <tr><td>語言設定</td><td>所有 WEIBO HTML 輸出均設 <code>lang="zh-Hant"</code></td></tr>
+      <tr><td>資料來源</td><td>Logo 完稿壓縮檔、營運管理手冊 V1.0、新進人員引導簡報（2026.08）、品牌新聞稿、現行名片、戰略部署簡報</td></tr>
+    </table></div>
+  </div>
+
+  <hr class="rule">
+
+  <!-- ══ 15. 設計檢查清單 ════════════════════════════════════ -->
+  <div class="section" id="checklist">
+    <div class="section-label">15</div>
+    <h2>設計檢查清單</h2>
+    <ul class="checklist">
+      <li>名稱寫法 WEIBO 全大寫；中英並列「WEIBO 威柏科技」</li>
+      <li>用的是第 4 章六種版型之一，未拆解重排</li>
+      <li>標誌藍灰未改色；文字只用黑或白</li>
+      <li>安全距離 ≥ 標誌高 ½，區域內無其他元素</li>
+      <li>尺寸不小於最小規格</li>
+      <li>色彩 70 / 20 / 10，主色 #5252FF，文字 #333333</li>
+      <li>沒有促銷紅金、沒有 Teal（除非定稿保留）</li>
+      <li>字型 Noto Sans TC + Inter，無明體</li>
+      <li>中英之間半形空格，型號不加空格</li>
+      <li>沒有 Emoji、沒有吉祥物</li>
+      <li>Logo 在左上／左下，不在右下</li>
+      <li>漸層只在封面／Hero，不在按鈕與文字</li>
+      <li>代理品牌並列順序與間距符合第 13 章</li>
+      <li>對外文件頁尾有公司資訊與統編</li>
+    </ul>
+  </div>
+
+</div><!-- /wrap -->
+
+<div class="doc-footer">
+  <img src="assets/logos/weibo_full_wide_white.png" alt="WEIBO">
+  <span>威柏科技貿易有限公司 ｜ WEIBO VIS v0.1 核對稿 ｜ 2026 年 9 月</span>
+</div>
+
+</body>
+</html>

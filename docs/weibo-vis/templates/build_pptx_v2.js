@@ -8,7 +8,7 @@ const W = 13.33, H = 7.5, M = 0.6;
 const img = (f) => 'image/png;base64,' + fs.readFileSync(f).toString('base64');
 const A = (n) => img('assets/' + n);
 const BG_COVER = A('bg_cover.png'), BG_INNER = A('bg_inner.png'), RULE = A('header_rule.png');
-const LOGO_EN_W = img('logo_en_white.png'), LOGO_CORP_B = img('logo_corp_black.png');
+const LOGO_EN_W = img('logo_en_white.png'), LOGO_CORP_B = img('logo_corp_black.png'), LOGO_EN_B = img('logo_en_black.png');
 const NUM = {}; for (let i = 1; i <= 15; i++) NUM[i] = A(`num_${String(i).padStart(2, '0')}.png`);
 const ICO = (name, white) => A(`icon_${name}_${white ? 'FFFFFF' : C.P}.png`);
 
@@ -34,7 +34,7 @@ function inner(pres, n, eyebrow, title, total) {
   s.addImage({ data: RULE, x: M, y: 1.36, w: 6.6, h: 0.11 });
   txt(s, title, { x: M, y: 1.62, w: 11.8, h: 0.75, fontSize: 28, bold: true, color: C.P });
   // 頁尾：Logo 左下、頁碼膠囊右下
-  s.addImage({ data: LOGO_CORP_B, x: M, y: H - M - 0.3, w: 1.8, h: 0.3 });
+  s.addImage({ data: LOGO_EN_B, x: M, y: H - M - 0.3, w: 1.29, h: 0.3 }); // ⑥ 英文橫式黑字（VIS 內頁左下）
   s.addShape('roundRect', { x: W - M - 1.35, y: H - M - 0.34, w: 1.35, h: 0.34, rectRadius: 0.17, fill: { color: C.P50 }, line: { color: C.P50, width: 0 } });
   txt(s, `Page ${String(n).padStart(2, '0')} / ${total}`, { x: W - M - 1.35, y: H - M - 0.34, w: 1.35, h: 0.34, fontSize: 9.5, color: C.P, align: 'center', valign: 'middle' });
   return s;

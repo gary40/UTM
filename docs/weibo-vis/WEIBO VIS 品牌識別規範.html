@@ -8,11 +8,11 @@
 <style>
   :root {
     color-scheme: light;
-    --blue: #5252FF;        /* WEIBO Blue 500 — Logo 藍在白底的實際呈現色 */
-    --blue-600: #4242E6;
-    --blue-700: #3333C2;
-    --blue-200: #A8A8FF;
-    --blue-100: #D6D6FF;
+    --blue: #5D59FF;        /* WEIBO Blue — 與 WEiZ 共用之集團主色（B 案） */
+    --blue-600: #4A46E6;
+    --blue-700: #3A37C2;
+    --blue-200: #A3A3FF;
+    --blue-100: #D6D5FF;
     --blue-50: #EEEEFF;
     --navy: #1E2A5E;        /* WEIBO Navy — 深底、封面、印刷 */
     --logo-gray: #979797;   /* Logo 灰在白底的實際呈現色 */
@@ -31,7 +31,7 @@
   code { font: 500 .92em/1 var(--font); background: var(--gray-50); padding: 1px 6px; border-radius: 4px; color: var(--blue-700); }
 
   /* ── Cover ── */
-  .cover { background: linear-gradient(150deg, #5252FF 0%, #3333C2 45%, #1E2A5E 100%); min-height: 380px; display: flex; flex-direction: column; justify-content: flex-end; padding: 64px 80px 56px; position: relative; overflow: hidden; }
+  .cover { background: linear-gradient(150deg, #5D59FF 0%, #3A37C2 45%, #1E2A5E 100%); min-height: 380px; display: flex; flex-direction: column; justify-content: flex-end; padding: 64px 80px 56px; position: relative; overflow: hidden; }
   .cover-glow { position: absolute; inset: 0; background: radial-gradient(60% 60% at 80% 20%, rgba(255,255,255,.16), transparent 70%); }
   /* 橫式 Logo PNG 為 900×900 正方畫布、圖形只在中央帶，用 object-fit: cover 裁掉上下透明區 */
   .cover img { width: 292px; height: 64px; object-fit: cover; object-position: center; margin-bottom: 36px; position: relative; }
@@ -376,7 +376,7 @@
       <div class="logo-tile navy"><img src="assets/logos/weibo_full_stacked_white.png" alt="白字版"><div class="logo-cap">白字版<small>WEIBO Navy、深色、深色照片上使用</small></div></div>
     </div>
     <div class="callout">
-      <b>標誌顏色固定，不隨背景反白。</b>標誌的藍（<code>#0000FF</code>@68%）與灰（<code>#666666</code>@68%）帶透明度，因此放在<strong>白底</strong>呈現為 <code>#5252FF</code>／<code>#979797</code>，放在 Navy 上會略暗——這是設計原意，屬正常現象。不得為了「看起來一樣」而改色。
+      <b>標誌顏色固定，不隨背景反白。</b>標誌的藍（<code>#0000FF</code>@68%）與灰（<code>#666666</code>@68%）帶透明度，因此放在<strong>白底</strong>呈現為 <code>#5D59FF</code>／<code>#979797</code>，放在 Navy 上會略暗——這是設計原意，屬正常現象。不得為了「看起來一樣」而改色。
     </div>
 
     <h3>名稱書寫規定</h3>
@@ -417,19 +417,17 @@
   <!-- ══ 5. 色彩系統 ═══════════════════════════════════════════ -->
   <div class="section" id="colors">
     <div class="section-label">05</div>
-    <h2>色彩系統 <span class="tag todo">待定稿</span></h2>
-    <p>WEIBO 目前沒有設計師定義的官方色票。以下色票由 Logo 實際呈現色反推，並對齊集團 WEiZ 的 token 結構（同一套變數名稱、不同數值），讓兩品牌素材可以互相套用。</p>
+    <h2>色彩系統 <span class="tag todo">色票待設計師確認 CMYK</span></h2>
+    <p>WEIBO 與 WEiZ 共用同一套色彩 token（主色、藍色階、中性色相同），差別在 WEIBO 以 Navy 取代 WEiZ 的深紫與暖色點綴，並不使用促銷紅金。CMYK／Pantone 待設計師確認。</p>
 
-    <div class="callout todo">
-      <b>待定稿：主色方案。</b>兩個選項，請擇一：<br>
-      <b>A（本稿採用）</b>WEIBO Blue <code>#5252FF</code>：直接取 Logo 藍在白底的呈現色，WEIBO 有自己的主色，與 WEiZ <code>#5D59FF</code> 同色系但可辨識。<br>
-      <b>B</b> 與 WEiZ 共用 <code>#5D59FF</code>：集團一致，素材完全可互用，但 Logo 藍與版面主色會有肉眼可辨的微差。
+    <div class="callout">
+      <b>主色採 B 案：與 WEiZ 共用 <code>#5D59FF</code>。</b>依據：現行已上線的合約文件（BB009001）、新進人員簡報與 Notion 規範庫均以 <code>#5D59FF</code> 系為主色，沿用可讓既有文件與新模板一致。Logo 標誌本身的藍（<code>#0000FF</code>@68%，白底呈現 <code>#5252FF</code>）不變，兩者同色系、肉眼差異極小。
     </div>
 
     <h3>使用比例：70 / 20 / 10</h3>
     <div class="ratio-bar">
       <span style="flex:70;background:#F4F4F8;color:#666;">70% 中性基底</span>
-      <span style="flex:20;background:#5252FF;color:#fff;">20% WEIBO Blue</span>
+      <span style="flex:20;background:#5D59FF;color:#fff;">20% WEIBO Blue</span>
       <span style="flex:10;background:#1E2A5E;color:#fff;">10%</span>
     </div>
     <p style="font-size:13px;color:var(--gray-400);">70% = 白／#F4F4F8 等中性色；20% = WEIBO Blue；10% = Navy 或功能色。與 WEiZ 的差別：WEIBO 的 10% 以 <strong>Navy 與灰</strong>為主，不用促銷紅金。</p>
@@ -438,7 +436,7 @@
     <div class="swatches">
       <div class="sw"><div class="sw-chip" style="background:#FFFFFF;"></div><div class="sw-name">White</div><div class="sw-hex">#FFFFFF</div><div class="sw-zh">主要背景</div></div>
       <div class="sw"><div class="sw-chip" style="background:#F4F4F8;"></div><div class="sw-name">Gray 50</div><div class="sw-hex">#F4F4F8</div><div class="sw-zh">次要背景（偏冷）</div></div>
-      <div class="sw"><div class="sw-chip" style="background:#5252FF;"></div><div class="sw-name" style="color:#5252FF;">WEIBO Blue</div><div class="sw-hex">#5252FF</div><div class="sw-zh">主色・CTA・標題強調</div></div>
+      <div class="sw"><div class="sw-chip" style="background:#5D59FF;"></div><div class="sw-name" style="color:#5D59FF;">WEIBO Blue</div><div class="sw-hex">#5D59FF</div><div class="sw-zh">主色（與 WEiZ 共用）</div></div>
       <div class="sw"><div class="sw-chip" style="background:#1E2A5E;"></div><div class="sw-name" style="color:#1E2A5E;">WEIBO Navy</div><div class="sw-hex">#1E2A5E</div><div class="sw-zh">深底・封面・頁尾</div></div>
       <div class="sw"><div class="sw-chip" style="background:#979797;"></div><div class="sw-name">Logo Gray</div><div class="sw-hex">#979797</div><div class="sw-zh">標誌灰・輔助圖形</div></div>
       <div class="sw"><div class="sw-chip" style="background:#999999;"></div><div class="sw-name">Gray 400</div><div class="sw-hex">#999999</div><div class="sw-zh">說明文字</div></div>
@@ -449,12 +447,12 @@
     <h3>藍色階（UI 狀態用）</h3>
     <div class="swatches">
       <div class="sw"><div class="sw-chip" style="background:#EEEEFF;border:1px solid #ddd;"></div><div class="sw-hex">#EEEEFF</div><div class="sw-zh">50 淡填充</div></div>
-      <div class="sw"><div class="sw-chip" style="background:#D6D6FF;"></div><div class="sw-hex">#D6D6FF</div><div class="sw-zh">100 Hover 底</div></div>
-      <div class="sw"><div class="sw-chip" style="background:#A8A8FF;"></div><div class="sw-hex">#A8A8FF</div><div class="sw-zh">200 次要強調</div></div>
-      <div class="sw"><div class="sw-chip" style="background:#7A7AFF;"></div><div class="sw-hex">#7A7AFF</div><div class="sw-zh">300 過渡</div></div>
-      <div class="sw"><div class="sw-chip" style="background:#5252FF;"></div><div class="sw-hex">#5252FF</div><div class="sw-zh">500 主色</div></div>
-      <div class="sw"><div class="sw-chip" style="background:#4242E6;"></div><div class="sw-hex">#4242E6</div><div class="sw-zh">600 Hover</div></div>
-      <div class="sw"><div class="sw-chip" style="background:#3333C2;"></div><div class="sw-hex">#3333C2</div><div class="sw-zh">700 Press</div></div>
+      <div class="sw"><div class="sw-chip" style="background:#D6D5FF;"></div><div class="sw-hex">#D6D5FF</div><div class="sw-zh">100 Hover 底</div></div>
+      <div class="sw"><div class="sw-chip" style="background:#A3A3FF;"></div><div class="sw-hex">#A3A3FF</div><div class="sw-zh">200 次要強調</div></div>
+      <div class="sw"><div class="sw-chip" style="background:#837FFF;"></div><div class="sw-hex">#837FFF</div><div class="sw-zh">300 過渡</div></div>
+      <div class="sw"><div class="sw-chip" style="background:#5D59FF;"></div><div class="sw-hex">#5D59FF</div><div class="sw-zh">500 主色</div></div>
+      <div class="sw"><div class="sw-chip" style="background:#4A46E6;"></div><div class="sw-hex">#4A46E6</div><div class="sw-zh">600 Hover</div></div>
+      <div class="sw"><div class="sw-chip" style="background:#3A37C2;"></div><div class="sw-hex">#3A37C2</div><div class="sw-zh">700 Press</div></div>
       <div class="sw"><div class="sw-chip" style="background:#1E2A5E;"></div><div class="sw-hex">#1E2A5E</div><div class="sw-zh">900 Navy</div></div>
     </div>
 
@@ -472,10 +470,10 @@
 
     <h3>品牌漸層</h3>
     <div style="display:flex;gap:16px;margin:16px 0;flex-wrap:wrap;">
-      <div style="flex:1;min-width:240px;height:80px;border-radius:12px;background:linear-gradient(135deg,#5252FF 0%,#1E2A5E 100%);display:flex;align-items:flex-end;padding:12px 16px;">
-        <span style="color:#fff;font:700 12px/1 var(--font);">品牌漸層 — #5252FF → #1E2A5E（僅封面／Hero）</span>
+      <div style="flex:1;min-width:240px;height:80px;border-radius:12px;background:linear-gradient(135deg,#5D59FF 0%,#1E2A5E 100%);display:flex;align-items:flex-end;padding:12px 16px;">
+        <span style="color:#fff;font:700 12px/1 var(--font);">品牌漸層 — #5D59FF → #1E2A5E（僅封面／Hero）</span>
       </div>
-      <div style="flex:1;min-width:240px;height:80px;border-radius:12px;background:linear-gradient(135deg,#EEEEFF 0%,#D6D6FF 100%);display:flex;align-items:flex-end;padding:12px 16px;">
+      <div style="flex:1;min-width:240px;height:80px;border-radius:12px;background:linear-gradient(135deg,#EEEEFF 0%,#D6D5FF 100%);display:flex;align-items:flex-end;padding:12px 16px;">
         <span style="color:var(--blue-700);font:700 12px/1 var(--font);">輔助淺漸層 — Blue 50 → 100</span>
       </div>
     </div>
@@ -604,7 +602,7 @@
       <tr><th>規格項目</th><th>說明</th></tr>
       <tr><td>風格</td><td>線條型（Outline）、簡潔幾何</td></tr>
       <tr><td>筆畫 / 圓角</td><td>2px / 2px，圓接頭</td></tr>
-      <tr><td>預設顏色</td><td>WEIBO Blue #5252FF；深底用白色；表格內用 Gray 600</td></tr>
+      <tr><td>預設顏色</td><td>WEIBO Blue #5D59FF；深底用白色；表格內用 Gray 600</td></tr>
       <tr><td>尺寸</td><td>16px（內文）→ 24px（按鈕）→ 32px（功能）→ 48px（簡報大圖示）</td></tr>
       <tr><td>套件</td><td>Lucide Icons，與 WEiZ 相同，尚無官方圖示集</td></tr>
     </table></div>
@@ -724,7 +722,7 @@
       <li>標誌藍灰未改色；文字只用黑或白</li>
       <li>安全距離 ≥ 標誌高 ½，區域內無其他元素</li>
       <li>尺寸不小於最小規格</li>
-      <li>色彩 70 / 20 / 10，主色 #5252FF，文字 #333333</li>
+      <li>色彩 70 / 20 / 10，主色 #5D59FF（集團共用），文字 #333333</li>
       <li>沒有促銷紅金、沒有 Teal（除非定稿保留）</li>
       <li>字型 Noto Sans TC + Inter，無明體</li>
       <li>中英之間半形空格，型號不加空格</li>

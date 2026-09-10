@@ -4,203 +4,199 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>WEIBO 應用範例集</title>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700;900&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700;900&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
   :root {
     color-scheme: light;
-    --blue: #5252FF; --blue-700: #3333C2; --blue-200: #A8A8FF; --blue-100: #D6D6FF; --blue-50: #EEEEFF;
-    --navy: #1E2A5E; --logo-gray: #979797;
-    --gray-50: #F4F4F8; --gray-200: #E4E4EA; --gray-400: #999999; --gray-600: #666666; --gray-900: #333333;
-    --ok: #1E9E6A; --warn: #E8A317; --bad: #D93A1F;
+    --p: #5D59FF; --p7: #3A37C2; --p2: #A3A3FF; --p1: #D6D5FF; --p50: #EEEEFF; --p-soft: #F6F6FF;
+    --navy: #1E2A5E; --g50: #F4F4F8; --g200: #E4E4EA; --g400: #999999; --g600: #666666; --g900: #333333;
+    --ok: #1E9E6A; --warn: #E8A317;
     --font: 'Inter','Noto Sans TC','PingFang TC','Microsoft JhengHei',system-ui,sans-serif;
+    --shadow: 0 10px 30px rgba(93,89,255,.10), 0 1px 2px rgba(30,42,94,.06);
   }
   *, *::before, *::after { box-sizing: border-box; }
   html { background: #fff; }
-  body { margin: 0; font-family: var(--font); color: var(--gray-900); background: #fff; font-size: 15px; line-height: 1.7; -webkit-font-smoothing: antialiased; }
-  code { font: 500 .92em/1 var(--font); background: var(--gray-50); padding: 1px 6px; border-radius: 4px; color: var(--blue-700); }
-  img.hlogo { object-fit: cover; object-position: center; }
+  body { margin: 0; font-family: var(--font); color: var(--g900); background: linear-gradient(180deg,#F7F7FF 0%,#FFFFFF 18%); font-size: 15px; line-height: 1.7; -webkit-font-smoothing: antialiased; }
+  code { font: 500 .92em/1 var(--font); background: var(--p50); padding: 1px 6px; border-radius: 4px; color: var(--p7); }
+  .grad-text { background: linear-gradient(120deg, var(--p) 0%, #8B7CFF 100%); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  svg.wave { position: absolute; pointer-events: none; }
 
-  .cover { background: var(--navy); padding: 56px 80px 48px; position: relative; }
-  .cover img { width: 292px; height: 64px; object-fit: cover; margin-bottom: 28px; }
-  .cover h1 { font: 700 44px/1.15 var(--font); color: #fff; margin: 0 0 10px; letter-spacing: -.02em; }
-  .cover p { color: rgba(255,255,255,.75); margin: 0; font-size: 16px; }
-  .cover-meta { margin-top: 24px; display: flex; gap: 28px; flex-wrap: wrap; color: rgba(255,255,255,.55); font-size: 13px; }
-  .cover-meta b { color: rgba(255,255,255,.9); }
-  .draft-badge { position: absolute; top: 24px; right: 32px; border: 1px solid rgba(255,255,255,.4); color: #fff; font: 700 12px/1 var(--font); letter-spacing: .12em; padding: 8px 12px; border-radius: 6px; }
+  /* ── Cover ── */
+  .cover { position: relative; overflow: hidden; background: linear-gradient(135deg,#5D59FF 0%,#3A37C2 50%,#1E2A5E 100%); padding: 64px 80px 56px; color: #fff; }
+  .cover .glow { position: absolute; inset: 0; background: radial-gradient(60% 60% at 85% 10%, rgba(255,255,255,.18), transparent 70%); }
+  .cover img { height: 46px; margin-bottom: 30px; position: relative; }
+  .cover .eb { position: relative; font: 700 12px/1 var(--font); letter-spacing: .3em; color: var(--p1); margin-bottom: 14px; }
+  .cover h1 { position: relative; font: 700 46px/1.15 var(--font); margin: 0 0 12px; letter-spacing: -.02em; }
+  .cover p { position: relative; margin: 0; color: rgba(255,255,255,.8); font-size: 16px; }
+  .cover-meta { position: relative; margin-top: 26px; display: flex; gap: 28px; flex-wrap: wrap; color: rgba(255,255,255,.55); font-size: 13px; }
+  .cover-meta b { color: rgba(255,255,255,.92); }
+  .badge { position: absolute; top: 24px; right: 32px; border: 1px solid rgba(255,255,255,.45); color: #fff; font: 700 11px/1 var(--font); letter-spacing: .14em; padding: 8px 12px; border-radius: 999px; }
 
-  .wrap { max-width: 960px; margin: 0 auto; padding: 0 48px 120px; }
-  .toc { background: var(--gray-50); border-radius: 16px; padding: 28px 36px; margin: 44px 0; }
-  .toc h3 { font: 700 13px/1 var(--font); letter-spacing: .12em; color: var(--blue); margin: 0 0 14px; text-transform: uppercase; }
+  .wrap { max-width: 1000px; margin: 0 auto; padding: 0 48px 120px; }
+  .toc { background: #fff; border: 1px solid var(--p1); border-radius: 18px; padding: 28px 36px; margin: 44px 0; box-shadow: var(--shadow); }
+  .toc h3 { font: 700 12px/1 var(--font); letter-spacing: .22em; color: var(--p); margin: 0 0 14px; }
   .toc ol { margin: 0; padding-left: 20px; columns: 2; gap: 32px; }
-  .toc li { padding: 3px 0; font-size: 14px; color: var(--gray-600); }
-  .toc a { color: inherit; text-decoration: none; } .toc a:hover { color: var(--blue); }
+  .toc li { padding: 3px 0; font-size: 14px; color: var(--g600); }
+  .toc a { color: inherit; text-decoration: none; } .toc a:hover { color: var(--p); }
 
-  .section { margin-top: 72px; }
-  .section-label { font: 700 12px/1 var(--font); letter-spacing: .18em; color: var(--blue); text-transform: uppercase; margin-bottom: 8px; }
-  h2 { font: 700 32px/1.15 var(--font); margin: 0 0 20px; letter-spacing: -.01em; text-wrap: balance; }
-  h3 { font: 700 18px/1.3 var(--font); margin: 32px 0 10px; }
+  /* ── Section header：漸層數字 ＋ 斜線 ＋ 眉標 ＋ 斜切線 ── */
+  .section { margin-top: 84px; position: relative; }
+  .sec-head { display: flex; align-items: flex-end; gap: 18px; position: relative; padding-bottom: 14px; margin-bottom: 22px; }
+  .sec-head::after { content: ''; position: absolute; left: 0; bottom: 0; width: 62%; height: 2px; background: linear-gradient(90deg, var(--p) 0%, rgba(139,124,255,.15) 100%); clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%); }
+  .sec-num { font: 300 72px/1 'Inter',var(--font); font-style: italic; letter-spacing: -.04em; }
+  .sec-slash { width: 1px; height: 44px; background: var(--p2); transform: skewX(-20deg); margin-bottom: 6px; }
+  .sec-eb { font: 400 15px/1.2 var(--font); color: #8B8BC8; letter-spacing: .08em; margin-bottom: 12px; }
+  h2 { font: 700 30px/1.2 var(--font); margin: 0 0 18px; letter-spacing: -.01em; text-wrap: balance; }
+  h3 { font: 700 17px/1.3 var(--font); margin: 30px 0 10px; color: var(--g900); }
   p { margin: 0 0 14px; }
-  .rule { border: none; border-top: 1px solid var(--gray-200); margin: 48px 0 0; }
-  .spec { font-size: 13px; color: var(--gray-400); margin-top: 8px; }
-  .callout { background: var(--blue-50); border-left: 3px solid var(--blue); border-radius: 0 12px 12px 0; padding: 16px 20px; margin: 18px 0; font-size: 14.5px; }
-  .callout b { color: var(--blue-700); }
+  .callout { background: var(--p50); border-left: 3px solid var(--p); border-radius: 0 12px 12px 0; padding: 16px 20px; margin: 18px 0; font-size: 14.5px; }
+  .callout b { color: var(--p7); }
   .callout.todo { background: #FFF6E0; border-left-color: var(--warn); } .callout.todo b { color: #8A5A00; }
-  .tag { display: inline-block; font: 700 11px/1 var(--font); letter-spacing: .08em; padding: 5px 8px; border-radius: 4px; vertical-align: middle; margin-left: 8px; }
-  .tag.todo { background: #FFF6E0; color: #8A5A00; }
+  .callout.ok { background: #E8F7F0; border-left-color: var(--ok); } .callout.ok b { color: #146B47; }
+  .pill { display: inline-block; border: 1px solid var(--p); color: var(--p); border-radius: 999px; padding: 3px 12px; font: 500 12px/1.4 var(--font); letter-spacing: .12em; }
 
   .table-wrap { overflow-x: auto; }
-  table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 14px; }
-  th { background: var(--blue); color: #fff; font: 700 13px/1.3 var(--font); padding: 11px 14px; text-align: left; }
-  th:first-child { border-radius: 8px 0 0 0; } th:last-child { border-radius: 0 8px 0 0; }
-  td { padding: 10px 14px; border-bottom: 1px solid var(--gray-200); color: var(--gray-600); vertical-align: top; }
+  table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 14px; background: #fff; border-radius: 10px; overflow: hidden; box-shadow: var(--shadow); }
+  th { background: var(--p); color: #fff; font: 700 13px/1.3 var(--font); padding: 11px 14px; text-align: left; }
+  td { padding: 10px 14px; border-bottom: 1px solid var(--g200); color: var(--g600); vertical-align: top; }
   tr:last-child td { border-bottom: none; }
-  td:first-child { font-weight: 700; color: var(--gray-900); }
+  td:first-child { font-weight: 700; color: var(--g900); }
+  .spec { font-size: 13px; color: var(--g400); margin-top: 8px; }
 
-  /* ── Mock frames ── */
-  .stage { background: var(--gray-50); border-radius: 16px; padding: 32px; display: flex; gap: 28px; flex-wrap: wrap; align-items: flex-start; justify-content: center; margin: 16px 0; }
-  .paper { background: #fff; box-shadow: 0 8px 28px rgba(30,42,94,.14); position: relative; overflow: hidden; color: var(--gray-900); }
-  .cap { width: 100%; text-align: center; font: 500 12.5px/1.4 var(--font); color: var(--gray-600); margin-top: -8px; }
+  /* ── Stage & paper ── */
+  .stage { position: relative; overflow: hidden; background: linear-gradient(135deg,#F6F6FF 0%,#FFFFFF 55%,#F3F3FC 100%); border: 1px solid #ECECF8; border-radius: 20px; padding: 40px; display: flex; gap: 32px; flex-wrap: wrap; align-items: flex-start; justify-content: center; margin: 16px 0 6px; }
+  .paper { background: #fff; box-shadow: 0 14px 40px rgba(30,42,94,.14), 0 1px 2px rgba(30,42,94,.06); position: relative; overflow: hidden; color: var(--g900); }
+  .cap { width: 100%; text-align: center; font: 500 12.5px/1.5 var(--font); color: var(--g600); margin: 6px 0 0; }
 
-  /* A4 letterhead 210×297 → 300×424 */
-  .a4 { width: 300px; height: 424px; padding: 22px 24px; font-size: 6.2px; line-height: 1.6; display: flex; flex-direction: column; }
-  .a4 .head { display: flex; justify-content: space-between; align-items: flex-start; }
-  .a4 .head img { width: 118px; height: 20px; }
-  .a4 .head .ref { text-align: right; color: var(--gray-400); font-size: 5.8px; line-height: 1.5; }
-  .a4 .title { font: 700 12px/1.3 var(--font); margin: 26px 0 8px; }
+  /* 文件共同表頭／頁尾（信紙、報價單、合約） */
+  .dhead { display: flex; justify-content: space-between; align-items: center; }
+  .dhead img { height: 18px; }
+  .dhead .right { text-align: right; color: var(--g400); font: 400 4.6px/1.6 'Inter',var(--font); letter-spacing: .12em; text-transform: uppercase; }
+  .drule { height: 1px; background: var(--p1); margin: 8px 0 12px; }
+  .dfoot { border-top: 1px solid var(--p1); margin-top: auto; padding-top: 6px; display: flex; justify-content: space-between; align-items: center; color: var(--g400); font-size: 4.8px; }
+  .dfoot img { height: 7px; margin-right: 4px; vertical-align: middle; }
+
+  /* A4 信紙 300×424 */
+  .a4 { width: 300px; height: 424px; padding: 20px 24px; font-size: 6.2px; line-height: 1.6; display: flex; flex-direction: column; }
+  .a4 .doc-title { font: 700 12px/1.3 var(--font); color: var(--p); margin: 16px 0 6px; }
+  .a4 .meta { color: var(--g400); font-size: 5.4px; margin-bottom: 12px; }
+  .a4 .lines i { display: block; height: 1px; background: var(--g200); margin: 9px 0; } .a4 .lines i.s { width: 60%; }
   .a4 .lines { flex: 1; }
-  .a4 .lines i { display: block; height: 1px; background: var(--gray-200); margin: 9px 0; }
-  .a4 .lines i.short { width: 60%; }
-  .a4 .foot { border-top: 1px solid var(--gray-200); padding-top: 6px; display: flex; justify-content: space-between; color: var(--gray-400); font-size: 5.4px; }
 
-  /* DL envelope 220×110 → 330×165 */
+  /* DL 信封 330×165 */
   .dl { width: 330px; height: 165px; padding: 14px 16px; font-size: 6.4px; line-height: 1.6; }
-  .dl img { width: 120px; height: 20px; }
-  .dl .sender { color: var(--gray-400); font-size: 5.6px; margin-top: 2px; }
-  .dl .addr { position: absolute; left: 150px; top: 78px; font-size: 8px; line-height: 1.7; }
-  .dl .stamp { position: absolute; right: 14px; top: 12px; width: 30px; height: 36px; border: 1px dashed var(--gray-200); }
-  .dl.back { display: flex; align-items: center; justify-content: center; background: var(--navy); }
-  .dl.back .flap { position: absolute; left: 0; right: 0; top: 0; height: 78px; background: var(--blue-700); clip-path: polygon(0 0, 100% 0, 50% 100%); }
-  .dl.back img { width: 110px; height: 24px; position: relative; margin-top: 70px; }
+  .dl img { height: 17px; }
+  .dl .sender { color: var(--g400); font-size: 5.4px; margin-top: 3px; }
+  .dl .addr { position: absolute; left: 150px; top: 76px; font-size: 8px; line-height: 1.7; }
+  .dl .stamp { position: absolute; right: 14px; top: 12px; width: 30px; height: 36px; border: 1px dashed var(--p1); border-radius: 2px; }
+  .dl.back { background: linear-gradient(135deg,#5D59FF 0%,#3A37C2 50%,#1E2A5E 100%); display: flex; align-items: flex-end; justify-content: center; padding-bottom: 22px; }
+  .dl.back .flap { position: absolute; left: 0; right: 0; top: 0; height: 78px; background: rgba(255,255,255,.08); clip-path: polygon(0 0, 100% 0, 50% 100%); border-bottom: 1px solid rgba(255,255,255,.15); }
+  .dl.back img { height: 22px; position: relative; }
 
-  /* Box label 100×70mm → 300×210 */
-  .label { width: 300px; height: 210px; padding: 14px 16px; display: flex; flex-direction: column; border: 1px solid var(--gray-200); font-size: 8px; }
-  .label img { width: 150px; height: 24px; align-self: flex-start; }
-  .label .grid { flex: 1; display: grid; grid-template-columns: 1fr 1fr; gap: 6px 12px; margin-top: 10px; align-content: start; }
-  .label .f { border-bottom: 1px solid var(--gray-900); padding: 2px 0; display: flex; gap: 6px; }
-  .label .f b { color: var(--gray-600); font-weight: 500; white-space: nowrap; }
-  .label .f.wide { grid-column: 1 / -1; }
-  .label .bottom { display: flex; justify-content: space-between; align-items: flex-end; margin-top: 8px; }
-  .label .bottom .fragile { border: 1.5px solid var(--gray-900); padding: 2px 8px; font-weight: 700; letter-spacing: .1em; }
-  .label .bottom small { color: var(--gray-400); font-size: 6.5px; }
+  /* 箱貼 300×210 */
+  .label { width: 300px; height: 210px; padding: 12px 16px 12px; display: flex; flex-direction: column; font-size: 7.6px; border-top: 4px solid var(--p); }
+  .label img { height: 16px; align-self: flex-start; }
+  .label .grid { flex: 1; display: grid; grid-template-columns: 1fr 1fr 64px; grid-template-rows: auto auto auto; gap: 6px 12px; margin-top: 10px; }
+  .label .f { border-bottom: 1px solid var(--g200); padding: 2px 0 3px; display: flex; flex-direction: column; }
+  .label .f b { color: var(--g400); font: 500 5.4px/1.4 var(--font); letter-spacing: .1em; }
+  .label .f span { font-size: 8.5px; font-weight: 700; color: var(--g900); }
+  .label .f.wide { grid-column: 1 / 3; }
+  .label .qr { grid-row: 1 / 4; grid-column: 3; border: 1px solid var(--g200); border-radius: 3px; display: flex; align-items: center; justify-content: center; font-size: 5px; color: var(--g400); text-align: center; background: repeating-linear-gradient(90deg,#333 0 2px,transparent 2px 5px) 0 0/100% 40% no-repeat, #fff; }
+  .label .bottom { display: flex; justify-content: space-between; align-items: center; margin-top: 8px; font-size: 5.8px; color: var(--g600); }
+  .label .bottom .fragile { border: 1.5px solid var(--g900); border-radius: 3px; padding: 2px 8px; font-weight: 700; letter-spacing: .12em; color: var(--g900); }
 
-  /* Tape 48mm strip */
-  .tape { width: 100%; max-width: 640px; height: 48px; background: var(--blue); display: flex; align-items: center; overflow: hidden; gap: 0; border-radius: 3px; }
-  .tape img { width: 170px; height: 32px; flex-shrink: 0; margin-right: 60px; }
-  .tape.gray { background: var(--gray-50); border: 1px solid var(--gray-200); }
-  .tape.gray img { filter: none; }
+  /* 膠帶 */
+  .tapes { width: 100%; max-width: 640px; display: flex; flex-direction: column; gap: 14px; }
+  .tape { height: 48px; display: flex; align-items: center; overflow: hidden; border-radius: 4px; box-shadow: 0 6px 18px rgba(30,42,94,.10); }
+  .tape img { height: 26px; flex-shrink: 0; margin: 0 44px 0 24px; }
+  .tape.a { background: var(--p); }
+  .tape.b { background: #fff; border: 1px solid var(--g200); }
 
-  /* 104 banner 1200×400 → 640×213 */
-  .banner { width: 100%; max-width: 640px; aspect-ratio: 3/1; background: var(--navy); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; position: relative; overflow: hidden; }
-  .banner img { width: 260px; height: 56px; position: relative; }
-  .banner .tag-line { color: rgba(255,255,255,.85); font: 500 14px/1 var(--font); letter-spacing: .06em; position: relative; }
-  .banner .eyebrow { color: var(--blue-200); font: 700 10px/1 var(--font); letter-spacing: .18em; position: relative; }
-  .banner .leaf { position: absolute; right: -60px; top: -40px; width: 300px; height: 300px; opacity: .10; }
-  .banner .leaf::before, .banner .leaf::after { content: ''; position: absolute; width: 150px; height: 120px; border-radius: 60px 60px 60px 8px; background: #fff; }
-  .banner .leaf::before { left: 0; top: 60px; transform: rotate(-20deg); }
-  .banner .leaf::after { right: 0; top: 100px; transform: rotate(160deg); }
+  /* 104 banner */
+  .banner { width: 100%; max-width: 660px; aspect-ratio: 3/1; background: linear-gradient(135deg,#5D59FF 0%,#3A37C2 50%,#1E2A5E 100%); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; position: relative; overflow: hidden; border-radius: 8px; box-shadow: 0 14px 40px rgba(30,42,94,.18); }
+  .banner .glow { position: absolute; inset: 0; background: radial-gradient(50% 60% at 85% 10%, rgba(255,255,255,.2), transparent 70%); }
+  .banner img { height: 54px; position: relative; }
+  .banner .tag-line { color: rgba(255,255,255,.88); font: 500 14px/1 var(--font); letter-spacing: .12em; position: relative; }
+  .banner .eb { color: var(--p1); font: 700 10px/1 var(--font); letter-spacing: .3em; position: relative; }
 
-  /* Quotation / contract A4 */
-  .doc { width: 320px; height: 452px; padding: 22px 24px; font-size: 6px; line-height: 1.6; display: flex; flex-direction: column; }
-  .doc .head { display: flex; justify-content: space-between; align-items: flex-start; }
-  .doc .head img { width: 118px; height: 20px; }
-  .doc .meta { text-align: right; font-size: 5.6px; color: var(--gray-600); line-height: 1.6; }
-  .doc .meta b { color: var(--gray-900); }
-  .doc h4 { font: 700 13px/1.2 var(--font); margin: 20px 0 10px; letter-spacing: .02em; }
-  .doc h4 small { display: block; font: 700 6px/1 var(--font); letter-spacing: .18em; color: var(--blue); margin-bottom: 4px; }
-  .doc .party { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
-  .doc .party div { border: 1px solid var(--gray-200); border-radius: 3px; padding: 5px 7px; }
-  .doc .party b { display: block; font-size: 5.6px; color: var(--blue); letter-spacing: .1em; margin-bottom: 2px; }
-  .doc table { margin: 6px 0; font-size: 5.6px; }
-  .doc th { padding: 4px 6px; font-size: 5.6px; border-radius: 0 !important; }
-  .doc td { padding: 4px 6px; font-size: 5.6px; }
-  .doc td:first-child { font-weight: 400; color: var(--gray-600); }
-  .doc .total { display: flex; justify-content: flex-end; gap: 14px; font-size: 6px; margin-top: 4px; }
-  .doc .total b { font-size: 8px; }
-  .doc .terms { font-size: 5.2px; color: var(--gray-600); margin-top: 8px; }
-  .doc .terms b { color: var(--gray-900); }
-  .doc .sign { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: auto; padding-top: 12px; }
-  .doc .sign div { border-top: 1px solid var(--gray-900); padding-top: 3px; font-size: 5.4px; color: var(--gray-600); }
-  .doc .foot { border-top: 1px solid var(--gray-200); margin-top: 10px; padding-top: 5px; display: flex; justify-content: space-between; color: var(--gray-400); font-size: 5.2px; }
-  .doc .clauses i { display: block; height: 1px; background: var(--gray-200); margin: 8px 0; }
-  .doc .clauses i.short { width: 55%; }
-  .doc .clauses b { display: block; font-size: 6px; margin-top: 6px; }
+  /* 報價單／合約 320×452 */
+  .doc { width: 320px; height: 452px; padding: 18px 22px; font-size: 5.8px; line-height: 1.6; display: flex; flex-direction: column; }
+  .doc .doc-title { font: 700 13px/1.2 var(--font); color: var(--p); margin: 12px 0 8px; }
+  .doc .metat { display: grid; grid-template-columns: 62px 1fr; border: 1px solid var(--g200); border-radius: 2px; font-size: 5.4px; }
+  .doc .metat div { padding: 3px 6px; border-bottom: 1px solid var(--g200); } .doc .metat div:nth-last-child(-n+2) { border-bottom: none; }
+  .doc .metat div:nth-child(odd) { background: var(--g50); color: var(--g600); }
+  .doc h5 { font: 700 7px/1.2 var(--font); color: var(--p); margin: 9px 0 4px; }
+  .doc ul { margin: 0 0 4px; padding-left: 9px; color: var(--g600); } .doc li { margin: 1px 0; }
+  .doc table { box-shadow: none; border-radius: 0; margin: 4px 0; font-size: 5.4px; }
+  .doc th { padding: 3px 5px; font-size: 5.4px; } .doc td { padding: 3px 5px; font-size: 5.4px; } .doc td:first-child { font-weight: 400; color: var(--g600); }
+  .doc .total { text-align: right; margin-top: 3px; } .doc .total b { color: var(--p); font-size: 7.5px; margin-left: 6px; }
+  .doc .sign { display: grid; grid-template-columns: 1fr 1fr; border: 1px solid var(--g200); font-size: 5.4px; margin-top: 8px; }
+  .doc .sign div { padding: 3px 6px; border-bottom: 1px solid var(--g200); border-right: 1px solid var(--g200); } .doc .sign div:nth-child(even) { border-right: none; }
+  .doc .sign div.h { background: var(--p); color: #fff; font-weight: 700; }
+  .doc .wm { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; transform: rotate(-32deg); color: rgba(93,89,255,.07); font: 900 64px/1 var(--font); letter-spacing: .2em; pointer-events: none; }
+  .doc .clauses p { margin: 0 0 3px; color: var(--g600); }
 
-  /* Slides 16:9 → 300×169 */
-  .slides { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin: 14px 0; }
-  .slide { aspect-ratio: 16/9; background: #fff; border: 1px solid var(--gray-200); border-radius: 4px; position: relative; overflow: hidden; padding: 14px 16px; font-size: 6px; line-height: 1.5; box-shadow: 0 2px 8px rgba(51,51,51,.06); }
-  .slide .eb { font: 700 5px/1 var(--font); letter-spacing: .18em; color: var(--blue); text-transform: uppercase; }
-  .slide h5 { font: 700 11px/1.2 var(--font); margin: 4px 0 6px; }
-  .slide .pn { position: absolute; right: 12px; bottom: 9px; font-size: 5px; color: var(--gray-400); }
-  .slide .lg { position: absolute; left: 12px; bottom: 7px; width: 54px; height: 12px; }
-  .slide.dark { background: linear-gradient(135deg,#5252FF 0%,#3333C2 45%,#1E2A5E 100%); color: #fff; }
-  .slide.dark .eb { color: var(--blue-200); }
-  .slide.dark .pn { color: rgba(255,255,255,.5); }
-  .slide.navy { background: var(--navy); color: #fff; }
-  .slide .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-  .slide .box { border: 1px solid var(--gray-200); border-radius: 3px; padding: 5px 6px; }
-  .slide .box b { display: block; font-size: 6.5px; }
-  .slide .img { background: var(--gray-50); border-radius: 3px; display: flex; align-items: center; justify-content: center; color: var(--gray-400); font-size: 5px; min-height: 60px; }
-  .slide .stat { font: 700 20px/1 var(--font); color: var(--blue); }
-  .slide .stat small { display: block; font: 400 5.5px/1.4 var(--font); color: var(--gray-600); margin-top: 3px; }
-  .slide .mini { font-size: 5px; }
-  .slide .mini th { padding: 2px 4px; font-size: 5px; border-radius: 0 !important; }
-  .slide .mini td { padding: 2px 4px; font-size: 5px; }
-  .slide .mini td:first-child { color: var(--gray-900); }
-  .slide .steps { display: flex; gap: 4px; margin-top: 6px; }
-  .slide .steps div { flex: 1; background: var(--blue-50); border-radius: 3px; padding: 4px 5px; font-size: 5px; }
-  .slide .steps div b { display: block; color: var(--blue-700); font-size: 6px; }
-  .slide .tocl { columns: 2; font-size: 5.5px; color: var(--gray-600); padding-left: 10px; margin: 4px 0 0; }
+  /* Slide previews 16:9 */
+  .slides { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin: 14px 0; }
+  .slide { aspect-ratio: 16/9; background: linear-gradient(135deg,#F6F6FF 0%,#FFFFFF 55%,#F3F3FC 100%); border: 1px solid #ECECF8; border-radius: 6px; position: relative; overflow: hidden; padding: 12px 14px; font-size: 5.8px; line-height: 1.5; box-shadow: var(--shadow); }
+  .slide .num { position: absolute; left: 12px; top: 6px; font: 300 22px/1 'Inter',var(--font); font-style: italic; }
+  .slide .eb { position: absolute; left: 50px; top: 12px; font: 400 5px/1 var(--font); color: #8B8BC8; letter-spacing: .1em; }
+  .slide .eb::before { content: ''; position: absolute; left: -9px; top: -3px; width: 1px; height: 11px; background: var(--p2); transform: skewX(-20deg); }
+  .slide .rule { position: absolute; left: 12px; top: 32px; width: 55%; height: 1px; background: linear-gradient(90deg,var(--p),rgba(139,124,255,.15)); }
+  .slide h5 { position: absolute; left: 12px; top: 38px; margin: 0; font: 700 9.5px/1.2 var(--font); color: var(--p); }
+  .slide .body { position: absolute; left: 12px; right: 12px; top: 56px; bottom: 20px; }
+  .slide .pn { position: absolute; right: 10px; bottom: 7px; font-size: 4.6px; color: var(--p); background: var(--p50); border-radius: 999px; padding: 2px 6px; }
+  .slide .lg { position: absolute; left: 12px; bottom: 7px; height: 7px; }
+  .slide.dark { background: linear-gradient(135deg,#5D59FF 0%,#3A37C2 50%,#1E2A5E 100%); color: #fff; }
+  .slide.dark .eb0 { font: 700 4.6px/1 var(--font); letter-spacing: .3em; color: var(--p1); margin-top: 34px; }
+  .slide.dark h4 { font: 700 11px/1.25 var(--font); margin: 6px 0 4px; }
+  .slide.dark .sub { font-size: 5.2px; opacity: .85; }
+  .slide.dark .lg { height: 9px; }
+  .slide .cards { display: grid; grid-template-columns: repeat(3,1fr); gap: 5px; }
+  .slide .cd { background: #fff; border: 1px solid #ECECF8; border-radius: 4px; padding: 5px 6px; box-shadow: 0 3px 8px rgba(93,89,255,.08); }
+  .slide .cd i { display: block; width: 9px; height: 9px; border-radius: 50%; background: var(--p50); margin-bottom: 3px; position: relative; }
+  .slide .cd i::after { content: ''; position: absolute; inset: 2.5px; border: 1px solid var(--p); border-radius: 1px; }
+  .slide .cd b { display: block; font-size: 5.6px; color: var(--g900); }
+  .slide .cd span { color: var(--g600); font-size: 4.6px; }
+  .slide .cd.hl { background: var(--p); border-color: var(--p); } .slide .cd.hl b, .slide .cd.hl span { color: #fff; } .slide .cd.hl i { background: rgba(255,255,255,.25); } .slide .cd.hl i::after { border-color: #fff; }
+  .slide .stat { font: 700 17px/1 var(--font); color: var(--p); } .slide .stat small { display: block; font: 400 4.6px/1.4 var(--font); color: var(--g600); margin-top: 2px; }
+  .slide table { box-shadow: none; border-radius: 0; margin: 0; font-size: 4.4px; } .slide th { padding: 2px 4px; font-size: 4.4px; } .slide td { padding: 2px 4px; font-size: 4.4px; }
+  .slide .img { background: #fff; border: 1px solid #ECECF8; border-radius: 4px; display: flex; align-items: center; justify-content: center; color: var(--g400); font-size: 4.6px; }
 
-  /* Org chart */
-  .org { display: grid; gap: 12px; margin: 16px 0; }
-  .org .root { background: var(--navy); color: #fff; border-radius: 10px; padding: 12px 18px; text-align: center; font-weight: 700; }
-  .org .root small { display: block; font-weight: 400; font-size: 12px; opacity: .75; }
-  .org .row { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; }
-  .org .unit { border: 1.5px solid var(--blue); border-radius: 10px; padding: 12px; background: #fff; min-width: 0; }
-  .org .unit > b { display: block; color: var(--blue-700); font-size: 14px; margin-bottom: 8px; }
-  .org .unit ul { margin: 0; padding-left: 14px; font-size: 12.5px; color: var(--gray-600); line-height: 1.5; }
-  .org .unit ul ul { padding-left: 12px; margin-top: 2px; font-size: 12px; color: var(--gray-400); }
+  /* Org chart 部門制 */
+  .org { display: grid; gap: 14px; margin: 16px 0; }
+  .org .root { background: linear-gradient(135deg,#5D59FF,#3A37C2); color: #fff; border-radius: 14px; padding: 14px 20px; text-align: center; font-weight: 700; box-shadow: var(--shadow); }
+  .org .root small { display: block; font-weight: 400; font-size: 12px; opacity: .8; }
+  .org .row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+  .org .unit { background: #fff; border: 1px solid #ECECF8; border-radius: 14px; padding: 16px 16px 14px; box-shadow: var(--shadow); }
+  .org .unit .ic { width: 38px; height: 38px; border-radius: 50%; background: var(--p50); display: flex; align-items: center; justify-content: center; margin-bottom: 10px; }
+  .org .unit .ic svg { width: 18px; height: 18px; stroke: var(--p); fill: none; stroke-width: 1.75; stroke-linecap: round; stroke-linejoin: round; }
+  .org .unit > b { display: block; font-size: 15px; color: var(--p7); }
+  .org .unit > small { display: block; font-size: 11.5px; color: var(--g400); margin-bottom: 8px; }
+  .org .unit ul { margin: 0; padding-left: 14px; font-size: 12.5px; color: var(--g600); line-height: 1.5; }
   .org .unit li { margin: 3px 0; }
-  .org .unit .new { color: var(--ok); font-size: 10.5px; font-weight: 700; margin-left: 3px; }
-  .org .unit.weiz { border-color: var(--blue-200); }
-  .org .unit.weiz > b { color: var(--blue); }
 
   /* System architecture */
   .sys { display: grid; gap: 12px; margin: 16px 0; }
-  .sys .layer { border: 1px solid var(--gray-200); border-radius: 12px; padding: 14px 16px 14px; position: relative; }
-  .sys .layer > b { display: block; font-size: 12px; letter-spacing: .12em; color: var(--blue); text-transform: uppercase; margin-bottom: 10px; }
+  .sys .layer { background: #fff; border: 1px solid #ECECF8; border-radius: 14px; padding: 14px 16px; box-shadow: var(--shadow); }
+  .sys .layer > b { display: block; font-size: 11px; letter-spacing: .2em; color: var(--p); text-transform: uppercase; margin-bottom: 10px; }
   .sys .nodes { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; }
-  .sys .node { background: var(--gray-50); border-radius: 8px; padding: 10px 12px; font-size: 13px; }
-  .sys .node b { display: block; color: var(--gray-900); font-size: 14px; }
-  .sys .node span { color: var(--gray-600); font-size: 12px; }
-  .sys .node.core { background: var(--blue-50); border: 1.5px solid var(--blue); }
+  .sys .node { background: var(--p-soft); border-radius: 10px; padding: 10px 12px; font-size: 13px; }
+  .sys .node b { display: block; color: var(--g900); font-size: 14px; } .sys .node span { color: var(--g600); font-size: 12px; }
+  .sys .node.core { background: var(--p50); border: 1.5px solid var(--p); }
   .flows { margin: 16px 0; display: grid; gap: 6px; }
-  .flow { display: grid; grid-template-columns: 1fr 24px 1fr 1.2fr; gap: 10px; align-items: center; font-size: 13.5px; background: var(--gray-50); border-radius: 8px; padding: 8px 14px; }
-  .flow b { color: var(--gray-900); }
-  .flow .arr { color: var(--blue); font-weight: 700; text-align: center; }
-  .flow span { color: var(--gray-600); font-size: 12.5px; }
+  .flow { display: grid; grid-template-columns: 1fr 24px 1fr 1.2fr; gap: 10px; align-items: center; font-size: 13.5px; background: #fff; border: 1px solid #ECECF8; border-radius: 10px; padding: 8px 14px; }
+  .flow b { color: var(--g900); } .flow .arr { color: var(--p); font-weight: 700; text-align: center; } .flow span { color: var(--g600); font-size: 12.5px; }
 
   .doc-footer { background: var(--navy); color: rgba(255,255,255,.7); padding: 36px 80px; font-size: 13px; display: flex; justify-content: space-between; align-items: center; gap: 24px; flex-wrap: wrap; margin-top: 80px; }
-  .doc-footer img { width: 60px; height: 42px; object-fit: cover; }
+  .doc-footer img { height: 40px; }
 
   @media (max-width: 720px) {
     .cover { padding: 48px 24px 36px; } .cover h1 { font-size: 32px; }
     .wrap { padding: 0 20px 80px; } .toc ol { columns: 1; }
-    .slides, .org .row, .flow { grid-template-columns: 1fr; }
-    .flow .arr { transform: rotate(90deg); }
-    .stage { padding: 20px 16px; }
-    .doc-footer { padding: 28px 24px; }
-    .draft-badge { top: 14px; right: 14px; }
+    .slides, .org .row, .flow { grid-template-columns: 1fr; } .flow .arr { transform: rotate(90deg); }
+    .stage { padding: 20px 14px; } .sec-num { font-size: 52px; }
+    .doc-footer { padding: 28px 24px; } .badge { top: 14px; right: 14px; }
   }
   @media print { .section { page-break-inside: avoid; } }
 </style>
@@ -208,464 +204,272 @@
 <body>
 
 <div class="cover">
-  <div class="draft-badge">DRAFT v0.1 · 審核稿</div>
-  <img src="assets/logos/weibo_en_horizontal_white.png" alt="WEIBO">
+  <div class="glow"></div>
+  <svg class="wave" data-wave="#FFFFFF" data-op=".55" style="right:-80px;top:-120px;width:760px;height:520px;"></svg>
+  <div class="badge">DRAFT v0.2 · 審核稿</div>
+  <img src="assets/logos/cropped/logo_en_white.png" alt="WEIBO">
+  <div class="eb">BRAND APPLICATIONS</div>
   <h1>WEIBO 應用範例集</h1>
   <p>信封信紙・出貨箱貼與膠帶・104 封面・報價單與合約外框・簡報模板・組織圖・系統架構</p>
   <div class="cover-meta">
-    <span><b>依據</b> WEIBO VIS v0.1 核對稿</span>
-    <span><b>公司</b> 威柏科技貿易有限公司</span>
+    <span><b>依據</b> WEIBO VIS v0.2（主色 #5D59FF 集團共用）</span>
+    <span><b>對齊</b> 現行合約文件 BB009001、新進人員簡報版式</span>
     <span><b>日期</b> 2026 年 9 月</span>
   </div>
 </div>
 
 <div class="wrap">
-  <div class="callout todo" style="margin-top:36px;">
-    <b>審核方式。</b>每一項先看「示意圖」確認方向，再看「規格」。示意圖的尺寸都依實際比例縮小；文字內容為範例，定稿後會換成正式內容。簡報模板另附 PPTX 檔，報價單／合約外框另附 DOCX 檔。
+  <div class="callout ok" style="margin-top:36px;">
+    <b>v0.2 改版重點。</b>視覺語言對齊你現行已上線的簡報與合約：漸層數字＋斜線眉標＋斜切線的章節頭、右上波紋線稿、白色圓角卡加淡紫陰影、圓形圖示、膠囊標籤；文件類沿用合約 BB009001 的表頭／文件資訊表／頁尾格式，合約加「機密」水印；文件編號改依 CubeLV 文件收件匣既有編碼；組織圖改為拍板的六部門制。
   </div>
 
   <div class="toc">
-    <h3>目錄</h3>
+    <h3>CONTENTS</h3>
     <ol>
       <li><a href="#letter">信封信紙</a></li>
       <li><a href="#box">出貨箱貼與封箱膠帶</a></li>
       <li><a href="#banner">104 公司頁封面</a></li>
       <li><a href="#docs">報價單與合約標準外框</a></li>
-      <li><a href="#slides">簡報模板 16:9（新品簡報・新進員工簡報）</a></li>
-      <li><a href="#org">公司組織圖（職能架構）</a></li>
+      <li><a href="#slides">簡報模板 16:9（新品・新進員工）</a></li>
+      <li><a href="#org">公司組織圖（六部門）</a></li>
       <li><a href="#sys">系統架構圖</a></li>
-      <li><a href="#tools">系統名稱與用途</a></li>
+      <li><a href="#tools">系統名稱與用途・文件編號規則</a></li>
     </ol>
   </div>
 
-  <!-- ══ 1. 信封信紙 ══ -->
+  <!-- 01 信封信紙 -->
   <div class="section" id="letter">
-    <div class="section-label">01</div>
-    <h2>信封信紙</h2>
+    <div class="sec-head"><div class="sec-num grad-text">01</div><div class="sec-slash"></div><div class="sec-eb">STATIONERY｜信封信紙</div></div>
+    <h2 class="grad-text">同一個表頭，貫穿所有紙本文件</h2>
     <div class="stage">
+      <svg class="wave" data-wave="#5D59FF" data-op=".35" style="right:-60px;top:-90px;width:560px;height:380px;"></svg>
       <div class="paper a4">
-        <div class="head">
-          <img class="hlogo" src="assets/logos/weibo_corp_horizontal_black.png" alt="WEIBO 威柏科技貿易有限公司">
-          <div class="ref">文號 WB-2026-0910-001<br>日期 2026.09.10</div>
-        </div>
-        <div class="title">2026 年第四季經銷合作方案說明</div>
-        <div class="lines"><i></i><i></i><i class="short"></i><i></i><i></i><i></i><i class="short"></i><i></i><i></i><i class="short"></i></div>
-        <div class="foot"><span>威柏科技貿易有限公司 ｜ 統一編號 55903333 ｜ 05-3209919</span><span>嘉義縣太保市健康路 187 號 1 樓 ｜ www.weiboltd.com</span></div>
+        <div class="dhead"><img src="assets/logos/cropped/logo_corp_black.png" alt="WEIBO 威柏科技貿易有限公司"><div class="right">WEI BO TECHNOLOGY TRADE CO., LTD<br>OFFICIAL LETTER</div></div>
+        <div class="drule"></div>
+        <div class="doc-title">2026 年第四季經銷合作方案說明</div>
+        <div class="meta">文號 PM-2026091001 ｜ 日期 2026.09.10 ｜ 發文部門 行銷業務部</div>
+        <div class="lines"><i></i><i></i><i class="s"></i><i></i><i></i><i></i><i class="s"></i><i></i><i></i><i class="s"></i></div>
+        <div class="dfoot"><span><img src="assets/logos/cropped/logo_zh_black.png" alt="">威柏科技貿易有限公司｜統一編號 55903333｜05-3209919｜www.weiboltd.com</span><span>第 1 頁</span></div>
       </div>
       <div style="display:flex;flex-direction:column;gap:20px;">
         <div class="paper dl">
-          <img class="hlogo" src="assets/logos/weibo_corp_horizontal_black.png" alt="WEIBO">
-          <div class="sender">61247 嘉義縣太保市健康路 187 號 1 樓 ｜ 05-3209919</div>
+          <img src="assets/logos/cropped/logo_corp_black.png" alt="WEIBO">
+          <div class="sender">61247 嘉義縣太保市健康路 187 號 1 樓 ｜ 05-3209919 ｜ www.weiboltd.com</div>
           <div class="stamp"></div>
           <div class="addr">100 台北市中正區○○路○段○號○樓<br><b>○○○○股份有限公司　採購部</b><br>王○○ 經理　收</div>
         </div>
         <div class="paper dl back">
+          <svg class="wave" data-wave="#FFFFFF" data-op=".45" style="right:-40px;top:-40px;width:300px;height:180px;"></svg>
           <div class="flap"></div>
-          <img class="hlogo" src="assets/logos/weibo_en_horizontal_white.png" alt="WEIBO">
+          <img src="assets/logos/cropped/logo_en_white.png" alt="WEIBO">
         </div>
       </div>
     </div>
-    <div class="cap">左：A4 信紙　右上：DL 西式信封正面　右下：信封背面（Navy 底、封口 Blue 700）</div>
+    <div class="cap">左：A4 信紙　右上：DL 西式信封正面　右下：信封背面（品牌漸層＋波紋線稿）</div>
     <div class="table-wrap"><table>
       <tr><th>項目</th><th>規格</th></tr>
-      <tr><td>信紙</td><td>A4 210×297mm；邊距上 20 / 左右 20 / 下 18mm；表頭放 ④ 公司名橫式黑字 Logo，高 10mm 靠左；右側文號與日期 8pt 灰；頁尾一條 0.3pt 灰線＋公司資訊 7pt 灰</td></tr>
-      <tr><td>信封正面</td><td>DL 220×110mm；左上 ④ Logo 高 9mm，下方寄件地址 7pt 灰；收件人區塊起點 x 100mm / y 52mm，收件人名稱 11pt 粗體</td></tr>
-      <tr><td>信封背面</td><td>Navy 滿版，封口三角 Blue 700；⑥ 英文橫式白字 Logo 居中偏下，高 9mm</td></tr>
-      <tr><td>紙材</td><td>信紙 100–120g 道林；信封 120g；單色印刷版本可用 ⑤ 中文橫式黑字</td></tr>
+      <tr><td>信紙表頭</td><td>與合約、報價單同一表頭：左 ④ 公司名橫式 Logo 高 9mm；右兩行灰色英文全大寫 6pt 字距 .12em（公司英文名／文件類型）；下方 0.5pt #D6D5FF 細線</td></tr>
+      <tr><td>信紙內文</td><td>文件標題 16pt 粗體 #5D59FF；文號一行 7pt 灰；內文 10.5pt #444；A4 邊距 上 18 / 左右 20 / 下 16mm</td></tr>
+      <tr><td>信紙頁尾</td><td>0.5pt #D6D5FF 線；左：標誌小圖＋公司資訊 6.5pt 灰；右：頁碼</td></tr>
+      <tr><td>信封正面</td><td>DL 220×110mm；左上 ④ Logo 高 8mm＋寄件資訊 6pt 灰；收件區起點 x 100 / y 50mm，收件人名稱 11pt 粗體</td></tr>
+      <tr><td>信封背面</td><td>品牌漸層 #5D59FF → #3A37C2 → #1E2A5E 滿版，右上白色波紋線稿 45%；⑥ 英文橫式白字 Logo 居中偏下高 9mm；封口三角以白色 8% 區分</td></tr>
+      <tr><td>紙材</td><td>信紙 100–120g 道林；信封 120g；單色印刷版用 ⑤ 中文橫式黑字，背面改白底紫字</td></tr>
     </table></div>
   </div>
 
-  <hr class="rule">
-
-  <!-- ══ 2. 箱貼與膠帶 ══ -->
+  <!-- 02 箱貼膠帶 -->
   <div class="section" id="box">
-    <div class="section-label">02</div>
-    <h2>出貨箱貼與封箱膠帶</h2>
+    <div class="sec-head"><div class="sec-num grad-text">02</div><div class="sec-slash"></div><div class="sec-eb">PACKAGING｜出貨箱貼與封箱膠帶</div></div>
+    <h2 class="grad-text">倉儲現場也要看得出是威柏出的貨</h2>
     <div class="stage">
+      <svg class="wave" data-wave="#5D59FF" data-op=".3" style="left:-80px;bottom:-120px;width:520px;height:340px;"></svg>
       <div class="paper label">
-        <img class="hlogo" src="assets/logos/weibo_zh_horizontal_black.png" alt="威柏科技貿易有限公司">
+        <img src="assets/logos/cropped/logo_zh_black.png" alt="威柏科技貿易有限公司">
         <div class="grid">
-          <div class="f wide"><b>品名</b>ACEFAST T8 真無線藍牙耳機 黑</div>
-          <div class="f"><b>品號</b>AF-T8-BK</div>
-          <div class="f"><b>數量</b>40 PCS</div>
-          <div class="f"><b>箱號</b>03 / 12</div>
-          <div class="f"><b>出貨日</b>2026.09.10</div>
-          <div class="f wide"><b>客戶／通路</b>momo 購物網　林口三倉</div>
+          <div class="f wide"><b>品名 PRODUCT</b><span>ACEFAST T8 真無線藍牙耳機 黑</span></div>
+          <div class="qr">QR<br>T8 發貨單條碼</div>
+          <div class="f"><b>品號 SKU</b><span>AF-T8-BK</span></div>
+          <div class="f"><b>數量 QTY</b><span>40 PCS</span></div>
+          <div class="f"><b>箱號 CTN</b><span>03 / 12</span></div>
+          <div class="f"><b>出貨日 DATE</b><span>2026.09.10</span></div>
         </div>
-        <div class="bottom"><span class="fragile">易碎品 FRAGILE</span><small>威柏科技 05-3209919 ｜ 退貨請洽 LINE @weibo</small></div>
+        <div class="bottom"><span>客戶／通路：momo 購物網 林口三倉</span><span class="fragile">易碎 FRAGILE</span><span>退貨請洽 LINE @weibo</span></div>
       </div>
-      <div style="display:flex;flex-direction:column;gap:14px;width:100%;max-width:640px;">
-        <div class="tape">
-          <img class="hlogo" src="assets/logos/weibo_en_horizontal_white.png" alt="WEIBO">
-          <img class="hlogo" src="assets/logos/weibo_en_horizontal_white.png" alt="">
-          <img class="hlogo" src="assets/logos/weibo_en_horizontal_white.png" alt="">
-          <img class="hlogo" src="assets/logos/weibo_en_horizontal_white.png" alt="">
-        </div>
-        <div class="tape gray">
-          <img class="hlogo" src="assets/logos/weibo_zh_horizontal_black.png" alt="威柏科技貿易有限公司">
-          <img class="hlogo" src="assets/logos/weibo_zh_horizontal_black.png" alt="">
-          <img class="hlogo" src="assets/logos/weibo_zh_horizontal_black.png" alt="">
-          <img class="hlogo" src="assets/logos/weibo_zh_horizontal_black.png" alt="">
-        </div>
+      <div class="tapes">
+        <div class="tape a"><img src="assets/logos/cropped/logo_en_white.png" alt="WEIBO"><img src="assets/logos/cropped/logo_en_white.png" alt=""><img src="assets/logos/cropped/logo_en_white.png" alt=""><img src="assets/logos/cropped/logo_en_white.png" alt=""></div>
+        <div class="tape b"><img src="assets/logos/cropped/logo_zh_black.png" alt="威柏科技貿易有限公司"><img src="assets/logos/cropped/logo_zh_black.png" alt=""><img src="assets/logos/cropped/logo_zh_black.png" alt=""></div>
       </div>
     </div>
-    <div class="cap">左：出貨箱貼 100×70mm　右上：封箱膠帶 A 款（Blue 底白字）　右下：B 款（透明或牛皮底黑字，單色印刷）</div>
+    <div class="cap">左：出貨箱貼 100×70mm（頂端 3mm 主色帶，其餘單色）　右：封箱膠帶 A 款主色底白字、B 款透明或白底黑字</div>
     <div class="table-wrap"><table>
       <tr><th>項目</th><th>規格</th></tr>
-      <tr><td>箱貼</td><td>100×70mm 白色銅版貼紙、單色黑印刷；⑤ 中文橫式 Logo 高 8mm 左上；欄位七格（品名／品號／數量／箱號／出貨日／客戶通路），欄名 7pt 灰、內容 8pt 黑，底線 0.5pt；右下「易碎品」外框字；可留 QR 位置給 T8 發貨單條碼（待確認）</td></tr>
-      <tr><td>膠帶 A</td><td>48mm×90Y OPP；底色 WEIBO Blue（CMYK 待定，暫 75/70/0/0）；⑥ 英文橫式白字 Logo 高 32mm，重複間距 = Logo 寬 × 0.35</td></tr>
-      <tr><td>膠帶 B</td><td>48mm 透明或牛皮底，⑤ 中文橫式黑字重複；適合單色印刷與低成本批次</td></tr>
+      <tr><td>箱貼</td><td>100×70mm 銅版貼紙；頂端 3mm #5D59FF 色帶（雙色印刷；單色版省略）；⑤ 中文橫式 Logo 高 7mm；欄位欄名 5.5pt 灰全大寫、內容 9pt 粗體；右側 22×22mm 預留 T8 發貨單 QR／條碼；右下「易碎」外框字；右側保留空白給 momo 平台貼紙疊貼</td></tr>
+      <tr><td>膠帶 A</td><td>48mm×90Y OPP；底色 #5D59FF（CMYK 暫 75/70/0/0，待設計師確認）；⑥ 英文橫式白字 Logo 高 26mm，重複間距 44mm</td></tr>
+      <tr><td>膠帶 B</td><td>48mm 透明或白底，⑤ 中文橫式黑字重複；單色印刷、低成本批次</td></tr>
     </table></div>
-    <div class="callout todo"><b>待確認：</b>箱貼是否要整合 momo／PChome 的平台貼紙規則（例如 momo 出貨須貼平台貼紙）。若要，箱貼保留右側 30mm 空白供平台貼紙疊貼。</div>
   </div>
 
-  <hr class="rule">
-
-  <!-- ══ 3. 104 封面 ══ -->
+  <!-- 03 104 -->
   <div class="section" id="banner">
-    <div class="section-label">03</div>
-    <h2>104 公司頁封面</h2>
+    <div class="sec-head"><div class="sec-num grad-text">03</div><div class="sec-slash"></div><div class="sec-eb">RECRUITING｜104 公司頁封面</div></div>
+    <h2 class="grad-text">求職者第一眼看到的威柏</h2>
     <div class="stage">
       <div class="banner">
-        <div class="leaf"></div>
-        <div class="eyebrow">WE EMPOWER INNOVATION</div>
-        <img class="hlogo" src="assets/logos/weibo_en_horizontal_white.png" alt="WEIBO">
+        <div class="glow"></div>
+        <svg class="wave" data-wave="#FFFFFF" data-op=".5" style="right:-80px;top:-80px;width:520px;height:340px;"></svg>
+        <svg class="wave" data-wave="#FFFFFF" data-op=".25" style="left:-120px;bottom:-140px;width:460px;height:300px;"></svg>
+        <div class="eb">WE EMPOWER INNOVATION</div>
+        <img src="assets/logos/cropped/logo_en_white.png" alt="WEIBO">
         <div class="tag-line">讓科技更貼近生活，讓未來觸手可及</div>
       </div>
     </div>
-    <div class="cap">104 公司頁封面 1200×400（3:1）；同版型可輸出 LinkedIn 1584×396、Facebook 820×312</div>
+    <div class="cap">104 公司頁封面 1200×400；同版型輸出 LinkedIn 1584×396、Facebook 820×312</div>
     <div class="table-wrap"><table>
       <tr><th>項目</th><th>規格</th></tr>
-      <tr><td>底色</td><td>WEIBO Navy #1E2A5E；右上以標誌雙葉圖形 10% 透明度作輔助圖形，一頁只出現一次</td></tr>
-      <tr><td>內容</td><td>上：眉標 WE EMPOWER INNOVATION（Blue 200，字距 .18em）；中：⑥ 英文橫式白字 Logo 高 = 畫布高 26%；下：企業標語 白 85%</td></tr>
-      <tr><td>安全區</td><td>104 頭像會壓在左下，內容置中且距左右 ≥ 20%；避免把文字放在左下 25% 區域</td></tr>
-      <tr><td>禁止</td><td>不放代理品牌 Logo、不放產品照、不放徵才訊息（那些放在職缺內容）</td></tr>
+      <tr><td>底</td><td>品牌漸層 135° #5D59FF → #3A37C2 → #1E2A5E；右上白色光暈 20%；右上與左下各一組白色波紋線稿（50% / 25%）</td></tr>
+      <tr><td>內容</td><td>眉標 WE EMPOWER INNOVATION（#D6D5FF，字距 .3em）；⑥ 英文橫式白字 Logo 高 = 畫布高 26%；企業標語白 88%，字距 .12em；三者垂直居中</td></tr>
+      <tr><td>安全區</td><td>104 頭像壓左下，內容距左右 ≥ 20%，左下 25% 不放文字</td></tr>
+      <tr><td>禁止</td><td>代理品牌 Logo、產品照、徵才訊息（放職缺內容）</td></tr>
     </table></div>
   </div>
 
-  <hr class="rule">
-
-  <!-- ══ 4. 報價單與合約 ══ -->
+  <!-- 04 報價單合約 -->
   <div class="section" id="docs">
-    <div class="section-label">04</div>
-    <h2>報價單與合約標準外框</h2>
-    <p>兩種文件共用同一個「外框」：表頭 Logo＋文件資訊、頁尾公司資訊＋頁碼。中間內容區各自不同。DOCX 版本提供可直接套用的 Word 檔。</p>
+    <div class="sec-head"><div class="sec-num grad-text">04</div><div class="sec-slash"></div><div class="sec-eb">BUSINESS DOCUMENTS｜報價單與合約外框</div></div>
+    <h2 class="grad-text">沿用已上線合約的版式，加上機密水印</h2>
+    <p>以現行合約 BB009001（年度採購品質穩定供應合約書）為基準：表頭 Logo＋右側灰色英文、文件資訊表左欄灰底、章節標題主色、表格表頭主色、頁尾細線＋頁碼。DOCX 檔已附。</p>
     <div class="stage">
       <div class="paper doc">
-        <div class="head">
-          <img class="hlogo" src="assets/logos/weibo_corp_horizontal_black.png" alt="WEIBO">
-          <div class="meta"><b>報價單 QUOTATION</b><br>單號 Q-2026-0910-018<br>日期 2026.09.10 ｜ 有效期 30 天<br>承辦 電商業務部 李柏樟 #236</div>
-        </div>
-        <h4><small>QUOTATION</small>報價單</h4>
-        <div class="party">
-          <div><b>客戶 BILL TO</b>○○○○股份有限公司<br>統編 12345678<br>採購部 王○○ 經理</div>
-          <div><b>供應商 FROM</b>威柏科技貿易有限公司<br>統編 55903333<br>嘉義縣太保市健康路 187 號 1 樓</div>
-        </div>
-        <table>
-          <tr><th>#</th><th>品名／規格</th><th>品號</th><th>數量</th><th>單價</th><th>金額</th></tr>
+        <div class="dhead"><img src="assets/logos/cropped/logo_corp_black.png" alt="WEIBO"><div class="right">WEI BO TECHNOLOGY TRADE CO., LTD<br>QUOTATION - BUSINESS DOCUMENT</div></div>
+        <div class="drule"></div>
+        <div class="doc-title">報價單</div>
+        <div class="metat"><div>文件編號</div><div>DOC-YYYYMMDD-NN（收件匣定稿賦予）</div><div>版本</div><div>V1（2026.09.10）</div><div>發文部門</div><div>電商通路部</div><div>有效期</div><div>報價日起 30 天</div></div>
+        <h5>立約雙方</h5>
+        <ul><li>客戶（Bill To）：○○○○股份有限公司　統編 12345678　採購部 王○○</li><li>供應商（From）：威柏科技貿易有限公司　統編 55903333　承辦 ○○○ #236</li></ul>
+        <h5>報價品項</h5>
+        <table><tr><th>#</th><th>品名／規格</th><th>品號</th><th>數量</th><th>單價</th><th>金額</th></tr>
           <tr><td>1</td><td>ACEFAST T8 真無線藍牙耳機 黑</td><td>AF-T8-BK</td><td>40</td><td>1,290</td><td>51,600</td></tr>
           <tr><td>2</td><td>WiWU 20000mAh 行動電源</td><td>WW-PB20</td><td>60</td><td>890</td><td>53,400</td></tr>
-          <tr><td>3</td><td>SMASMALL 黑夜騎士刮鬍刀禮盒</td><td>SM-NK-GB</td><td>24</td><td>2,180</td><td>52,320</td></tr>
-        </table>
-        <div class="total"><span>小計 157,320</span><span>稅額 5% 7,866</span><b>合計 NT$ 165,186</b></div>
-        <div class="terms"><b>付款條件</b> 月結 30 天　<b>交貨</b> 訂單確認後 7 個工作日　<b>運費</b> 單筆滿 3 萬免運　<b>保固</b> 依各原廠保固條款　<b>備註</b> 本報價含稅，價格以新台幣計；逾有效期請重新確認。</div>
-        <div class="sign"><div>客戶簽章 ／ 日期</div><div>威柏科技 簽章 ／ 日期</div></div>
-        <div class="foot"><span>威柏科技貿易有限公司 ｜ 05-3209919 ｜ www.weiboltd.com</span><span>第 1 頁，共 1 頁</span></div>
+          <tr><td>3</td><td>SMASMALL 黑夜騎士刮鬍刀禮盒</td><td>SM-NK-GB</td><td>24</td><td>2,180</td><td>52,320</td></tr></table>
+        <div class="total">小計 157,320　營業稅 7,866　合計（含稅）<b>NT$ 165,186</b></div>
+        <h5>交易條件</h5>
+        <ul><li>付款：月結 30 天　交貨：訂單確認後 7 個工作日　運費：滿 3 萬免運</li><li>保固依原廠條款，由售後品保部受理；本報價含稅、新台幣計價</li></ul>
+        <div class="sign"><div class="h">客戶（Buyer）</div><div class="h">威柏科技貿易有限公司（Seller）</div><div>代表人／簽章：</div><div>代表人／簽章：</div><div>日期（西元）：＿＿年＿月＿日</div><div>日期（西元）：＿＿年＿月＿日</div></div>
+        <div class="dfoot"><span><img src="assets/logos/cropped/logo_zh_black.png" alt="">威柏科技貿易有限公司｜報價文件｜統一編號 55903333｜www.weiboltd.com</span><span>第 1 頁</span></div>
       </div>
       <div class="paper doc">
-        <div class="head">
-          <img class="hlogo" src="assets/logos/weibo_corp_horizontal_black.png" alt="WEIBO">
-          <div class="meta"><b>合約 AGREEMENT</b><br>合約編號 C-2026-0910-005<br>簽署日期 2026 年 9 月 10 日<br>版本 v1.0</div>
-        </div>
-        <h4><small>DISTRIBUTION AGREEMENT</small>經銷合作合約書</h4>
-        <div class="party">
-          <div><b>甲方</b>威柏科技貿易有限公司<br>統編 55903333<br>代表人 黃冠博</div>
-          <div><b>乙方</b>○○○○股份有限公司<br>統編 12345678<br>代表人 ○○○</div>
-        </div>
-        <div class="clauses">
-          <b>第一條　合作範圍</b><i></i><i></i><i class="short"></i>
-          <b>第二條　價格與付款</b><i></i><i></i><i class="short"></i>
-          <b>第三條　交貨與驗收</b><i></i><i class="short"></i>
-          <b>第四條　保固與售後</b><i></i><i></i><i class="short"></i>
-        </div>
-        <div class="sign"><div>甲方　威柏科技貿易有限公司<br>代表人：<br>日期：</div><div>乙方<br>代表人：<br>日期：</div></div>
-        <div class="foot"><span>威柏科技貿易有限公司 ｜ 合約編號 C-2026-0910-005</span><span>第 1 頁，共 4 頁</span></div>
+        <div class="wm">機密</div>
+        <div class="dhead"><img src="assets/logos/cropped/logo_corp_black.png" alt="WEIBO"><div class="right">WEI BO TECHNOLOGY TRADE CO., LTD<br>CONFIDENTIAL - CONTRACT DOCUMENT</div></div>
+        <div class="drule"></div>
+        <div class="doc-title">經銷合作合約書</div>
+        <div class="metat"><div>合約編號</div><div>CONYYMMDDNN（收件匣定稿賦予）</div><div>版本</div><div>V1.0（2026.09.10 定稿）</div><div>發文部門</div><div>行政管理部</div><div>機密等級</div><div>機密 CONFIDENTIAL</div></div>
+        <h5>立約雙方</h5>
+        <ul><li>甲方（供應方）：威柏科技貿易有限公司　代表人 黃冠博　統編 55903333</li><li>乙方（經銷方）：○○○○股份有限公司　代表人 ○○○　統編 12345678</li></ul>
+        <h5>第一條 合作範圍</h5><div class="clauses"><p>一、甲方授權乙方於中華民國境內經銷附件一所列商品。</p><p>二、乙方不得未經甲方書面同意轉售至指定通路以外之平台。</p></div>
+        <h5>第二條 價格與付款</h5><div class="clauses"><p>一、經銷價格依附件二價格表，調價應於 30 日前書面通知。</p><p>二、付款條件為月結 30 天。</p></div>
+        <h5>第三條 交貨與驗收</h5><div class="clauses"><p>一、訂單確認後 7 個工作日內出貨；乙方應於收貨 3 日內完成驢收。</p></div>
+        <div class="sign"><div class="h">甲方（供應方）</div><div class="h">乙方（經銷方）</div><div>公司：威柏科技貿易有限公司</div><div>公司：</div><div>簽章／用印：</div><div>簽章／用印：</div></div>
+        <div class="dfoot"><span><img src="assets/logos/cropped/logo_zh_black.png" alt="">威柏科技貿易有限公司｜合約文件｜未經書面同意不得轉載或揭露</span><span>第 1 頁</span></div>
       </div>
     </div>
-    <div class="cap">左：報價單　右：合約書首頁　（A4，同一外框）</div>
+    <div class="cap">左：報價單　右：合約書首頁（機密水印 45° 置中、主色 7% 透明，每頁重複）</div>
     <div class="table-wrap"><table>
       <tr><th>區域</th><th>規格</th></tr>
-      <tr><td>頁面</td><td>A4 直式；邊距上 18 / 下 16 / 左右 20mm；字型 Noto Sans TC（Word 環境用微軟正黑體）＋ Inter（數字）</td></tr>
-      <tr><td>表頭（每頁）</td><td>左：④ 公司名橫式黑字 Logo 高 10mm；右：文件類型（粗體 9pt）＋編號、日期、承辦（8pt 灰）右對齊</td></tr>
-      <tr><td>文件標題</td><td>眉標英文全大寫 7pt Blue 字距 .18em；中文標題 18pt 粗體；表頭下留 12mm</td></tr>
-      <tr><td>當事人區</td><td>兩欄框線 0.5pt 灰、圓角 2mm；標籤 7pt Blue 全大寫</td></tr>
-      <tr><td>品項表</td><td>表頭 WEIBO Blue 底白字 8pt；內容 8.5pt；數字右對齊、千分位；列線 0.3pt 灰</td></tr>
-      <tr><td>合計區</td><td>右對齊，合計 11pt 粗體；稅額獨立一列</td></tr>
-      <tr><td>條款／條文</td><td>7.5pt 灰；條文標題 8.5pt 粗體黑</td></tr>
-      <tr><td>簽章區</td><td>兩欄，上緣 0.5pt 黑線；固定在內容區底部</td></tr>
-      <tr><td>頁尾（每頁）</td><td>0.3pt 灰線；左：公司名、電話、網址 7pt 灰；右：第 N 頁，共 M 頁</td></tr>
-      <tr><td>文件編號規則</td><td>Q（報價）／ C（合約）／ WB（公文）－年－月日－流水三碼，例 Q-2026-0910-018</td></tr>
+      <tr><td>頁面</td><td>A4 直式；邊距上 27（含表頭）／下 18／左右 20mm；字型 Noto Sans TC（Word 用微軟正黑體）＋ Arial 數字</td></tr>
+      <tr><td>表頭（每頁）</td><td>左：④ 公司名橫式黑字 Logo 高 9mm；右：兩行灰色英文全大寫 6.5pt，字距 .12em；下方 0.5pt #D6D5FF 細線</td></tr>
+      <tr><td>文件標題</td><td>20pt 粗體 #5D59FF，靠左</td></tr>
+      <tr><td>文件資訊表</td><td>兩欄，左欄 42mm 灰底 #F4F4F8 8.5pt 灰字；右欄 8.5pt 黑；0.5pt 灰框線；列：編號、版本、發文部門、日期、有效期／機密等級</td></tr>
+      <tr><td>章節標題</td><td>11pt 粗體 #5D59FF；內文 9pt #444，行距 1.5；列點用主色圓點</td></tr>
+      <tr><td>品項表</td><td>表頭 #5D59FF 底白字 8pt；內容 8.5pt；數字右對齊、千分位；奇偶列 #F9F9FE 交錯；只保留橫線</td></tr>
+      <tr><td>簽署欄</td><td>兩欄表格，表頭主色底白字，五列：公司、代表人、統編、簽章／用印、日期（西元）</td></tr>
+      <tr><td>頁尾（每頁）</td><td>0.5pt #D6D5FF 線；左：標誌小圖＋文件說明 6.5pt 灰；右：第 N 頁</td></tr>
+      <tr><td>機密水印</td><td>合約與含金額文件：「機密 CONFIDENTIAL」#5D59FF 7% 透明，旋轉 32°，置中，每頁；報價單不加</td></tr>
+      <tr><td>文件編號</td><td>由 CubeLV 文件收件匣定稿時賦予：合約 CON+年月日6碼+流水2碼（CON26082801）、公文 PM-年月日8碼+流水2碼（PM-2026082601）、報價／其他 DOC-年月日8碼-流水2碼（DOC-20260807-02）。模板只留格式提示</td></tr>
+      <tr><td>檔名</td><td>依產出品質九條：<code>YYYYMMDD_部門_主題_v版本</code>，例 20260910_行政_WEIBO合約模板_v2.docx</td></tr>
     </table></div>
-    <div class="callout todo"><b>待確認：</b>文件編號規則是否沿用現有 T8 或 CubeLV 文件收件匣的編碼；合約是否需加「機密」水印與騎縫章位置。</div>
   </div>
 
-  <hr class="rule">
-
-  <!-- ══ 5. 簡報模板 ══ -->
+  <!-- 05 簡報 -->
   <div class="section" id="slides">
-    <div class="section-label">05</div>
-    <h2>簡報模板 16:9</h2>
-    <p>兩套模板共用母版：封面 Navy 漸層、內頁白底、左上眉標、左下 ⑥ Logo、右下頁碼。差別在版型組合與語氣：<strong>新品簡報</strong>對通路 MD／經銷商，重規格、比較、檔期；<strong>新進員工簡報</strong>對內，重流程、檢核、系統。</p>
+    <div class="sec-head"><div class="sec-num grad-text">05</div><div class="sec-slash"></div><div class="sec-eb">PRESENTATION｜簡報模板 16:9</div></div>
+    <h2 class="grad-text">和現行簡報同一套語言，兩種用途</h2>
+    <p>母版沿用你現行簡報的元素：左上漸層數字、斜線眉標、斜切線；右上波紋線稿；白色圓角卡加淡紫陰影；圓形圖示；膠囊標籤；封面與結尾用品牌漸層。<strong>新品簡報</strong>對通路 MD／經銷商，<strong>新進員工簡報</strong>對內。PPTX 已附。</p>
 
-    <h3>A. 新品簡報（對通路／經銷商）</h3>
+    <h3>A. 新品簡報（10 頁）</h3>
     <div class="slides">
-      <div class="slide dark">
-        <div class="eb">NEW PRODUCT · 2026 Q4</div>
-        <h5 style="margin-top:22px;">ACEFAST T8<br>真無線藍牙耳機 上市提案</h5>
-        <div style="font-size:5.5px;opacity:.8;">威柏科技貿易有限公司 ｜ 台灣總代理 ｜ 2026.09</div>
-        <img class="lg hlogo" src="assets/logos/weibo_en_horizontal_white.png" alt="">
-        <div class="pn">封面</div>
-      </div>
-      <div class="slide">
-        <div class="eb">PRODUCT OVERVIEW</div>
-        <h5>一句話賣點＋三個關鍵規格</h5>
-        <div class="cols">
-          <div class="img">產品去背圖</div>
-          <div>
-            <div class="stat">40h<small>總續航（含充電盒）</small></div>
-            <div style="display:flex;gap:8px;margin-top:6px;"><div class="stat" style="font-size:12px;">ANC<small>主動降噪</small></div><div class="stat" style="font-size:12px;">IPX5<small>防水</small></div></div>
-          </div>
-        </div>
-        <img class="lg hlogo" src="assets/logos/weibo_en_horizontal_white.png" alt="" style="filter:invert(.6);">
-        <div class="pn">02</div>
-      </div>
-      <div class="slide">
-        <div class="eb">COMPARISON</div>
-        <h5>與同價位競品比較</h5>
-        <table class="mini">
-          <tr><th>項目</th><th>T8</th><th>競品 A</th><th>競品 B</th></tr>
-          <tr><td>建議售價</td><td>1,990</td><td>2,290</td><td>1,890</td></tr>
-          <tr><td>續航</td><td>40h</td><td>30h</td><td>24h</td></tr>
-          <tr><td>降噪</td><td>ANC</td><td>ENC</td><td>—</td></tr>
-          <tr><td>保固</td><td>18 個月</td><td>12</td><td>12</td></tr>
-        </table>
-        <div class="pn">05</div>
-      </div>
-      <div class="slide">
-        <div class="eb">LAUNCH PLAN</div>
-        <h5>檔期與行銷資源</h5>
-        <div class="steps">
-          <div><b>10/01</b>momo 首賣<br>站內 BN＋mo 幣</div>
-          <div><b>10/15</b>PChome 24h<br>品類活動</div>
-          <div><b>11/11</b>雙 11<br>KOL ×3 開箱</div>
-          <div><b>12/01</b>實體通路<br>燦坤・全國電子</div>
-        </div>
-        <div class="pn">07</div>
-      </div>
-      <div class="slide">
-        <div class="eb">PRICING &amp; TERMS</div>
-        <h5>價格結構與供貨條件</h5>
-        <div class="cols">
-          <div class="box"><b>建議售價 NT$ 1,990</b>經銷價 ／ 活動價 ／ 最低售價依合約</div>
-          <div class="box"><b>供貨與保固</b>首批 2,000 pcs 現貨 ｜ 18 個月原廠保固 ｜ 太保倉 D+1 出貨</div>
-        </div>
-        <div class="pn">09</div>
-      </div>
-      <div class="slide navy">
-        <div class="eb">CONTACT</div>
-        <h5 style="margin-top:18px;">讓品牌在台灣被看見、被喜歡、被信任</h5>
-        <div style="font-size:5.5px;opacity:.8;">電商業務部 李柏樟 Sam ｜ 05-3209919 #236<br>weibo.sd8@weiboltd.com ｜ www.weiboltd.com</div>
-        <img class="lg hlogo" src="assets/logos/weibo_en_horizontal_white.png" alt="">
-        <div class="pn">結尾</div>
-      </div>
+      <div class="slide dark"><svg class="wave" data-wave="#FFFFFF" data-op=".5" style="right:-40px;top:-50px;width:240px;height:150px;"></svg><div class="eb0">NEW PRODUCT · 2026 Q4</div><h4>ACEFAST T8 真無線藍牙耳機<br>上市提案</h4><div class="sub">台灣總代理 ｜ 對象：momo・PChome MD／區域經銷商</div><img class="lg" src="assets/logos/cropped/logo_en_white.png" alt=""></div>
+      <div class="slide"><svg class="wave" data-wave="#5D59FF" data-op=".4" style="right:-40px;top:-50px;width:220px;height:140px;"></svg><div class="num grad-text">02</div><div class="eb">ABOUT WEIBO｜三大生態軸心</div><div class="rule"></div><h5>一個生態系，三種承諾</h5><div class="body"><div class="cards"><div class="cd"><i></i><b>WEiZ 體驗</b><span>專櫃、體驗店與 OMO</span></div><div class="cd hl"><i></i><b>WEIBO 科技</b><span>代理、供應鏈、全通路</span></div><div class="cd"><i></i><b>WEILIFE 未來</b><span>自主開發生活產品</span></div></div></div><img class="lg" src="assets/logos/cropped/logo_corp_black.png" alt=""><div class="pn">Page 02 / 10</div></div>
+      <div class="slide"><svg class="wave" data-wave="#5D59FF" data-op=".4" style="right:-40px;top:-50px;width:220px;height:140px;"></svg><div class="num grad-text">03</div><div class="eb">PRODUCT OVERVIEW｜一句話賣點</div><div class="rule"></div><h5>40 小時續航的主動降噪耳機</h5><div class="body" style="display:grid;grid-template-columns:1fr 1fr;gap:6px;"><div class="img">產品去背圖</div><div><div class="stat">40h<small>總續航</small></div><div class="stat" style="margin-top:4px;">ANC<small>主動降噪 −35dB</small></div></div></div><img class="lg" src="assets/logos/cropped/logo_corp_black.png" alt=""><div class="pn">Page 03 / 10</div></div>
+      <div class="slide"><svg class="wave" data-wave="#5D59FF" data-op=".4" style="right:-40px;top:-50px;width:220px;height:140px;"></svg><div class="num grad-text">05</div><div class="eb">COMPARISON｜同價位競品</div><div class="rule"></div><h5>規格對照</h5><div class="body"><table><tr><th>項目</th><th>T8</th><th>競品 A</th><th>競品 B</th></tr><tr><td>售價</td><td>1,990</td><td>2,290</td><td>1,890</td></tr><tr><td>續航</td><td>40h</td><td>30h</td><td>24h</td></tr><tr><td>降噪</td><td>ANC</td><td>ENC</td><td>—</td></tr></table></div><img class="lg" src="assets/logos/cropped/logo_corp_black.png" alt=""><div class="pn">Page 05 / 10</div></div>
+      <div class="slide"><svg class="wave" data-wave="#5D59FF" data-op=".4" style="right:-40px;top:-50px;width:220px;height:140px;"></svg><div class="num grad-text">06</div><div class="eb">LAUNCH PLAN｜上市時程</div><div class="rule"></div><h5>四個檔期，線上先行、實體接力</h5><div class="body"><div class="cards" style="grid-template-columns:repeat(4,1fr);"><div class="cd"><i></i><b>10/01</b><span>momo 首賣</span></div><div class="cd"><i></i><b>10/15</b><span>PChome 24h</span></div><div class="cd hl"><i></i><b>11/11</b><span>KOL ×3 開箱</span></div><div class="cd"><i></i><b>12/01</b><span>實體通路</span></div></div></div><img class="lg" src="assets/logos/cropped/logo_corp_black.png" alt=""><div class="pn">Page 06 / 10</div></div>
+      <div class="slide dark"><svg class="wave" data-wave="#FFFFFF" data-op=".5" style="right:-40px;top:-50px;width:240px;height:150px;"></svg><div class="eb0">CONTACT</div><h4>讓品牌在台灣被看見、被喜歡、被信任</h4><div class="sub">電商通路部 ｜ 05-3209919 #236 ｜ www.weiboltd.com</div><img class="lg" src="assets/logos/cropped/logo_en_white.png" alt=""></div>
     </div>
-    <div class="cap">新品簡報 6 種版型：封面／產品總覽（大數字）／比較表／時程／價格條件／結尾</div>
 
-    <h3>B. 新進員工簡報（對內）</h3>
+    <h3>B. 新進員工簡報（11 頁）</h3>
     <div class="slides">
-      <div class="slide dark">
-        <div class="eb">ONBOARDING · 2026</div>
-        <h5 style="margin-top:22px;">新進人員引導與職務培訓</h5>
-        <div style="font-size:5.5px;opacity:.8;">電商通路部 ｜ 電商行銷助理 ｜ 我們相互賦能，共創價值</div>
-        <img class="lg hlogo" src="assets/logos/weibo_en_horizontal_white.png" alt="">
-        <div class="pn">封面</div>
-      </div>
-      <div class="slide">
-        <div class="eb">AGENDA</div>
-        <h5>今天會講四件事</h5>
-        <ol class="tocl"><li>關於威柏：三軸與品牌矩陣</li><li>組織與你的位置</li><li>職務職能與 90 天藍圖</li><li>系統帳號與第一週安排</li></ol>
-        <div class="pn">01</div>
-      </div>
-      <div class="slide">
-        <div class="eb">ORGANIZATION</div>
-        <h5>組織架構與你的位置</h5>
-        <div class="steps" style="margin-top:4px;">
-          <div><b>威柏</b>代理進口・電商・行銷業務</div>
-          <div style="background:var(--blue);color:#fff;"><b style="color:#fff;">★ 電商通路部</b>你在這裡</div>
-          <div><b>WEiZ</b>後勤・現場</div>
-          <div><b>倉儲物流</b>內外倉・對帳</div>
-        </div>
-        <div class="pn">04</div>
-      </div>
-      <div class="slide">
-        <div class="eb">ROADMAP</div>
-        <h5>90 天成長藍圖</h5>
-        <div class="steps">
-          <div><b>前 3 日</b>認知驗收</div>
-          <div><b>第 1 月</b>操作驗收</div>
-          <div><b>第 2 月</b>獨立主責 1 檔活動</div>
-          <div><b>第 3 月</b>轉正面談</div>
-        </div>
-        <div class="pn">08</div>
-      </div>
-      <div class="slide">
-        <div class="eb">SYSTEMS</div>
-        <h5>你會用到的系統</h5>
-        <table class="mini">
-          <tr><th>系統</th><th>用途</th><th>入口</th></tr>
-          <tr><td>T8 ERP</td><td>發貨單、庫存</td><td>電腦版</td></tr>
-          <tr><td>NUEiP</td><td>打卡、請假</td><td>網頁／APP</td></tr>
-          <tr><td>NAS</td><td>檔案歸檔</td><td>QuickConnect</td></tr>
-          <tr><td>CubeLV</td><td>專案、AI 工作</td><td>網頁</td></tr>
-        </table>
-        <div class="pn">12</div>
-      </div>
-      <div class="slide navy">
-        <div class="eb">WELCOME</div>
-        <h5 style="margin-top:18px;">再次歡迎加入威柏科技</h5>
-        <div style="font-size:5.5px;opacity:.8;">培訓導師 黃冠博 Gary ｜ 直屬主管 ○○○<br>有問題直接問，不要留到事後</div>
-        <img class="lg hlogo" src="assets/logos/weibo_en_horizontal_white.png" alt="">
-        <div class="pn">結尾</div>
-      </div>
+      <div class="slide dark"><svg class="wave" data-wave="#FFFFFF" data-op=".5" style="right:-40px;top:-50px;width:240px;height:150px;"></svg><div class="eb0">ONBOARDING · 2026</div><h4>新進人員引導與職務培訓</h4><div class="sub">電商通路部 ｜ 電商行銷助理 ｜ 我們相互賦能，共創價值</div><img class="lg" src="assets/logos/cropped/logo_en_white.png" alt=""></div>
+      <div class="slide"><svg class="wave" data-wave="#5D59FF" data-op=".4" style="right:-40px;top:-50px;width:220px;height:140px;"></svg><div class="num grad-text">03</div><div class="eb">CORE VALUES｜行為準則</div><div class="rule"></div><h5>品牌靈魂：六大核心價值</h5><div class="body"><div class="cards"><div class="cd"><i></i><b>自由與責任</b></div><div class="cd"><i></i><b>顧客至上</b></div><div class="cd"><i></i><b>成長心態</b></div><div class="cd"><i></i><b>凡事從簡</b></div><div class="cd"><i></i><b>永續經營</b></div><div class="cd"><i></i><b>創造價值</b></div></div></div><img class="lg" src="assets/logos/cropped/logo_corp_black.png" alt=""><div class="pn">Page 03 / 11</div></div>
+      <div class="slide"><svg class="wave" data-wave="#5D59FF" data-op=".4" style="right:-40px;top:-50px;width:220px;height:140px;"></svg><div class="num grad-text">05</div><div class="eb">ORGANIZATION｜六大部門</div><div class="rule"></div><h5>組織架構與你的位置</h5><div class="body"><div class="cards" style="grid-template-columns:repeat(6,1fr);gap:3px;"><div class="cd"><i></i><b>人才資源</b></div><div class="cd"><i></i><b>行政管理</b></div><div class="cd"><i></i><b>WEiZ 營運</b></div><div class="cd"><i></i><b>售後品保</b></div><div class="cd"><i></i><b>行銷業務</b></div><div class="cd hl"><i></i><b>電商通路 ★</b></div></div></div><img class="lg" src="assets/logos/cropped/logo_corp_black.png" alt=""><div class="pn">Page 05 / 11</div></div>
+      <div class="slide"><svg class="wave" data-wave="#5D59FF" data-op=".4" style="right:-40px;top:-50px;width:220px;height:140px;"></svg><div class="num grad-text">06</div><div class="eb">GROWTH ROADMAP｜90 天</div><div class="rule"></div><h5>從 0 到轉正的四個階段</h5><div class="body"><div class="cards" style="grid-template-columns:repeat(4,1fr);"><div class="cd"><i></i><b>前 3 日</b><span>認知驗收</span></div><div class="cd"><i></i><b>第 1 個月</b><span>操作驗收</span></div><div class="cd"><i></i><b>第 2 個月</b><span>主責 1 檔活動</span></div><div class="cd hl"><i></i><b>第 3 個月</b><span>轉正面談</span></div></div></div><img class="lg" src="assets/logos/cropped/logo_corp_black.png" alt=""><div class="pn">Page 06 / 11</div></div>
+      <div class="slide"><svg class="wave" data-wave="#5D59FF" data-op=".4" style="right:-40px;top:-50px;width:220px;height:140px;"></svg><div class="num grad-text">08</div><div class="eb">SYSTEMS｜系統與帳號</div><div class="rule"></div><h5>你會用到的系統</h5><div class="body"><table><tr><th>系統</th><th>用途</th><th>入口</th></tr><tr><td>T8 ERP</td><td>發貨單、庫存</td><td>電腦版</td></tr><tr><td>NUEiP</td><td>打卡、請假</td><td>網頁／APP</td></tr><tr><td>CubeLV</td><td>專案、AI 工作</td><td>網頁</td></tr></table></div><img class="lg" src="assets/logos/cropped/logo_corp_black.png" alt=""><div class="pn">Page 08 / 11</div></div>
+      <div class="slide dark"><svg class="wave" data-wave="#FFFFFF" data-op=".5" style="right:-40px;top:-50px;width:240px;height:150px;"></svg><div class="eb0">WELCOME</div><h4>再次歡迎加入威柏科技</h4><div class="sub">讓我們相互賦能，共創精彩生活與未來。</div><img class="lg" src="assets/logos/cropped/logo_en_white.png" alt=""></div>
     </div>
-    <div class="cap">新進員工簡報 6 種版型：封面／議程／組織定位／時程藍圖／系統表／結尾</div>
 
     <div class="table-wrap"><table>
       <tr><th>母版元素</th><th>規格</th></tr>
-      <tr><td>畫布</td><td>16:9，1920×1080（PowerPoint 13.33×7.5 in）；邊距 80px（0.56 in）</td></tr>
-      <tr><td>封面／結尾</td><td>品牌漸層 #5252FF → #1E2A5E 或 Navy 滿版；白字；⑥ 英文橫式白字 Logo 左下高 40px</td></tr>
-      <tr><td>內頁</td><td>白底；左上眉標 Blue 全大寫 12pt 字距 .18em；標題 28–32pt 粗體；內文 14–16pt；左下 ⑥ Logo 灰階高 28px；右下頁碼 10pt 灰</td></tr>
-      <tr><td>字型</td><td>Noto Sans TC ＋ Inter；PowerPoint 環境用微軟正黑體 ＋ Arial，避免字型未嵌入變明體</td></tr>
-      <tr><td>圖表</td><td>單色系：主資料 Blue、對照 Blue 200、其他灰；表頭 Blue 底白字</td></tr>
-      <tr><td>禁止</td><td>右下放 Logo、標題底線、彩色側邊條、Emoji、吉祥物、每頁都用同一版型</td></tr>
+      <tr><td>畫布</td><td>16:9，13.33×7.5 in；邊距 0.6 in</td></tr>
+      <tr><td>封面／結尾</td><td>品牌漸層 #5D59FF → #3A37C2 → #1E2A5E ＋ 右上白色波紋線稿；眉標 #D6D5FF 字距 .3em；標題 40pt 白；⑥ 英文橫式白字 Logo 左下</td></tr>
+      <tr><td>內頁章節頭</td><td>左上漸層數字（斜體、細）高 1 in；斜線；眉標「ENGLISH｜中文」13pt #8B8BC8；斜切線寬 6.6 in；標題 28pt 粗體 #5D59FF</td></tr>
+      <tr><td>內頁背景</td><td>#F6F6FF → 白 → #F3F3FC 對角漸層，右上紫色波紋線稿</td></tr>
+      <tr><td>卡片</td><td>白底、0.75pt #ECECF8 邊、圓角 0.16 in、淡紫陰影（#5D59FF 10%，模糊 14）；圖示置於 0.62 in 圓形 #EEEEFF 內；強調卡改 #5D59FF 底白字</td></tr>
+      <tr><td>圖示</td><td>Lucide 線條 1.75px，主色或白色；每張內頁至少一組圖示或一張圖表，不做純文字頁</td></tr>
+      <tr><td>表格</td><td>表頭 #5D59FF 底白字；奇偶列 #F7F7FD 交錯；框線 0.5pt #E4E4EE</td></tr>
+      <tr><td>頁尾</td><td>左下 ④ 公司名橫式黑字 Logo 高 0.3 in；右下頁碼膠囊「Page 02 / 10」#EEEEFF 底主色字</td></tr>
+      <tr><td>字型</td><td>Noto Sans TC ＋ Inter；PowerPoint 環境用微軟正黑體 ＋ Arial（模板已設定，不會再出現明體）</td></tr>
     </table></div>
   </div>
 
-  <hr class="rule">
-
-  <!-- ══ 6. 組織圖 ══ -->
+  <!-- 06 組織圖 -->
   <div class="section" id="org">
-    <div class="section-label">06</div>
-    <h2>公司組織圖（職能架構）</h2>
-    <p>依《威柏科技＿組織架構圖＿2026.07》與 2026-09-10 補充整理。本圖呈現<strong>職能架構</strong>，不列人名與職級，也不代表新增人事任命或兩法人的法律隸屬。標示 <span class="org"><span class="unit" style="border:none;padding:0;"><span class="new">新增</span></span></span> 者為本次補入的職掌。</p>
-
+    <div class="sec-head"><div class="sec-num grad-text">06</div><div class="sec-slash"></div><div class="sec-eb">ORGANIZATION｜公司組織圖</div></div>
+    <h2 class="grad-text">六大部門（2026-09-10 拍板）</h2>
+    <p>正式對外組織圖採部門制，不列人名與職級。職掌整合營運管理手冊 V1.0 與 2026-09-10 職能架構說明；原「客服與商品保」定名為<strong>售後品保部</strong>。</p>
     <div class="org">
-      <div class="root">威柏科技貿易有限公司　WEIBO<small>總經理室 ｜ 公司職能架構</small></div>
+      <div class="root">總經理室<small>統籌營運策略、財務健全、企業文化與品牌形象</small></div>
       <div class="row">
-        <div class="unit">
-          <b>威柏（業務區塊）</b>
-          <ul>
-            <li>國外代理進口、商品 PM／商品管理</li>
-            <li>平台電商營運<ul><li>momo／PChome／Pinkoi／蝦皮</li></ul></li>
-            <li>行銷業務部門
-              <ul>
-                <li>品牌行銷推廣：口碑經營、網路流量、社群行銷、KOL 體驗邀約、商務合作、公關媒體經營</li>
-                <li>經銷業務合作：連鎖通路經銷、各區域經銷商、團購經銷、企業禮贈品經銷</li>
-              </ul>
-            </li>
-          </ul>
-        </div>
-        <div class="unit weiz">
-          <b>WEiZ</b>
-          <ul>
-            <li>後勤
-              <ul>
-                <li>櫃位供貨、採購與電商營運</li>
-                <li>供應商管理<span class="new">新增</span></li>
-                <li>營運管理 A：新品選品上架、樣品申請、系統活動設定</li>
-                <li>營運管理 B：業績分析</li>
-                <li>行銷活動：會員、OMO、活動企劃、社群與成效分析</li>
-                <li>品牌與展店企劃</li>
-                <li>營運管理 C／D／E（原件文字有疑義，待核對）</li>
-              </ul>
-            </li>
-            <li>現場
-              <ul>
-                <li>櫃位管理：嘉義、高雄、台中</li>
-                <li>櫃位人員培訓<span class="new">新增</span></li>
-              </ul>
-            </li>
-          </ul>
-        </div>
-        <div class="unit">
-          <b>客服與商品保</b>
-          <ul>
-            <li>客服</li>
-            <li>代理商品檢測與維修</li>
-          </ul>
-          <p style="font-size:11px;color:var(--gray-400);margin:8px 0 0;">原件名稱，正式部門名稱待核（營運手冊稱「售後品保部」）</p>
-        </div>
-        <div class="unit">
-          <b>資訊與系統管理</b>
-          <ul>
-            <li>系統維護：帳號權限、設備管理</li>
-            <li>人資與合約：招募面試、人資系統、人資顧問、供應商合約</li>
-          </ul>
-        </div>
-        <div class="unit">
-          <b>倉儲與物流</b>
-          <ul>
-            <li>庫存管理：內倉／外倉</li>
-            <li>代理商品倉管</li>
-            <li>進出貨與物流對帳</li>
-          </ul>
-        </div>
+        <div class="unit"><div class="ic"><svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></div><b>人才資源部</b><small>人資與系統 MIS</small><ul><li>選才任用、教育訓練、薪酬福利、績效管理、員工關係</li><li>系統維護：帳號權限、設備管理、人資系統（NUEiP）</li></ul></div>
+        <div class="unit"><div class="ic"><svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg></div><b>行政管理部</b><small>採購／行政／專案</small><ul><li>財務管理：會計、出納、稅務</li><li>產品管理：選品、供應商開發、上市專案、市場管控</li><li>採購與進口：國外原廠採購、進口報關</li><li>專案管理、供應商合約、總務、會議與後勤</li></ul></div>
+        <div class="unit"><div class="ic"><svg viewBox="0 0 24 24"><path d="M3 9l1-5h16l1 5"/><path d="M3 9v11h18V9"/><path d="M3 9a3 3 0 0 0 6 0 3 3 0 0 0 6 0 3 3 0 0 0 6 0"/><path d="M9 20v-6h6v6"/></svg></div><b>WEiZ 營運部</b><small>後勤／現場</small><ul><li>後勤：櫃位供貨、採購與電商營運、供應商管理、選品上架、業績分析、行銷活動（會員・OMO・社群）、品牌與展店企劃</li><li>現場：嘉義・高雄・台中櫃位管理、櫃位人員培訓</li></ul></div>
+        <div class="unit"><div class="ic"><svg viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg></div><b>售後品保部</b><small>倉儲／客服／檢測</small><ul><li>倉儲管理：內倉／外倉庫存、代理商品倉管、進出貨與物流對帳</li><li>顧客服務：各通路客訴、訂單追蹤、客服 LINE @weibo</li><li>售後產品檢測：退換貨檢測、故障分析、維修與整新</li></ul></div>
+        <div class="unit"><div class="ic"><svg viewBox="0 0 24 24"><path d="M3 11l18-5v12L3 13v-2z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg></div><b>行銷業務部</b><small>品牌行銷／經銷業務</small><ul><li>品牌行銷推廣：口碑經營、網路流量、社群行銷、KOL 體驗邀約、商務合作、公關媒體</li><li>經銷業務合作：連鎖通路、各區域經銷商、團購、企業禮贈品</li></ul></div>
+        <div class="unit"><div class="ic"><svg viewBox="0 0 24 24"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg></div><b>電商通路部</b><small>平台營運／數位行銷／訂單履行</small><ul><li>momo、PChome、蝦皮、Pinkoi、Yahoo、WEiZ 購物商城上架與活動</li><li>站內廣告、SEO、社群；撈單出貨 D+1、對帳與損益</li></ul></div>
       </div>
     </div>
-
-    <div class="callout todo">
-      <b>待核對三點。</b>① 營運手冊 V1.0 的部門制（人才資源部、行政管理部、品牌營運處下轄 WEiZ 營運部／售後品保部／行銷業務部／電商通路部）與本職能架構是兩種切法，正式組織圖要定一種對外版本。② 營運管理 C／D／E 細項。③ 「客服與商品保」是否定名為「售後品保部」。
-    </div>
+    <div class="callout"><b>「營運管理 C／D／E」是什麼？</b>2026-09-10 的說明文件指出，原件《威柏科技＿組織架構圖＿2026.07》在 WEiZ 後勤下列有營運管理 A 到 E 五項：A 是選品上架與樣品申請、B 是業績分析，<strong>C／D／E 的細項文字在原件中有疑義，整理者沒有展開，也沒有猜測</strong>。原件不在我能讀到的 Drive／Notion 範圍。本版用「選品上架／業績分析」概括，C／D／E 不再出現；若原件另有明確項目，請提供檔案或名稱，我再補回。</div>
   </div>
 
-  <hr class="rule">
-
-  <!-- ══ 7. 系統架構 ══ -->
+  <!-- 07 系統架構 -->
   <div class="section" id="sys">
-    <div class="section-label">07</div>
-    <h2>系統架構圖</h2>
+    <div class="sec-head"><div class="sec-num grad-text">07</div><div class="sec-slash"></div><div class="sec-eb">SYSTEM ARCHITECTURE｜系統架構圖</div></div>
+    <h2 class="grad-text">三層：入口、核心營運、文件協作</h2>
     <p>既有系統的功能分層。同層並列不代表已自動串接；箭頭只列既有架構文件記載的主要資料方向。</p>
-
     <div class="sys">
-      <div class="layer">
-        <b>顧客與交易入口</b>
-        <div class="nodes">
-          <div class="node"><b>WEiZ 商城（Cyberbiz）</b><span>線上購物／會員</span></div>
-          <div class="node"><b>Cyberbiz POS</b><span>門市結帳</span></div>
-          <div class="node"><b>WEIBO 官網</b><span>保固／維修／經銷服務</span></div>
-          <div class="node"><b>LINE OA ＋ LIFF</b><span>顧客溝通、會員入口、銷售宇宙手機入口</span></div>
-        </div>
-      </div>
-      <div class="layer">
-        <b>核心營運</b>
-        <div class="nodes">
-          <div class="node core"><b>T8 ERP（正航）</b><span>進銷存／採購／帳務／商品主檔</span></div>
-          <div class="node core"><b>WEiZ 銷售宇宙</b><span>三櫃業績／班表／日誌／任務／公告／權限</span></div>
-        </div>
-      </div>
-      <div class="layer">
-        <b>文件與協作</b>
-        <div class="nodes">
-          <div class="node"><b>CubeLV</b><span>管理筆記、專案、插件與 AI 員工；含文件收件匣</span></div>
-          <div class="node"><b>Notion</b><span>團隊共編、會議紀錄、定稿登記</span></div>
-          <div class="node"><b>Synology NAS</b><span>文件／素材儲存與備份</span></div>
-          <div class="node"><b>WEiZ 知識庫</b><span>門市操作與訓練（HTML）</span></div>
-          <div class="node"><b>WEiZ 社群成效追蹤</b><span>貼文資料與前台成效</span></div>
-          <div class="node"><b>NUEiP</b><span>人資考勤（新進人員簡報記載）</span></div>
-        </div>
-      </div>
+      <div class="layer"><b>顧客與交易入口</b><div class="nodes">
+        <div class="node"><b>WEiZ 商城（Cyberbiz）</b><span>線上購物／會員</span></div>
+        <div class="node"><b>Cyberbiz POS</b><span>門市結帳</span></div>
+        <div class="node"><b>WEIBO 官網</b><span>保固／維修／經銷服務</span></div>
+        <div class="node"><b>LINE OA ＋ LIFF</b><span>顧客溝通、會員入口、銷售宇宙手機入口</span></div></div></div>
+      <div class="layer"><b>核心營運</b><div class="nodes">
+        <div class="node core"><b>T8 ERP（正航）</b><span>進銷存／採購／帳務／商品主檔</span></div>
+        <div class="node core"><b>WEiZ 銷售宇宙</b><span>三櫃業績／班表／日誌／任務／公告／權限</span></div></div></div>
+      <div class="layer"><b>文件與協作</b><div class="nodes">
+        <div class="node"><b>CubeLV</b><span>管理筆記、專案、插件與 AI 員工；文件收件匣：審查、編號、定稿</span></div>
+        <div class="node"><b>Notion</b><span>團隊共編、會議紀錄、定稿登記</span></div>
+        <div class="node"><b>Synology NAS</b><span>文件／素材儲存與備份</span></div>
+        <div class="node"><b>WEiZ 知識庫</b><span>門市操作與訓練（HTML）</span></div>
+        <div class="node"><b>WEiZ 社群成效追蹤</b><span>貼文資料與前台成效</span></div>
+        <div class="node"><b>NUEiP ／ EVOX</b><span>人資考勤／雲端總機</span></div></div></div>
     </div>
-
     <h3>主要業務資料流</h3>
     <div class="flows">
       <div class="flow"><b>T8 ERP</b><span class="arr">→</span><b>商城／官網</b><span>商品代碼與首次建檔</span></div>
@@ -678,40 +482,58 @@
     <div class="callout"><b>必要區分：</b>商城可售量、POS 成交與 T8 實體庫存是三筆不同的資料；既有文件不支持「三者已全面即時同步」的說法。</div>
   </div>
 
-  <hr class="rule">
-
-  <!-- ══ 8. 系統名稱 ══ -->
+  <!-- 08 系統名稱與編號 -->
   <div class="section" id="tools">
-    <div class="section-label">08</div>
-    <h2>系統名稱與用途</h2>
+    <div class="sec-head"><div class="sec-num grad-text">08</div><div class="sec-slash"></div><div class="sec-eb">REFERENCE｜系統名稱與文件編號</div></div>
+    <h2 class="grad-text">系統名稱與用途</h2>
     <div class="table-wrap"><table>
-      <tr><th>名稱／別名</th><th>用途</th><th>主要使用者</th></tr>
-      <tr><td>T8 ERP／正航 ERP／T8</td><td>商品代碼與首次建檔、採購、入出庫、調撥、盤點、客戶供應商及財務帳務管理</td><td>全公司；電商發貨單為核心作業</td></tr>
-      <tr><td>WEiZ 商城／WEiZ EC</td><td>WEiZ 線上銷售通路：商品頁、售價、會員、購物、優惠、訂單與線上可售量</td><td>WEiZ 後勤</td></tr>
-      <tr><td>Cyberbiz／CBZ</td><td>WEiZ 商城使用的電商平台；不是另一套獨立商城</td><td>WEiZ 後勤</td></tr>
-      <tr><td>Cyberbiz POS／WEiZ POS</td><td>實體門市結帳：交易、會員、結帳人員與優惠券使用</td><td>WEiZ 現場</td></tr>
-      <tr><td>WEIBO 官網</td><td>品牌產品展示、保固登錄、維修申請與查詢、經銷商帳號與訂單服務</td><td>客服與商品保、經銷業務</td></tr>
-      <tr><td>WEiZ 銷售宇宙</td><td>三櫃營運管理後台：業績、班表、工作日誌、任務、公告、目標與角色權限。成交來源為 Cyberbiz POS，不負責 ERP 扣庫</td><td>WEiZ 現場與後勤</td></tr>
-      <tr><td>LINE OA</td><td>LINE 官方帳號，品牌與顧客溝通及會員入口</td><td>客服、行銷</td></tr>
-      <tr><td>LINE LIFF</td><td>LINE 內開啟網頁應用的技術；銷售宇宙已整合為手機入口</td><td>WEiZ 現場</td></tr>
+      <tr><th>名稱／別名</th><th>用途</th><th>主要使用部門</th></tr>
+      <tr><td>T8 ERP／正航 ERP／T8</td><td>商品代碼與首次建檔、採購、入出庫、調撥、盤點、客戶供應商及財務帳務管理</td><td>全公司</td></tr>
+      <tr><td>WEiZ 商城／WEiZ EC</td><td>WEiZ 線上銷售通路：商品頁、售價、會員、購物、優惠、訂單與線上可售量</td><td>WEiZ 營運部</td></tr>
+      <tr><td>Cyberbiz／CBZ</td><td>WEiZ 商城使用的電商平台；不是另一套獨立商城</td><td>WEiZ 營運部</td></tr>
+      <tr><td>Cyberbiz POS／WEiZ POS</td><td>實體門市結帳：交易、會員、結帳人員與優惠券使用</td><td>WEiZ 營運部（現場）</td></tr>
+      <tr><td>WEIBO 官網</td><td>品牌產品展示、保固登錄、維修申請與查詢、經銷商帳號與訂單服務</td><td>售後品保部、行銷業務部</td></tr>
+      <tr><td>WEiZ 銷售宇宙</td><td>三櫃營運管理後台：業績、班表、工作日誌、任務、公告、目標與角色權限；成交來源為 Cyberbiz POS，不負責 ERP 扣庫</td><td>WEiZ 營運部</td></tr>
+      <tr><td>LINE OA／LIFF</td><td>官方帳號與顧客溝通、會員入口；LIFF 讓銷售宇宙在 LINE 內開啟</td><td>售後品保部、WEiZ 營運部</td></tr>
       <tr><td>CubeLV</td><td>管理筆記、檔案、待辦、專案、插件與 AI 員工的工作平台</td><td>管理層、各部門</td></tr>
-      <tr><td>文件收件匣</td><td>接收送件、文件審查與定稿處理，銜接文件登記及歸檔</td><td>行政管理</td></tr>
+      <tr><td>文件收件匣</td><td>接收送件、文件審查與定稿處理；賦予統一文件編號並歸檔</td><td>行政管理部</td></tr>
       <tr><td>Notion</td><td>團隊文件、會議紀錄、定稿登記與社群內容共編</td><td>全公司</td></tr>
       <tr><td>Synology NAS</td><td>內部文件與素材集中儲存、共享、共編及備份</td><td>全公司</td></tr>
-      <tr><td>WEiZ 知識庫</td><td>門市新人訓練、產品與操作手冊的 HTML 閱讀入口</td><td>WEiZ 現場</td></tr>
-      <tr><td>WEiZ 社群成效追蹤工具</td><td>管理貼文資料與公開前台成效，供社群追蹤、共編和週報使用</td><td>行銷</td></tr>
+      <tr><td>WEiZ 知識庫</td><td>門市新人訓練、產品與操作手冊的 HTML 閱讀入口</td><td>WEiZ 營運部</td></tr>
+      <tr><td>WEiZ 社群成效追蹤工具</td><td>管理貼文資料與公開前台成效，供社群追蹤、共編和週報使用</td><td>行銷業務部</td></tr>
       <tr><td>NUEiP</td><td>人資考勤：打卡、請假、福利假申請</td><td>全公司</td></tr>
       <tr><td>EVOX 雲端總機</td><td>公司電話與分機、客服來電</td><td>全公司</td></tr>
     </table></div>
-    <p class="spec">資料依據：威柏全系統架構總覽（內文更新 2026-08-17）、WEiZ &amp; 威柏會員資料體系規範、新進人員引導簡報系統資源表。未確認上線的規劃項目不列入。帳號與密碼不記載於任何品牌文件。</p>
-  </div>
 
+    <h3>文件編號規則（CubeLV 文件收件匣既有編碼）</h3>
+    <div class="table-wrap"><table>
+      <tr><th>文件類型</th><th>格式</th><th>範例</th><th>模板上的寫法</th></tr>
+      <tr><td>合約、經銷／授權合約</td><td><code>CON</code> + 年月日 6 碼 + 流水 2 碼</td><td>CON26082801</td><td>CONYYMMDDNN（收件匣定稿賦予）</td></tr>
+      <tr><td>公文</td><td><code>PM-</code> + 年月日 8 碼 + 流水 2 碼</td><td>PM-2026082601</td><td>PM-YYYYMMDDNN</td></tr>
+      <tr><td>報價／報表、其他</td><td><code>DOC-</code> + 年月日 8 碼 + <code>-</code> + 流水 2 碼</td><td>DOC-20260807-02</td><td>DOC-YYYYMMDD-NN</td></tr>
+    </table></div>
+    <p class="spec">編號由文件收件匣於定稿時賦予，模板只保留欄位與格式提示；另有舊制編號 BB009001 一筆。檔名依產出品質九條：<code>YYYYMMDD_部門_主題_v版本</code>。資料依據：文件定稿交件中心（Notion）、威柏全系統架構總覽（2026-08-17）。帳號與密碼不記載於任何品牌文件。</p>
+  </div>
 </div>
 
 <div class="doc-footer">
-  <img src="assets/logos/weibo_full_wide_white.png" alt="WEIBO">
-  <span>威柏科技貿易有限公司 ｜ WEIBO 應用範例集 v0.1 審核稿 ｜ 2026 年 9 月</span>
+  <img src="assets/logos/cropped/logo_full_white.png" alt="WEIBO">
+  <span>威柏科技貿易有限公司 ｜ WEIBO 應用範例集 v0.2 審核稿 ｜ 2026 年 9 月</span>
 </div>
 
+<script>
+  // 波紋線稿：多條相位微調的貝茲曲線（與簡報素材同一演算法）
+  document.querySelectorAll('svg.wave').forEach(function (svg) {
+    var w = 1400, h = 900, n = 26, color = svg.dataset.wave || '#5D59FF', op = parseFloat(svg.dataset.op || '.5');
+    svg.setAttribute('viewBox', '0 0 ' + w + ' ' + h); svg.setAttribute('preserveAspectRatio', 'none');
+    var out = '';
+    for (var i = 0; i < n; i++) {
+      var t = i / (n - 1), a = 0.35 + 0.65 * (1 - Math.abs(t - 0.5) * 2);
+      var y0 = h * (0.15 + 0.55 * t), y1 = h * (0.65 - 0.5 * t), y2 = h * (0.2 + 0.7 * t), y3 = h * (0.55 - 0.35 * t);
+      out += '<path d="M ' + (-w * 0.05) + ' ' + y0 + ' C ' + (w * 0.3) + ' ' + y1 + ', ' + (w * 0.55) + ' ' + y2 + ', ' + (w * 1.05) + ' ' + y3 + '" fill="none" stroke="' + color + '" stroke-opacity="' + (op * a).toFixed(3) + '" stroke-width="1.1" vector-effect="non-scaling-stroke"/>';
+    }
+    svg.innerHTML = out;
+  });
+</script>
 </body>
 </html>

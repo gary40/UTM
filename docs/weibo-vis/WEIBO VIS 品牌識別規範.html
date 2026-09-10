@@ -440,13 +440,14 @@
     </div>
     <p style="font-size:13px;color:var(--gray-400);">70% = 白／#F4F4F8 等中性色；20% = WEIBO Blue；10% = Navy 或功能色。與 WEiZ 的差別：WEIBO 的 10% 以 <strong>Navy 與灰</strong>為主，不用促銷紅金。</p>
 
-    <h3>品牌核心 8 色</h3>
+    <h3>品牌核心 8 色＋名片專用色</h3>
     <div class="swatches">
       <div class="sw"><div class="sw-chip" style="background:#FFFFFF;"></div><div class="sw-name">White</div><div class="sw-hex">#FFFFFF</div><div class="sw-zh">主要背景</div></div>
       <div class="sw"><div class="sw-chip" style="background:#F4F4F8;"></div><div class="sw-name">Gray 50</div><div class="sw-hex">#F4F4F8</div><div class="sw-zh">次要背景（偏冷）</div></div>
       <div class="sw"><div class="sw-chip" style="background:#5D59FF;"></div><div class="sw-name" style="color:#5D59FF;">WEIBO Blue</div><div class="sw-hex">#5D59FF</div><div class="sw-zh">主色（與 WEiZ 共用）</div></div>
       <div class="sw"><div class="sw-chip" style="background:#1E2A5E;"></div><div class="sw-name" style="color:#1E2A5E;">WEIBO Navy</div><div class="sw-hex">#1E2A5E</div><div class="sw-zh">深底・封面・頁尾</div></div>
       <div class="sw"><div class="sw-chip" style="background:#979797;"></div><div class="sw-name">Logo Gray</div><div class="sw-hex">#979797</div><div class="sw-zh">標誌灰・輔助圖形</div></div>
+      <div class="sw"><div class="sw-chip" style="background:#4FA8C2;"></div><div class="sw-name">Card Teal</div><div class="sw-hex">≈#4FA8C2</div><div class="sw-zh">名片專用（限名片）</div></div>
       <div class="sw"><div class="sw-chip" style="background:#999999;"></div><div class="sw-name">Gray 400</div><div class="sw-hex">#999999</div><div class="sw-zh">說明文字</div></div>
       <div class="sw"><div class="sw-chip" style="background:#666666;"></div><div class="sw-name">Gray 600</div><div class="sw-hex">#666666</div><div class="sw-zh">次要文字</div></div>
       <div class="sw"><div class="sw-chip" style="background:#333333;"></div><div class="sw-name">Gray 900</div><div class="sw-hex">#333333</div><div class="sw-zh">主要文字（不用純黑）</div></div>
@@ -473,7 +474,7 @@
     </div>
 
     <div class="callout">
-      <b>現行名片配色處理（V1.0 定案）。</b>名片曾使用深藍＋湖水藍雙色帶，且標誌被改為不透明皇家藍，與 Logo 完稿不一致。定案：<strong>Navy #1E2A5E 納入核心色</strong>；<strong>湖水藍不納入色票</strong>；名片改版依第 12 章版型，標誌回到原色。
+      <b>名片配色（V1.0 審核定案）。</b>名片以公司現行版為準：深藍 #1E2A5E ＋ 湖水藍 ≈#4FA8C2 雙色帶。<strong>Navy 納入核心色</strong>；<strong>湖水藍列為名片專用輔色</strong>，不用於文件、簡報、網站與其他印刷品。
     </div>
 
     <h3>品牌漸層</h3>
@@ -642,22 +643,30 @@
     <h2>商務應用範例</h2>
     <p>示意圖說明方向與規格；可直接套用的檔案見同套文件的《WEIBO 應用範例集》與 <code>templates/</code>（新品簡報、新進員工簡報、報價單、合約），皆依現行已上線合約與簡報版式製作。</p>
 
-    <h3>名片 90×54mm</h3>
+    <h3>名片 90×54mm（以現行版為準，2026-09-10 審核定案）</h3>
     <div class="app-grid">
-      <div class="card-mock">
-        <div class="band"><img src="assets/logos/weibo_en_horizontal_white.png" alt="WEIBO"><span style="font:700 9px/1 var(--font);letter-spacing:.1em;">品牌代理 ｜ 禮品訂製 ｜ 進口認證</span></div>
-        <div class="body">
-          <div><div class="name">李柏樟 <small>Sam ｜ 電商業務部</small></div><div class="line">0905 510 923</div></div>
-          <div style="font-size:9.5px;line-height:1.55;"><div class="line">威柏科技貿易有限公司 ｜ 05-3209919 #236 ｜ weibo.sd8@weiboltd.com</div><div>嘉義縣太保市健康路 187 號 1 樓 ｜ 統編 55903333 ｜ www.weiboltd.com</div></div>
-        </div>
+      <div class="card-mock" style="background:#1E2A5E;border-color:#1E2A5E;flex-direction:column;">
+        <div style="height:26%;"></div>
+        <div style="height:36%;background:#4FA8C2;display:flex;align-items:center;justify-content:center;gap:8px;color:#0D1B3D;font:900 15px/1 var(--font);letter-spacing:.02em;"><img src="assets/logos/cropped/logomark.png" alt="" style="height:18px;">WEIBO 威柏科技</div>
+        <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;color:#fff;font-size:8.5px;letter-spacing:.14em;"><span>www.weiboltd.com</span><span style="font-size:7.5px;">｜ 品牌代理 ｜ 禮品訂製 ｜ 進口認證 ｜</span></div>
       </div>
-      <div class="card-mock" style="background:var(--navy);border-color:var(--navy);">
-        <div class="body" style="background:transparent;color:rgba(255,255,255,.75);align-items:center;justify-content:center;">
-          <img src="assets/logos/weibo_full_stacked_white.png" alt="WEIBO 威柏科技貿易有限公司" style="height:78%;object-fit:contain;">
+      <div class="card-mock" style="background:#1E2A5E;border-color:#1E2A5E;flex-direction:column;color:#fff;">
+        <div style="height:34%;background:#4FA8C2;display:flex;align-items:center;justify-content:center;gap:8px;color:#0D1B3D;"><img src="assets/logos/cropped/logomark.png" alt="" style="height:16px;"><div style="font:700 9px/1.3 var(--font);">威柏科技貿易有限公司<br><span style="font-size:6px;letter-spacing:.08em;">WEI BO TECHNOLOGY TRADE CO., LTD</span></div></div>
+        <div style="flex:1;padding:8px 12px;display:flex;flex-direction:column;justify-content:space-between;">
+          <div><span style="font-size:7px;opacity:.8;">電商業務部</span>　<b style="font-size:11px;">李柏樟</b> <span style="font-size:8px;">Sam</span><div style="font-size:8px;font-style:italic;">0905 510 923</div></div>
+          <div style="font-size:6.5px;line-height:1.6;border-left:1px solid rgba(255,255,255,.5);padding-left:6px;">公司電話／05-3209919 #236<br>電子信箱／weibo.sd8@weiboltd.com<br>統一編號／55903333<br>地址／嘉義縣太保市健康路 187 號 1 樓</div>
         </div>
       </div>
     </div>
-    <p style="font-size:13px;color:var(--gray-400);">正面：Navy 色帶＋英文橫式 Logo；資訊區白底黑字。背面：Navy 滿版＋完整直式白字 Logo。與現行名片的差異：去掉 Teal 色帶、標誌回到原色、資訊改為兩行制式。</p>
+    <p style="font-size:13px;color:var(--gray-400);">示意圖依現行名片重繪，非實際印刷檔；正式版型以公司現行名片檔為準。正面：深藍底、湖水藍色帶置中「WEIBO 威柏科技」字標，下方網址與三項服務；背面：湖水藍色帶放公司中英全名，深藍區放部門、姓名、電話與公司資訊，右側以標誌雙葉圖形淡色鋪底。</p>
+    <div class="table-wrap"><table>
+      <tr><th>項目</th><th>規格</th></tr>
+      <tr><td>尺寸</td><td>90×54mm，出血 3mm，文字距邊 ≥ 5mm</td></tr>
+      <tr><td>名片專用配色</td><td>深藍 #1E2A5E（Navy）＋ 湖水藍 ≈#4FA8C2；湖水藍僅限名片使用，不延伸到其他文件</td></tr>
+      <tr><td>字標</td><td>「WEIBO 威柏科技」並列、標誌在前；背面公司中英全名</td></tr>
+      <tr><td>資訊欄</td><td>部門、姓名（中英）、手機；公司電話與分機、信箱、統編、地址四行，左側細線</td></tr>
+      <tr><td>輔助圖形</td><td>標誌雙葉圖形放大、白色 10–15% 透明，置右側</td></tr>
+    </table></div>
 
     <h3>Email 簽名檔</h3>
     <div class="sig">
@@ -731,7 +740,7 @@
       <li>安全距離 ≥ 標誌高 ½，區域內無其他元素</li>
       <li>尺寸不小於最小規格</li>
       <li>色彩 70 / 20 / 10，主色 #5D59FF（集團共用），文字 #333333</li>
-      <li>沒有促銷紅金、沒有 Teal（除非定稿保留）</li>
+      <li>沒有促銷紅金；湖水藍只出現在名片</li>
       <li>字型 Noto Sans TC + Inter，無明體</li>
       <li>中英之間半形空格，型號不加空格</li>
       <li>沒有 Emoji、沒有吉祥物</li>
@@ -753,7 +762,7 @@
       <tr><th>版本</th><th>日期</th><th>內容</th></tr>
       <tr><td>v0.1</td><td>2026-09-10</td><td>核對稿：依 WEiZ VIS PLUS v3.0 架構建立 15 章，Logo 完稿 11 檔納入，色彩以 Logo 反推提案</td></tr>
       <tr><td>v0.2</td><td>2026-09-10</td><td>主色改採集團共用 #5D59FF；補品牌敘事與新聞稿引述；發言人改為總經理一人；補英文橫式黑字 Logo；組織圖改六部門制；文件編號改依文件收件匣編碼</td></tr>
-      <tr><td><strong>V1.0</strong></td><td><strong>2026-09-10</strong></td><td>定稿：標語層級、名稱書寫、帳號規則、名片配色處理、標誌單獨使用範圍定案；應用範例與模板（簡報 ×2、報價單、合約）v2 同步發布</td></tr>
+      <tr><td><strong>V1.0</strong></td><td><strong>2026-09-10</strong></td><td>定稿：標語層級、名稱書寫、帳號規則、標誌單獨使用範圍定案；應用範例與模板（簡報 ×2、報價單、合約）v2 同步發布。<strong>總經理審核通過</strong>；依審核意見名片改以現行版為準，湖水藍列名片專用輔色</td></tr>
     </table></div>
     <h3>v1.1 待辦</h3>
     <div class="table-wrap"><table>
@@ -774,8 +783,8 @@
       ▸ 已驗證項目：公司全名、統編 55903333、電話 05-3209919、地址、網域、成立年份與里程碑、六大核心價值、三軸使命、企業標語、六部門名稱、文件編號格式（對照交件中心 20 筆紀錄）、Logo 12＋1 檔尺寸<br>
       ▸ 未確認項目／假設：CMYK 色值；Logo 向量檔；WEILIFE 創立年份（新聞稿 2024／簡報 2023，本文並列）；營運管理 C／D／E 細項；代理品牌授權範圍<br>
       ▸ 風險分級：☑ B 對外發布（規範將用於客戶、通路、社群可見之產出；其中合約模板屬 C，使用前需法務或顧問審閱）<br>
-      ▸ 建議審核人：總經理 黃冠博；合約模板另送法務／顧問<br>
-      ▸ 狀態：⚠️ AI 產出・待人工審核（審核完成後由審核人移除本標記）
+      ▸ 審核人：總經理 黃冠博（2026-09-10 審核通過）；合約模板條文另送法務／顧問<br>
+      ▸ 狀態：✅ 總經理審核通過，可入檔；合約模板條文待法務／顧問審閱後方可對外使用
     </div>
   </div>
 

@@ -16,6 +16,8 @@
 | `templates/20260910_人資_WEIBO新進員工簡報模板_v2.pptx` | 新進員工簡報模板，11 頁 |
 | `templates/20260910_行政_WEIBO報價單模板_v2.docx` | 報價單外框，含文件資訊表、品項表、簽署欄 |
 | `templates/20260910_行政_WEIBO合約模板_v2.docx` | 合約外框，含機密水印、條文樣式、簽署欄 |
+| `templates/business-card/WEIBO_名片_印刷檔.ai` | 名片印刷原始檔（正／背，92×51mm 含出血），公司現行版，名片一律以此檔輸出 |
+| `templates/business-card/WEIBO_電子名片.ai` | 電子名片合成圖（300×300mm），供 LINE、Email 簽名等數位用途 |
 | `assets/logos/` | Logo 12 檔（六種版型 × 黑白字）＋ 標誌單獨檔 `weibo_logomark.png`；`cropped/` 為去除透明邊的裁切版，供排版直接使用 |
 | `assets/brand/` | 品牌漸層背景、內頁背景、波紋線稿、章節斜切線、機密水印、標誌小圖 |
 | `source/` | 產生模板與素材的腳本（`build_pptx_v2.js`、`build_docx_v2.js`、`build_assets.js`），供日後改版重建 |
@@ -24,7 +26,7 @@
 
 | 項目 | 規格 |
 |---|---|
-| 名片 | 以公司現行版為準：深藍 #1E2A5E ＋ 湖水藍 ≈#4FA8C2；湖水藍僅限名片 |
+| 名片 | 以 `templates/business-card/` 的 AI 印刷檔為準：深藍 #1B3065 ＋ 湖水藍 #4DAAC0；此配色僅限名片 |
 | 名稱 | **WEIBO**（全大寫）；中英並列「WEIBO 威柏科技」；全名 威柏科技貿易有限公司 / WEI BO TECHNOLOGY TRADE CO., LTD |
 | 主色 | `#5D59FF`（與 WEiZ 集團共用）；深色 Navy `#1E2A5E`；標誌灰 `#979797`；文字 `#333333` |
 | 比例 | 70 中性 / 20 主色 / 10 Navy 與灰；不用促銷紅金 |

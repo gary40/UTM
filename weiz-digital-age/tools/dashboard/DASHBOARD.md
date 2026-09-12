@@ -27,3 +27,12 @@
 
 ## Code.gs v1.2 部署後可以強化
 `answers`／`events`／`question_stats` 分頁上線後，可以擴充 parse.py 加入：每題正確率與超時率、平均反應時間、類型標籤分布、結果頁停留數據。屆時記得同步更新這份文件與戰情室頁面上的「更完整的資料等你部署」提示卡。
+
+## 寄信統計（v1.3-draft，草稿，尚未部署）
+`Code.v1.3-draft.gs` 是加了「自動寄折扣碼信」的草稿版本（在 v1.2 基礎上疊加，MAIL_ENABLED 預設 false，部署了也不會馬上寄信，詳見檔頭「啟用寄信的步驟」）。**這份草稿沒有部署到正式後端，需要 Gary 親自決定並操作部署**，Claude 不會擅自替換正式的 Code.gs。
+
+一旦 Gary 部署了 v1.3-draft（不論寄信功能有沒有真的開啟），`leads` 分頁就會多出 `mail_status`／`mail_sent_at`／`mail_error` 三欄，可能還有 `mail_log` 分頁。parse.py 已經支援讀取這些欄位並輸出 `mail` 區塊：
+- `mail.available`：偵測 `leads` 表頭有沒有 `mail_status` 欄位，沒有就是 false（戰情室會顯示「尚未啟用」提示卡，不會出錯）。
+- 有的話會算：待寄送／已寄送／失敗筆數、寄送成功率、依 `mail_sent_at` 分日的寄出數（近 14 天）、最近一次寄出時間、前 5 種失敗原因。
+
+戰情室頁面（`dashboard/latest` 這個 db 文件）現在的形狀是 `{ game: {...}, mail: {...} }`，兩個 Routine 的步驟不需要改，parse.py 印出的 JSON 已經是這個合併形狀，直接整包寫入 `dashboard/latest` 即可。

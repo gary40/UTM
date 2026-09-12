@@ -51,7 +51,7 @@ shares_real = [s for s in shares if not is_test(s)]
 platform_dist = Counter(s.get('platform','') for s in shares_real)
 content_dist = Counter(s.get('content_type','') for s in shares_real)
 
-out = {
+game = {
   'generated_at': datetime.now(timezone.utc).isoformat(),
   'totals': {'results': len(res_real), 'leads': len(leads_real), 'unique_leads': len(lead_emails), 'shares': len(shares_real)},
   'avg_age': round(mean,1), 'sd_age': round(sd,1), 'avg_right_n': round(avg_right,1), 'avg_new_rate': round(avg_newrate,1),
@@ -61,4 +61,29 @@ out = {
   'lead_conversion_pct': round(len(leads_real)/len(res_real)*100,1) if res_real else 0,
   'platform_dist': dict(platform_dist), 'content_type_dist': dict(content_dist),
 }
-print(json.dumps(out, ensure_ascii=False, indent=1))
+
+# ===== 寄信統計（v1.3-draft 部署、leads 分頁出現 mail_status 欄位後才有資料）=====
+mail_log = find(['status','coupon_version'])
+has_mail_cols = bool(leads) and 'mail_status' in leads[0]
+if not has_mail_cols:
+    mail = {'available': False, 'generated_at': game['generated_at']}
+else:
+    ml_real = [l for l in leads_real]  # 已用同一套排除測試資料的規則
+    status_of = lambda l: str(l.get('mail_status','')).strip().lower()
+    sent = [l for l in ml_real if status_of(l) == 'sent']
+    failed = [l for l in ml_real if status_of(l) == 'failed']
+    pending = [l for l in ml_real if status_of(l) not in ('sent','failed')]
+    sent_by_day = Counter(day(l['mail_sent_at']) for l in sent if l.get('mail_sent_at'))
+    error_samples = Counter(l.get('mail_error','')[:60] for l in failed if l.get('mail_error'))
+    last_sent = max((l['mail_sent_at'] for l in sent if l.get('mail_sent_at')), default='')
+    mail = {
+      'available': True, 'generated_at': game['generated_at'],
+      'totals': {'leads': len(ml_real), 'sent': len(sent), 'failed': len(failed), 'pending': len(pending)},
+      'send_rate_pct': round(len(sent)/len(ml_real)*100,1) if ml_real else 0,
+      'by_day': dict(sorted(sent_by_day.items())),
+      'last_sent_at': last_sent,
+      'top_errors': dict(error_samples.most_common(5)),
+      'log_rows_seen': len(mail_log),
+    }
+
+print(json.dumps({'game': game, 'mail': mail}, ensure_ascii=False, indent=1))

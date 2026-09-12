@@ -299,7 +299,7 @@ body{background:var(--weiz-gray-50)}
 .bubble::before{content:'';position:absolute;left:-7px;top:50%;transform:translateY(-50%);border:7px solid transparent;border-right-color:var(--weiz-gray-50);border-left:0}
 .bubble b{color:var(--weiz-gray-900);font-weight:500}
 /* 音樂鈕 */
-.music{position:fixed;right:14px;bottom:14px;z-index:5;display:inline-flex;align-items:center;gap:6px;height:40px;padding:0 14px;border-radius:999px;background:rgba(255,255,255,.9);border:1px solid var(--color-border);box-shadow:0 6px 20px rgba(51,51,51,.12);font-size:13px;font-weight:500;color:var(--weiz-gray-600);backdrop-filter:blur(8px)}
+.music{position:fixed;right:14px;bottom:calc(14px + env(safe-area-inset-bottom,0px));z-index:5;display:inline-flex;align-items:center;gap:6px;height:40px;padding:0 14px;border-radius:999px;background:rgba(255,255,255,.9);border:1px solid var(--color-border);box-shadow:0 6px 20px rgba(51,51,51,.12);font-size:13px;font-weight:500;color:var(--weiz-gray-600);backdrop-filter:blur(8px)}
 .music.on{color:var(--weiz-indigo-500);border-color:var(--weiz-indigo-200)}
 .music .bars{display:inline-flex;gap:2px;align-items:flex-end;height:14px}
 .music .bars i{width:3px;height:4px;background:currentColor;border-radius:1px}
@@ -310,7 +310,7 @@ body{background:var(--weiz-gray-50)}
 /* 圖卡 */
 .share-block{grid-template-columns:1fr 1fr}
 .share-block .btn.full{grid-column:1/-1}
-.cardprev{display:none;position:fixed;inset:0;z-index:20;background:rgba(51,51,51,.7);backdrop-filter:blur(8px);align-items:center;justify-content:center;padding:var(--sp-1)}
+.cardprev{display:none;position:fixed;inset:0;z-index:20;background:rgba(51,51,51,.7);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);align-items:center;justify-content:center;padding:var(--sp-1)}
 .cardprev.show{display:flex}
 .cardprev .inner{background:#fff;border-radius:var(--r-card);padding:var(--sp-05);max-width:360px;width:100%;display:grid;gap:10px;animation:screenIn .3s var(--ease)}
 .cardprev canvas{width:100%;height:auto;border-radius:12px;display:block}
@@ -358,7 +358,7 @@ body{background:var(--weiz-gray-50)}
 .options{grid-auto-rows:104px}
 .opt{min-height:0;height:104px;overflow:hidden;padding:10px 14px;gap:6px;font-size:16px;line-height:1.3}
 .opt>span:last-child{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.beta{position:fixed;left:14px;bottom:14px;z-index:5;font-size:12px;font-weight:500;color:#B97500;background:#FFF1D1;border:1px solid #FDD403;border-radius:999px;padding:6px 12px;text-decoration:none}
+.beta{position:fixed;left:14px;bottom:calc(14px + env(safe-area-inset-bottom,0px));z-index:5;font-size:12px;font-weight:500;color:#B97500;background:#FFF1D1;border:1px solid #FDD403;border-radius:999px;padding:6px 12px;text-decoration:none}
 @media(min-width:560px){.beta{left:calc(50% - 240px + 14px)}}
 </style>
 </head>
@@ -501,7 +501,8 @@ body{background:var(--weiz-gray-50)}
 </section>
 
 </div></div>
-<audio id="unlock" loop playsinline preload="auto" src="data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAQB8AAIA+AAACABAAZGF0YQAAAAA="></audio>
+<!-- 0.25 秒靜音 WAV（8kHz／8-bit）：iOS 需有實際長度的音檔在手勢內 play() 才會把媒體通道打開，繞過靜音鍵 -->
+<audio id="unlock" loop playsinline preload="auto" src="data:audio/wav;base64,UklGRvQHAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YdAHAACAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgA=="></audio>
 <button class="music" id="musicBtn" aria-pressed="false"><span class="bars"><i></i><i></i><i></i></span><span id="musicLbl">音效＋音樂</span></button>
 <div class="cardprev" id="cardprev"><div class="inner"><canvas id="shareCanvas" width="1080" height="1350"></canvas><div class="row"><button class="btn btn-primary" id="saveCardBtn">存圖／分享</button><button class="btn btn-ghost" id="closeCardBtn">關閉</button></div></div></div>
 <div class="toast" id="toast">已複製結果，貼到社群分享吧</div>
@@ -571,7 +572,7 @@ function draw(){
 
 // ===== 作答 =====
 function start(){
-  try { history.replaceState(null,'',location.pathname); } catch(e){}
+  try { history.replaceState(null,'',location.pathname + location.search); } catch(e){}
   decade = -1; renderDecades(); show('birth');
 }
 function renderDecades(){
@@ -881,7 +882,7 @@ function ensureAC(){ if (!AC) { if (!(window.AudioContext||window.webkitAudioCon
 function blip(freq, t, dur, type, vol, bus){ const o=AC.createOscillator(), g=AC.createGain(); o.type=type; o.frequency.value=freq; g.gain.setValueAtTime(0,t); g.gain.linearRampToValueAtTime(vol,t+.01); g.gain.exponentialRampToValueAtTime(.001,t+dur); o.connect(g); g.connect(bus||musicGain); o.start(t); o.stop(t+dur+.02); }
 function sweep(f0, f1, t, dur, type, vol){ const o=AC.createOscillator(), g=AC.createGain(); o.type=type||'sine'; o.frequency.setValueAtTime(f0,t); o.frequency.exponentialRampToValueAtTime(f1,t+dur); g.gain.setValueAtTime(0,t); g.gain.linearRampToValueAtTime(vol,t+.03); g.gain.exponentialRampToValueAtTime(.001,t+dur); o.connect(g); g.connect(sfxGain); o.start(t); o.stop(t+dur+.02); }
 function startMusic(){
-  if (musicOn) return; ensureAC(); musicOn = true;
+  if (musicOn) return; ensureAC(); if (!AC) return; musicOn = true;
   const step = 60/112/2; let i = 0, next = AC.currentTime + .05;
   const loop = () => {
     while (next < AC.currentTime + .3) {
@@ -896,7 +897,8 @@ function startMusic(){
 }
 function stopMusic(){ musicOn = false; clearTimeout(seqTimer); }
 function sfx(kind){
-  if (soundMode===0) return; ensureAC(); const t = AC.currentTime, S = sfxGain;
+  if (soundMode===0) return;
+  try { ensureAC(); if (!AC) return; const t = AC.currentTime, S = sfxGain;
   switch(kind){
     case 'tap':     blip(880,t,.08,'square',.5,S); break;
     case 'ding':    blip(1046,t,.12,'square',.5,S); blip(1568,t+.08,.18,'square',.4,S); break;
@@ -910,6 +912,7 @@ function sfx(kind){
     case 'match':   blip(659,t,.18,'triangle',.45,S); blip(784,t+.14,.3,'triangle',.45,S); break;     // 符合：兩音和聲
     case 'legend':  [523,659,784,1047,784,1047,1318,1568].forEach((f,k)=>blip(f,t+k*.1,.26,'square',.5,S)); sweep(400,2400,t,.9,'sine',.25); break; // 全時代通才
   }
+  } catch(e){} // 音效失敗不影響遊戲
 }
 function setSound(mode){
   soundMode = mode; const btn = $('#musicBtn');
@@ -950,7 +953,7 @@ function wrapText(c, text, x, y, maxW, lh){ let line='', yy=y; for (const ch of 
 async function drawCard(r){
   const cv = $('#shareCanvas'), c = cv.getContext('2d'), W=1080, H=1350;
   const p = PERSONAS[r.t]||PERSONAS[3], g = gapInfo(r.age, r.d), yt = youngerThan(r.age);
-  try { await document.fonts.load('700 200px "Noto Sans TC"'); await document.fonts.load('700 200px Inter'); } catch(e){}
+  try { await document.fonts.ready; await document.fonts.load('700 200px "Noto Sans TC"'); await document.fonts.load('700 200px Inter'); } catch(e){}
   const grad = c.createLinearGradient(0,0,W,H); grad.addColorStop(0,'#5D59FF'); grad.addColorStop(1,'#371A45'); c.fillStyle=grad; c.fillRect(0,0,W,H);
   const glow=(x,y,rad,col)=>{ const gg=c.createRadialGradient(x,y,0,x,y,rad); gg.addColorStop(0,col); gg.addColorStop(1,'rgba(0,0,0,0)'); c.fillStyle=gg; c.fillRect(0,0,W,H); };
   glow(950,120,520,'rgba(252,170,7,.45)'); glow(80,1250,460,'rgba(66,207,167,.35)'); glow(540,700,700,'rgba(163,163,255,.18)');
@@ -976,7 +979,7 @@ async function drawCard(r){
   if (opp!=null){ c.fillStyle='rgba(255,255,255,.14)'; roundRect(c,80,1120,640,60,30); c.fill(); c.fillStyle='#fff'; c.font=`500 30px ${FONT}`; c.fillText(`好友對戰：${r.age} 歲 vs ${opp} 歲，${r.age<opp?'我贏':r.age>opp?'我輸':'平手'}`, 110, 1162); }
   // 限定成就金框
   if ((PERSONAS[r.t]||{}).title==='全時代通才'){ c.strokeStyle='#FCAA07'; c.lineWidth=18; roundRect(c,18,18,W-36,H-36,36); c.stroke(); c.strokeStyle='#FDD403'; c.lineWidth=4; roundRect(c,42,42,W-84,H-84,28); c.stroke();
-    c.fillStyle='#FCAA07'; roundRect(c,W-420,180,340,64,32); c.fill(); c.fillStyle='#5A3A00'; c.font=`700 30px ${FONT}`; c.fillText('★ 限定成就・全時代通才', W-395, 224); }
+    c.fillStyle='#FCAA07'; roundRect(c,W-470,180,390,64,32); c.fill(); c.fillStyle='#5A3A00'; c.font=`700 30px ${FONT}`; c.fillText('★ 限定成就・全時代通才', W-445, 224); } // 徽章加寬 50px，避免字型回退時文字超出
   // 吉祥物
   const mk = g.dir==='younger' ? 'm_young' : g.dir==='older' ? 'm_sleep' : p.mascot; const m = await loadImg(mk); const mh = 400, mw = m.width/m.height*mh; c.drawImage(m, W-mw-40, 720, mw, mh);
   // 底部 CTA
@@ -984,14 +987,17 @@ async function drawCard(r){
   c.fillStyle='#fff'; c.font=`500 38px ${FONT}`; c.fillText('不服來測，看誰比較老', 80, 1258);
   c.fillStyle='rgba(255,255,255,.75)'; c.font=`400 28px ${FONT}`; c.fillText((location.host||'weiz.com.tw')+' ・ WEiZ 出品', 80, 1306);
 }
-async function openCard(){ if (!lastResult) return; await drawCard(lastResult); $('#cardprev').classList.add('show'); track('card_open',{}); }
-async function saveCard(){
-  const cv = $('#shareCanvas');
-  cv.toBlob(async blob => {
-    const file = new File([blob], `weiz-digital-age-${lastResult.age}.png`, { type:'image/png' });
-    if (navigator.canShare && navigator.canShare({ files:[file] })) { try { await navigator.share({ files:[file], title:'WEiZ 數位年齡測驗', text:'不服來測 👉 '+location.href.split('#')[0]+resultHash(lastResult) }); track('card_share',{}); return; } catch(e){ if (e.name==='AbortError') return; } }
-    const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = file.name; a.click(); setTimeout(()=>URL.revokeObjectURL(a.href), 2000); toast('圖片已下載，上傳限動吧'); track('card_download',{});
-  }, 'image/png');
+let cardBlob = null; // 圖卡畫好就先轉成 PNG blob，分享時才能在手勢有效期內同步呼叫 navigator.share（iOS Safari 需要）
+async function openCard(){ if (!lastResult) return; cardBlob = null; await drawCard(lastResult); $('#cardprev').classList.add('show'); track('card_open',{}); $('#shareCanvas').toBlob(b => { cardBlob = b; }, 'image/png'); }
+async function shareCardBlob(blob){
+  if (!blob) { toast('圖片還在產生，再按一次'); return; }
+  const file = new File([blob], `weiz-digital-age-${lastResult.age}.png`, { type:'image/png' });
+  if (navigator.canShare && navigator.canShare({ files:[file] })) { try { await navigator.share({ files:[file], title:'WEiZ 數位年齡測驗', text:'不服來測 👉 '+location.href.split('#')[0]+resultHash(lastResult) }); track('card_share',{}); return; } catch(e){ if (e.name==='AbortError') return; } }
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = file.name; document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(a.href), 2000); toast('圖片已下載，上傳限動吧'); track('card_download',{});
+}
+function saveCard(){
+  if (cardBlob) return shareCardBlob(cardBlob);
+  $('#shareCanvas').toBlob(b => { cardBlob = b; shareCardBlob(b); }, 'image/png');
 }
 $('#cardBtn').addEventListener('click', openCard);
 $('#saveCardBtn').addEventListener('click', saveCard);

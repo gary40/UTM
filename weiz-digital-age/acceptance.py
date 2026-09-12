@@ -1,7 +1,18 @@
 import asyncio, json, time, base64
 from playwright.async_api import async_playwright
 
-import os, sys
+import os, sys, re
+# BROWSER=webkit 可切 WebKit；QUIZ_OFFLINE=1 在無法連 Google Fonts／GTM 的環境把這些請求擋成空回應，避免誤判成頁面錯誤
+BROWSER = os.environ.get('BROWSER', 'chromium')
+if os.environ.get('QUIZ_OFFLINE'):
+    from playwright.async_api import Browser as _B
+    _orig_nc = _B.new_context
+    async def _nc(self, **kw):
+        ctx = await _orig_nc(self, **kw)
+        async def _stub(route): await route.fulfill(status=200, body='', content_type='text/css')
+        await ctx.route(re.compile(r'https://(fonts\.googleapis\.com|fonts\.gstatic\.com|www\.googletagmanager\.com)/.*'), _stub)
+        return ctx
+    _B.new_context = _nc
 P = sys.argv[1] if len(sys.argv)>1 else os.environ.get('QUIZ_URL','http://localhost:8080/index.html')
 R = []  # (區塊, 測項, 結果, 備註)
 def rec(area, name, ok, note=''): R.append((area, name, 'PASS' if ok else 'FAIL', note)); print(('✅' if ok else '❌'), area, '|', name, '|', note)
@@ -25,7 +36,7 @@ async def answer_all(pg, rule='right', per_step=1300):
 
 async def main():
     async with async_playwright() as p:
-        b = await p.chromium.launch(args=['--autoplay-policy=user-gesture-required'])
+        b = await (p.chromium.launch(args=['--autoplay-policy=user-gesture-required']) if BROWSER=='chromium' else getattr(p, BROWSER).launch())
 
         # ---------- A. 載入與首頁 ----------
         ctx, pg, errs = await fresh(b)
@@ -118,6 +129,7 @@ async def main():
 
         # 版面穩定：10 題量測關鍵元素位置
         ctx, pg, errs = await fresh(b); await to_quiz(pg, 2)
+        await pg.wait_for_timeout(500)  # 等進場動畫（screenIn／fade 約 .4s）結束再量，避免量到 transform 中的位置
         boxes = []
         for _ in range(10):
             bb = await pg.evaluate("['#visual','#qText','#options','.quiz-foot'].map(s=>{const r=document.querySelector(s).getBoundingClientRect(); return [Math.round(r.top),Math.round(r.height)]})")
@@ -182,7 +194,10 @@ async def main():
         await pg.fill('#leadEmail', 'gary@weiz.com.tw'); await pg.evaluate("document.querySelector('#leadConsent').checked=false"); await pg.click('#leadBtn'); await pg.wait_for_timeout(200)
         rec('F 名單', 'F2 未勾同意被擋', '同意' in await pg.evaluate("document.querySelector('#toast').textContent"))
         await pg.evaluate("document.querySelector('#leadConsent').checked=true")
-        logs = []; pg.on('console', lambda m: logs.append(m.text) if '[lead]' in m.text else None)
+        logs = []
+        async def _grab(m):
+            if '[lead]' in m.text: logs.append(json.dumps([await a.json_value() for a in m.args], ensure_ascii=False))  # console 文字預覽會截斷物件，改讀完整參數
+        pg.on('console', _grab)
         await pg.click('#leadBtn'); await pg.wait_for_timeout(400)
         rec('F 名單', 'F3 送出成功顯示「收到了」、payload 含 email／年齡／出生年代', '收到了' in await pg.evaluate("document.querySelector('#leadCard').textContent") and any('gary@weiz.com.tw' in l and '1980' in l for l in logs), (logs[0][:120] if logs else 'no log'))
         await ctx.close()

@@ -192,21 +192,19 @@ function buildMailHtml_(row) {
   const persona = row.persona || '數位玩家', age = row.age || '';
   const ageLine = age ? `你的數位年齡是 <b>${age} 歲</b>，稱號是「<b>${escapeHtml_(persona)}</b>」。<br>` : '';
   return `
-    <div style="font-family:-apple-system,'PingFang TC','Microsoft JhengHei',sans-serif;max-width:480px;margin:0 auto;color:#1F1F24">
+    <div style="font-family:-apple-system,'PingFang TC','Microsoft JhengHei',sans-serif;max-width:480px;margin:0 auto;color:#1F1F24;background:#ffffff">
       <h2 style="color:#5D59FF;margin:0 0 12px">WEiZ 數位年齡測驗・專屬折扣碼</h2>
-      <p>Hi，謝謝你玩「WEiZ 數位年齡測驗」！${ageLine}
+      <p>Hi，謝謝你來參加「WEiZ 數位年齡測驗」！${ageLine}
       這是測驗才有的隱藏版限時折扣碼：</p>
       <div style="background:#F3F3F7;border:1px dashed #5D59FF;border-radius:12px;padding:16px;text-align:center;margin:16px 0">
-        <div style="font-size:28px;font-weight:700;letter-spacing:2px;color:#5D59FF">${escapeHtml_(MAIL_COUPON_CODE)}</div>
-        <div style="font-size:13px;color:#666;margin-top:6px">使用期限：${escapeHtml_(MAIL_COUPON_EXPIRE)}</div>
+        <div style="font-family:'SFMono-Regular',Consolas,Menlo,monospace;font-size:26px;font-weight:700;letter-spacing:2px;color:#5D59FF;background:#fff;border:1px solid #E1E0FF;border-radius:8px;padding:10px 16px;display:inline-block">${escapeHtml_(MAIL_COUPON_CODE)}</div>
+        <div style="font-size:12px;color:#999;margin-top:8px">長按或點兩下即可選取複製・使用期限：${escapeHtml_(MAIL_COUPON_EXPIRE)}</div>
       </div>
       <p style="text-align:center;margin:24px 0">
         <a href="${MAIL_SHOP_URL}" style="background:#5D59FF;color:#fff;text-decoration:none;padding:12px 28px;border-radius:10px;font-weight:600;display:inline-block">前往 WEiZ 購物商城</a>
       </p>
       <p style="font-size:12px;color:#999;line-height:1.6">
-        你收到這封信，是因為在 WEiZ 數位年齡測驗留下了 Email 並同意接收折扣碼與品牌資訊。<br>
-        若不想再收到，請回信告知，我們會盡快移除。<br>
-        WEiZ（汯錡國際）・娛樂測驗，結果為推估
+        WEiZ（汯錡國際）・數位年齡測驗，結果為娛樂推估
       </p>
     </div>`;
 }

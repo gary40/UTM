@@ -60,7 +60,7 @@ const MAIL_SUBJECT = '你的 WEiZ 數位年齡限定折扣碼到囉！';
 const MAIL_COUPON_CODE = 'age95off';
 const MAIL_COUPON_DESC = '全館商品 95 折專屬優惠';
 const MAIL_COUPON_EXPIRE = '2026/10/31';
-const MAIL_SHOP_URL = 'https://www.weiz.com.tw/?utm_source=email&utm_medium=lead&utm_campaign=digital_age_quiz'; // 沿用 Gary 給的 www.weiz.com.tw，補上 https:// 和既有的轉換來源追蹤參數（utm_source/medium/campaign），方便之後在戰情室或 GA 分開看這個管道的轉換
+const MAIL_SHOP_URL = `https://www.weiz.com.tw/?rcode=${MAIL_COUPON_CODE}&utm_source=email&utm_medium=lead&utm_campaign=digital_age_quiz`; // rcode= 直接帶折扣碼，點了會自動套用；跟著 MAIL_COUPON_CODE 走，以後改折扣碼不用兩邊改；後面 utm 參數是原本就有的轉換來源追蹤，保留
 const MAIL_TEST_TO = 'wwisky77@gmail.com'; // 供 sendTestMail 收預覽信
 const MAIL_BATCH_SIZE = 40;               // 每次執行最多寄幾封（時間驅動觸發器每次執行有時間上限，分批較穩）
 const MAIL_PREHEADER = '你的專屬折扣碼已經到囉，內含一鍵前往購物商城連結'; // 收件匣「摘要預覽」文字，跟標題分開設計，Gmail／手機通知欄大多會顯示
@@ -200,16 +200,16 @@ function buildMailHtml_(row) {
       <h2 style="color:#5D59FF;margin:0 0 12px">WEiZ 數位年齡測驗・專屬折扣碼</h2>
       <p>Hi，謝謝你來參加「WEiZ 數位年齡測驗」！${ageLine}
       這是測驗才有的隱藏版限時折扣碼：</p>
-      <div style="background:#F3F3F7;border:1px dashed #5D59FF;border-radius:12px;padding:16px;margin:16px 0">
+      <a href="${MAIL_SHOP_URL}" style="display:block;text-decoration:none;color:inherit;background:#F3F3F7;border:1px dashed #5D59FF;border-radius:12px;padding:16px;margin:16px 0">
         <table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>
           <td align="left" style="font-size:14px;font-weight:600;color:#1F1F24">${escapeHtml_(MAIL_COUPON_DESC)}</td>
-          <td align="right" style="font-size:18px;line-height:1" title="長按或點兩下折扣碼即可選取複製">📋</td>
+          <td align="right" style="font-size:18px;line-height:1">📋</td>
         </tr></table>
         <div style="text-align:center;margin-top:10px">
           <div style="font-family:'SFMono-Regular',Consolas,Menlo,monospace;font-size:26px;font-weight:700;letter-spacing:2px;color:#5D59FF;background:#fff;border:1px solid #E1E0FF;border-radius:8px;padding:10px 16px;display:inline-block">${escapeHtml_(MAIL_COUPON_CODE)}</div>
-          <div style="font-size:12px;color:#999;margin-top:8px">長按或點兩下即可選取複製・使用期限：${escapeHtml_(MAIL_COUPON_EXPIRE)}</div>
+          <div style="font-size:12px;color:#999;margin-top:8px">點一下自動套用折扣・前往商城・使用期限：${escapeHtml_(MAIL_COUPON_EXPIRE)}</div>
         </div>
-      </div>
+      </a>
       <p style="text-align:center;margin:24px 0">
         <a href="${MAIL_SHOP_URL}" style="background:#5D59FF;color:#fff;text-decoration:none;padding:12px 28px;border-radius:10px;font-weight:600;display:inline-block">前往 WEiZ 購物商城</a>
       </p>

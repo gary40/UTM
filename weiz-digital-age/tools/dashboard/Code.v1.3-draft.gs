@@ -222,13 +222,22 @@ function buildMailHtml_(row) {
 function escapeHtml_(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
 
 // 手動測試信：只寄一封到 MAIL_TEST_TO，不碰 leads 資料，用來上線前預覽內容
+// 注意：在編輯器手動執行函式時，「執行記錄」不會自動顯示 return 的文字，所以這裡額外用 Logger.log 印出結果，執行完打開左側「執行記錄」就能看到
 function sendTestMail() {
-  if (!MAIL_TEST_TO) return 'MAIL_TEST_TO 還沒填，先填你自己的信箱再執行';
-  const aliases = GmailApp.getAliases();
-  if (aliases.indexOf(MAIL_FROM_ADDRESS) < 0) return 'MAIL_FROM_ADDRESS（' + MAIL_FROM_ADDRESS + '）還不是這個帳號的別名，先去 Gmail 設定的「帳戶和匯入」加好再執行；目前可用別名：' + (aliases.join('、') || '（無）');
-  const html = buildMailHtml_({ persona: '數位主力', age: 28 });
-  GmailApp.sendEmail(MAIL_TEST_TO, '[預覽] ' + MAIL_SUBJECT, '', { htmlBody: html, name: MAIL_FROM_NAME, from: MAIL_FROM_ADDRESS, inlineImages: { weiz_logo: weizLogoBlob_() } });
-  return '已寄出預覽信到 ' + MAIL_TEST_TO + '（寄件人 ' + MAIL_FROM_ADDRESS + '），去信箱看看（含垃圾郵件匣）';
+  let result;
+  if (!MAIL_TEST_TO) { result = 'MAIL_TEST_TO 還沒填，先填你自己的信箱再執行'; }
+  else {
+    const aliases = GmailApp.getAliases();
+    if (aliases.indexOf(MAIL_FROM_ADDRESS) < 0) {
+      result = 'MAIL_FROM_ADDRESS（' + MAIL_FROM_ADDRESS + '）還不是這個帳號的別名，先去 Gmail 設定的「帳戶和匯入」加好再執行；目前可用別名：' + (aliases.join('、') || '（無）');
+    } else {
+      const html = buildMailHtml_({ persona: '數位主力', age: 28 });
+      GmailApp.sendEmail(MAIL_TEST_TO, '[預覽] ' + MAIL_SUBJECT, '', { htmlBody: html, name: MAIL_FROM_NAME, from: MAIL_FROM_ADDRESS, inlineImages: { weiz_logo: weizLogoBlob_() } });
+      result = '已寄出預覽信到 ' + MAIL_TEST_TO + '（寄件人 ' + MAIL_FROM_ADDRESS + '），去信箱看看（含垃圾郵件匣）';
+    }
+  }
+  Logger.log(result);
+  return result;
 }
 
 // 批次寄送：綁 Apps Script 時間驅動觸發器呼叫，不是給前端 POST/GET 用的

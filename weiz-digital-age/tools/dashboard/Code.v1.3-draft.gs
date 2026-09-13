@@ -60,7 +60,7 @@ const MAIL_SUBJECT = '你的 WEiZ 數位年齡限定折扣碼到囉！';
 const MAIL_COUPON_CODE = 'Zlab95off';
 const MAIL_COUPON_EXPIRE = '2026/10/31';
 const MAIL_SHOP_URL = 'https://www.weiz.com.tw/?utm_source=email&utm_medium=lead&utm_campaign=digital_age_quiz'; // 沿用 Gary 給的 www.weiz.com.tw，補上 https:// 和既有的轉換來源追蹤參數（utm_source/medium/campaign），方便之後在戰情室或 GA 分開看這個管道的轉換
-const MAIL_TEST_TO = '';                  // ⚠️ 上線前必填：你自己的信箱，供 sendTestMail 收預覽信
+const MAIL_TEST_TO = 'wwisky77@gmail.com'; // 供 sendTestMail 收預覽信
 const MAIL_BATCH_SIZE = 40;               // 每次執行最多寄幾封（時間驅動觸發器每次執行有時間上限，分批較穩）
 const ERA_LABEL = {"1995-2004": "撥接時代", "2005-2010": "MSN 時代", "2011-2016": "LINE 時代", "2017-2021": "5G 前夕", "2022-2026": "AI 時代"};
 // 題目清單（與前端題庫同版；[id, era, year, category, difficulty, 題目, [A,B,C,D], 正解索引, 關鍵字]）

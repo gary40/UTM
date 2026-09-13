@@ -23,12 +23,15 @@
  * - 新增 sendPendingMail()：批次寄送折扣碼信，要用 Apps Script 的「時間驅動觸發器」排程呼叫（不是這支 API 的 POST/GET，避免和前端流量搶額度）
  * - 新增 sendTestMail()：手動在編輯器執行，只寄一封預覽信到 MAIL_TEST_TO，不影響 leads 資料，用來先看信件內容
  * - MAIL_BACKFILL_EXISTING 預設 false：第一次啟用時只寄「啟用那一刻之後」的新名單，不會突然寄給啟用前累積的舊名單
- * - 遵守 MailApp 每日配額（消費版 Gmail 100 封／天、Workspace 1500 封／天），額度不夠時剩下的下次自動繼續處理
+ * - 用 GmailApp（不是 MailApp）寄送，才能指定 MAIL_FROM_ADDRESS 這個別名當寄件人；quota 檢查仍用 MailApp.getRemainingDailyQuota()（同一組每日額度），Workspace 帳號為 1500 封／天
  *
  * ==== 啟用寄信的步驟（Gary 手動操作，Claude 不會、也不能替你送出真正的信）====
+ * 0. 前提：MAIL_FROM_ADDRESS 這個別名要先在 Gmail 設定裡「帳戶和匯入」→「代表下列地址寄送」加好（同網域別名，Google 通常不需要另外寄驗證信）。
+ *    在 Apps Script 編輯器隨便挑個函式執行一次（例如 sendTestMail），第一次會跳出「未經驗證」的授權畫面，
+ *    選「進階」→「前往（專案名稱）(不安全)」→ 允許權限，這是因為改用 GmailApp 需要比 MailApp 更高的寄信權限範圍。
  * 1. 把下面 MAIL_COUPON_CODE／MAIL_COUPON_EXPIRE 改成真的折扣碼與到期日；MAIL_TEST_TO 填你自己的信箱。
  * 2. 部署這份程式碼（部署 → 新版本）。
- * 3. 在 Apps Script 編輯器選函式 sendTestMail，按執行 → 去自己信箱看預覽信，文案／版面滿意再繼續。
+ * 3. 在 Apps Script 編輯器選函式 sendTestMail，按執行 → 去自己信箱看預覽信，確認寄件人顯示 info@weiz.com.tw、文案／版面滿意再繼續。
  * 4. 確定要正式寄送後，把 MAIL_ENABLED 改成 true，決定 MAIL_BACKFILL_EXISTING 要不要補寄給啟用前的舊名單，重新部署一次。
  * 5. 到 Apps Script 左側「觸發條件」→「新增觸發條件」→ 選函式 sendPendingMail → 事件來源「時間驅動」→ 「分鐘計時器」選「每 15 分鐘」（或你想要的頻率）→ 儲存。
  * 6. 之後新名單會在你設定的頻率內自動收到信，戰情室的「寄信統計」分頁會顯示寄送狀況（部署後、Claude 下次同步就看得到）。
@@ -52,6 +55,7 @@ const MAILLOG_HEADERS = ['ts','email','status','error','coupon_version','lead_ro
 const MAIL_ENABLED = false;              // 真正開始寄送前才改成 true（見檔頭「啟用寄信的步驟」）
 const MAIL_BACKFILL_EXISTING = false;     // true＝連啟用前累積的舊名單也補寄；false＝只寄啟用那一刻之後的新名單
 const MAIL_FROM_NAME = 'WEiZ 汯錡國際';
+const MAIL_FROM_ADDRESS = 'info@weiz.com.tw'; // 要先在 Gmail「代表下列地址寄送」設定裡加好這個別名，GmailApp 才寄得出去（見檔頭步驟 0）
 const MAIL_SUBJECT = '你的 WEiZ 數位年齡限定折扣碼到囉！';
 const MAIL_COUPON_CODE = 'TODO_請填實際折扣碼';       // ⚠️ 上線前必改：真正的折扣碼
 const MAIL_COUPON_EXPIRE = 'TODO_請填折扣碼到期日';   // ⚠️ 上線前必改：例如「2026/10/31」
@@ -211,9 +215,11 @@ function escapeHtml_(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, 
 // 手動測試信：只寄一封到 MAIL_TEST_TO，不碰 leads 資料，用來上線前預覽內容
 function sendTestMail() {
   if (!MAIL_TEST_TO) return 'MAIL_TEST_TO 還沒填，先填你自己的信箱再執行';
+  const aliases = GmailApp.getAliases();
+  if (aliases.indexOf(MAIL_FROM_ADDRESS) < 0) return 'MAIL_FROM_ADDRESS（' + MAIL_FROM_ADDRESS + '）還不是這個帳號的別名，先去 Gmail 設定的「帳戶和匯入」加好再執行；目前可用別名：' + (aliases.join('、') || '（無）');
   const html = buildMailHtml_({ persona: '數位主力', age: 28 });
-  MailApp.sendEmail({ to: MAIL_TEST_TO, subject: '[預覽] ' + MAIL_SUBJECT, htmlBody: html, name: MAIL_FROM_NAME });
-  return '已寄出預覽信到 ' + MAIL_TEST_TO + '，去信箱看看（含垃圾郵件匣）';
+  GmailApp.sendEmail(MAIL_TEST_TO, '[預覽] ' + MAIL_SUBJECT, '', { htmlBody: html, name: MAIL_FROM_NAME, from: MAIL_FROM_ADDRESS });
+  return '已寄出預覽信到 ' + MAIL_TEST_TO + '（寄件人 ' + MAIL_FROM_ADDRESS + '），去信箱看看（含垃圾郵件匣）';
 }
 
 // 批次寄送：綁 Apps Script 時間驅動觸發器呼叫，不是給前端 POST/GET 用的
@@ -222,6 +228,7 @@ function sendPendingMail() {
   const lock = LockService.getScriptLock();
   try { lock.waitLock(10000); } catch (err) { return 'busy，稍後這個觸發器會再跑一次'; }
   try {
+    if (GmailApp.getAliases().indexOf(MAIL_FROM_ADDRESS) < 0) return 'MAIL_FROM_ADDRESS（' + MAIL_FROM_ADDRESS + '）還不是這個帳號的別名，先去 Gmail 設定加好，不然全部會寄送失敗';
     const ss = SpreadsheetApp.getActiveSpreadsheet();
     ensureSetup(ss);
     const props = PropertiesService.getScriptProperties();
@@ -245,7 +252,7 @@ function sendPendingMail() {
       const email = String(r[iEmail] || '').trim();
       if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { sh.getRange(rowNum, iStatus + 1).setValue('failed'); sh.getRange(rowNum, iErr + 1).setValue('bad email'); failed++; continue; }
       try {
-        MailApp.sendEmail({ to: email, subject: MAIL_SUBJECT, htmlBody: buildMailHtml_({ persona: r[iPersona], age: r[iAge] }), name: MAIL_FROM_NAME });
+        GmailApp.sendEmail(email, MAIL_SUBJECT, '', { htmlBody: buildMailHtml_({ persona: r[iPersona], age: r[iAge] }), name: MAIL_FROM_NAME, from: MAIL_FROM_ADDRESS });
         sh.getRange(rowNum, iStatus + 1).setValue('sent'); sh.getRange(rowNum, iSentAt + 1).setValue(new Date().toISOString()); sh.getRange(rowNum, iErr + 1).setValue('');
         logMail_(ss, email, 'sent', '', rowNum); sent++; quota--;
       } catch (err) {

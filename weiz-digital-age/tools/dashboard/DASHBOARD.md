@@ -10,7 +10,7 @@
 
 ## 每小時刷新（dashboard-hourly-refresh）步驟
 1. 呼叫 `mcp__Google_Drive__read_file_content`，`fileId` 用上面固定參數，取得整份試算表的 markdown 文字內容。
-2. 用 Write 工具把內容存成暫存檔（任一路徑），執行 `python3 tools/dashboard/parse.py <暫存檔路徑>`（若本機沒有這份 repo，先 `git clone` 這個 repo 的 `claude/new-session-y5za96` 分支，或用 `git pull` 更新既有 clone）。腳本會印出 JSON 彙總（今日/累計筆數、平均年齡、稱號分布、年代分布、分享平台、名單轉換率、依日期分布 by_day 等），已排除 test_mode=1、persona=測試資料、utm 含 test=1、email 含 test 字樣的測試列。
+2. 用 Write 工具把內容存成暫存檔（任一路徑），執行 `python3 tools/dashboard/parse.py <暫存檔路徑>`（若本機沒有這份 repo，先 `git clone` 這個 repo 的 `claude/new-session-y5za96` 分支，或用 `git pull` 更新既有 clone）。腳本會印出 JSON 彙總（今日/累計筆數、平均年齡、稱號分布、年代分布、分享平台、名單轉換率、依日期分布 `by_day`、依小時分布 `by_hour`（近 48 小時）等），已排除 test_mode=1、persona=測試資料、utm 含 test=1、email 含 test 字樣的測試列。
 3. 用 Artifact 工具 `action: write_db`、`db_op: set`、`collection: dashboard`、`doc_id: latest`、`url` 用上面固定的 Artifact 網址，`data` 傳入第 2 步印出的 JSON（或用 `file_path` 指向存成檔案的 JSON）。
 4. 不用回報 Gary，安靜完成即可（除非讀取或寫入失敗，那就簡短說明失敗原因）。
 
@@ -22,8 +22,9 @@
 
 ## 校驗規則（parse.py 已內建，供人工核對）
 - 排除測試資料：`test_mode == '1'`、`persona == '測試資料'`、`utm` 含 `test=1`、`attempt_id` 開頭 `verifytest`；leads 另外排除 email 含 `test` 字樣。
-- 時間一律換算台北時區（UTC+8）分日。
+- 時間一律換算台北時區（UTC+8）分日／分小時，資料本身仍以 UTC ISO 存在試算表裡，只有顯示與統計換算成台北時間；戰情室頁面（`dashboard.html`）也用 `Intl.DateTimeFormat` 明確指定 `timeZone:'Asia/Taipei'` 做「今天／現在」的判斷，不吃看戰情室的人瀏覽器所在時區，已用 Playwright 模擬美西/台北兩種瀏覽器時區驗證過，畫面完全一致。
 - `lead_conversion_pct` = 名單筆數 / 結果筆數 × 100。
+- `by_hour` 只留最近 48 小時（避免文件過大），戰情室的每小時趨勢圖只畫最近 24 小時，本小時用金色標示。
 
 ## Code.gs v1.2 部署後可以強化
 `answers`／`events`／`question_stats` 分頁上線後，可以擴充 parse.py 加入：每題正確率與超時率、平均反應時間、類型標籤分布、結果頁停留數據。屆時記得同步更新這份文件與戰情室頁面上的「更完整的資料等你部署」提示卡。

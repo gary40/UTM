@@ -26,8 +26,17 @@
 - `lead_conversion_pct` = 名單筆數 / 結果筆數 × 100。
 - `by_hour` 只留最近 48 小時（避免文件過大），戰情室的每小時趨勢圖只畫最近 24 小時，本小時用金色標示。
 
-## Code.gs v1.2 部署後可以強化
-`answers`／`events`／`question_stats` 分頁上線後，可以擴充 parse.py 加入：每題正確率與超時率、平均反應時間、類型標籤分布、結果頁停留數據。屆時記得同步更新這份文件與戰情室頁面上的「更完整的資料等你部署」提示卡。
+## 深度數據（2026-09-13 起，已完成）
+Code.gs v1.2 上線後試算表就已經在收集這些欄位，`parse.py` 也已經加了 `depth` 區塊（跟 `game`／`mail` 同一層），戰情室頁面新增「📊 深度數據」分頁顯示：
+- `per_question`：從 `question_stats` 分頁讀出，每題 `q_id`／`era`／`question`／`answered`／`correct_rate`／`timeout_rate`／`avg_sec`（只留有人作答過的題目）
+- `avg_duration_sec`／`avg_timeout_n`／`avg_visit_n`：從 `results` 分頁的 `duration_ms`／`timeout_n`／`visit_n` 取平均
+- `retake_pct`：`retake_n > 0` 的比例（玩過不只一次的人）
+- `device_dist`／`os_dist`／`browser_dist`：`results` 分頁的 `device`／`os`／`browser` 分布
+- `tag_dist`：`results` 分頁 `tags` 欄位（逗號分隔）拆開後的次數分布，只留前 12 種
+
+`available` 欄位判斷方式：`per_question`／`avg_duration_sec`／`device_dist` 三者只要有一個有資料就是 true，戰情室會顯示「尚未部署」提示卡或真正的統計區塊。
+
+**重要**：戰情室頁面的「🔄 手動更新」按鈕在瀏覽器內用 JS 重新實作了一份跟 `parse.py` 對應的 `depth` 計算邏輯（`computeAggregates()` 函式裡），兩邊修改時要一起改，避免手動更新跟每小時排程算出不一樣的數字。
 
 ## 手動更新按鈕（2026-09-13 起）
 戰情室頁面右上角新增「🔄 手動更新」按鈕，讓 Gary 想看的時候可以立刻更新，不用等每小時排程。

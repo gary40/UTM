@@ -92,4 +92,44 @@ else:
       'log_rows_seen': len(mail_log),
     }
 
-print(json.dumps({'game': game, 'mail': mail}, ensure_ascii=False, indent=1))
+# ===== 深度數據（Code.gs v1.2 起才有：每題正確率／超時率／反應時間、裝置與標籤、回訪次數）=====
+def fnum(v):
+    try: return float(v)
+    except Exception: return None
+
+question_stats = find(['q_id','answered','correct_rate'])
+per_question = [
+    {'q_id': q.get('q_id',''), 'era': q.get('era',''), 'question': q.get('question',''),
+     'answered': int(fnum(q['answered']) or 0), 'correct_rate': q.get('correct_rate',''),
+     'timeout_rate': q.get('timeout_rate',''), 'avg_sec': q.get('avg_sec','')}
+    for q in question_stats if fnum(q.get('answered')) not in (None, 0)
+]
+per_question.sort(key=lambda x: int(x['q_id']) if str(x['q_id']).isdigit() else 0)
+
+durations = [d for d in (fnum(r.get('duration_ms')) for r in res_real) if d]
+timeouts = [t for t in (fnum(r.get('timeout_n')) for r in res_real if r.get('timeout_n') not in (None,'')) if t is not None]
+visits = [v for v in (fnum(r.get('visit_n')) for r in res_real if r.get('visit_n') not in (None,'')) if v is not None]
+retakes = [t for t in (fnum(r.get('retake_n')) for r in res_real if r.get('retake_n') not in (None,'')) if t is not None]
+
+device_dist = Counter(r.get('device','') for r in res_real if r.get('device'))
+os_dist = Counter(r.get('os','') for r in res_real if r.get('os'))
+browser_dist = Counter(r.get('browser','') for r in res_real if r.get('browser'))
+tag_counter = Counter()
+for r in res_real:
+    for t in str(r.get('tags','') or '').split(','):
+        t = t.strip()
+        if t: tag_counter[t] += 1
+
+depth = {
+  'available': bool(per_question) or bool(durations) or bool(device_dist),
+  'generated_at': game['generated_at'],
+  'per_question': per_question,
+  'avg_duration_sec': round(sum(durations)/len(durations)/1000, 1) if durations else None,
+  'avg_timeout_n': round(sum(timeouts)/len(timeouts), 1) if timeouts else None,
+  'avg_visit_n': round(sum(visits)/len(visits), 1) if visits else None,
+  'retake_pct': round(sum(1 for t in retakes if t > 0)/len(retakes)*100, 1) if retakes else None,
+  'device_dist': dict(device_dist), 'os_dist': dict(os_dist), 'browser_dist': dict(browser_dist),
+  'tag_dist': dict(tag_counter.most_common(12)),
+}
+
+print(json.dumps({'game': game, 'mail': mail, 'depth': depth}, ensure_ascii=False, indent=1))

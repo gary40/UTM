@@ -192,31 +192,32 @@ function ensureStats(ss) {
 // 折扣碼信件內容：依 persona 帶一點個人化，包含折扣碼、到期日、前往商城連結
 function buildMailHtml_(row) {
   const persona = row.persona || '數位玩家', age = row.age || '';
-  const ageLine = age ? `你的數位年齡是 <b>${age} 歲</b>，稱號是「<b>${escapeHtml_(persona)}</b>」。<br>` : '';
+  const ageLine = age ? `你的數位年齡是 <b style="color:#1F1F24">${age} 歲</b>，稱號是「<b style="color:#5D59FF">${escapeHtml_(persona)}</b>」。<br>` : '';
   return `
-    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#ffffff" bgcolor="#ffffff"><tr><td align="center" style="padding:24px 16px;background:#ffffff" bgcolor="#ffffff">
     <div style="display:none;max-height:0;overflow:hidden;mso-hide:all;font-size:1px;line-height:1px;color:#ffffff;opacity:0">${escapeHtml_(MAIL_PREHEADER)}&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;</div>
-    <div style="font-family:-apple-system,'PingFang TC','Microsoft JhengHei',sans-serif;max-width:480px;margin:0 auto;color:#1F1F24;background:#ffffff">
-      <h2 style="color:#5D59FF;margin:0 0 12px">WEiZ 數位年齡測驗・專屬折扣碼</h2>
-      <p>Hi，謝謝你來參加「WEiZ 數位年齡測驗」！${ageLine}
-      這是測驗才有的隱藏版限時折扣碼：</p>
-      <a href="${MAIL_SHOP_URL}" style="display:block;text-decoration:none;color:inherit;background:#F3F3F7;border:1px dashed #5D59FF;border-radius:12px;padding:16px;margin:16px 0">
-        <table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>
-          <td align="left" style="font-size:14px;font-weight:600;color:#1F1F24">${escapeHtml_(MAIL_COUPON_DESC)}</td>
-          <td align="right" style="font-size:18px;line-height:1">📋</td>
-        </tr></table>
-        <div style="text-align:center;margin-top:10px">
-          <div style="font-family:'SFMono-Regular',Consolas,Menlo,monospace;font-size:26px;font-weight:700;letter-spacing:2px;color:#5D59FF;background:#fff;border:1px solid #E1E0FF;border-radius:8px;padding:10px 16px;display:inline-block">${escapeHtml_(MAIL_COUPON_CODE)}</div>
-          <div style="font-size:12px;color:#999;margin-top:8px">點一下自動套用折扣・前往商城・使用期限：${escapeHtml_(MAIL_COUPON_EXPIRE)}</div>
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#EDEDF2" bgcolor="#EDEDF2"><tr><td align="center" style="padding:24px 16px;background:#EDEDF2" bgcolor="#EDEDF2">
+    <table role="presentation" width="480" cellpadding="0" cellspacing="0" style="max-width:480px;width:100%;background:#ffffff;border:1px solid #E4E4E8;border-radius:16px" bgcolor="#ffffff"><tr><td style="padding:36px 28px;background:#ffffff" bgcolor="#ffffff">
+      <div style="font-family:-apple-system,'PingFang TC','Microsoft JhengHei',sans-serif;color:#333333;background:#ffffff">
+        <div style="font-size:11px;font-weight:700;letter-spacing:.12em;color:#5D59FF;text-transform:uppercase;margin-bottom:10px">WEiZ Z世代的3C專家</div>
+        <h1 style="color:#1F1F24;margin:0 0 16px;font-size:24px;font-weight:700;line-height:1.35">你的專屬折扣碼到囉</h1>
+        <p style="font-size:15px;line-height:1.7;margin:0 0 24px;color:#333333">Hi，謝謝你來參加「WEiZ 數位年齡測驗」！<br>
+        ${ageLine}這是測驗才有的隱藏版限時折扣碼：</p>
+        <a href="${MAIL_SHOP_URL}" style="display:block;text-decoration:none;color:inherit;background:#F3F3F7;border:1px dashed #5D59FF;border-radius:16px;padding:24px;margin:0 0 28px;text-align:center">
+          <div style="font-size:14px;font-weight:600;color:#1F1F24;margin-bottom:14px">${escapeHtml_(MAIL_COUPON_DESC)}</div>
+          <div style="font-family:'SFMono-Regular',Consolas,Menlo,monospace;font-size:28px;font-weight:700;letter-spacing:3px;color:#5D59FF;background:#fff;border:1px solid #E1E0FF;border-radius:8px;padding:12px 20px;display:inline-block">${escapeHtml_(MAIL_COUPON_CODE)}</div>
+          <div style="font-size:12px;color:#999;margin-top:12px">點一下自動套用折扣・前往商城</div>
+          <div style="font-size:12px;color:#999;margin-top:2px">使用期限：${escapeHtml_(MAIL_COUPON_EXPIRE)}</div>
+        </a>
+        <p style="text-align:center;margin:0 0 28px">
+          <a href="${MAIL_SHOP_URL}" style="background:#5D59FF;color:#fff;text-decoration:none;padding:14px 36px;border-radius:12px;font-weight:600;display:inline-block;font-size:15px;box-shadow:0 4px 14px rgba(93,89,255,.30)">前往 WEiZ 購物商城</a>
+        </p>
+        <div style="border-top:1px solid #E4E4E8;padding-top:16px;text-align:center">
+          <p style="font-size:12px;color:#999;line-height:1.6;margin:0">
+            WEiZ（汯錡國際）・數位年齡測驗，結果為娛樂推估
+          </p>
         </div>
-      </a>
-      <p style="text-align:center;margin:24px 0">
-        <a href="${MAIL_SHOP_URL}" style="background:#5D59FF;color:#fff;text-decoration:none;padding:12px 28px;border-radius:10px;font-weight:600;display:inline-block">前往 WEiZ 購物商城</a>
-      </p>
-      <p style="font-size:12px;color:#999;line-height:1.6">
-        WEiZ（汯錡國際）・數位年齡測驗，結果為娛樂推估
-      </p>
-    </div>
+      </div>
+    </td></tr></table>
     </td></tr></table>`;
 }
 function escapeHtml_(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }

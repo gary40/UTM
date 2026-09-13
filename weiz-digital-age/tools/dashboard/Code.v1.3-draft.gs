@@ -54,12 +54,12 @@ const MAILLOG_HEADERS = ['ts','email','status','error','coupon_version','lead_ro
 // ===== 自動寄信設定（上線前只需改這一區；MAIL_ENABLED 預設 false，不會自動寄信）=====
 const MAIL_ENABLED = false;              // 真正開始寄送前才改成 true（見檔頭「啟用寄信的步驟」）
 const MAIL_BACKFILL_EXISTING = false;     // true＝連啟用前累積的舊名單也補寄；false＝只寄啟用那一刻之後的新名單
-const MAIL_FROM_NAME = 'WEiZ 汯錡國際';
+const MAIL_FROM_NAME = 'WEiZ 數位生活研究所';
 const MAIL_FROM_ADDRESS = 'info@weiz.com.tw'; // 要先在 Gmail「代表下列地址寄送」設定裡加好這個別名，GmailApp 才寄得出去（見檔頭步驟 0）
 const MAIL_SUBJECT = '你的 WEiZ 數位年齡限定折扣碼到囉！';
-const MAIL_COUPON_CODE = 'TODO_請填實際折扣碼';       // ⚠️ 上線前必改：真正的折扣碼
-const MAIL_COUPON_EXPIRE = 'TODO_請填折扣碼到期日';   // ⚠️ 上線前必改：例如「2026/10/31」
-const MAIL_SHOP_URL = 'https://www.weiz.com.tw/?utm_source=email&utm_medium=lead&utm_campaign=digital_age_quiz';
+const MAIL_COUPON_CODE = 'Zlab95off';
+const MAIL_COUPON_EXPIRE = '2026/10/31';
+const MAIL_SHOP_URL = 'https://www.weiz.com.tw/?utm_source=email&utm_medium=lead&utm_campaign=digital_age_quiz'; // 沿用 Gary 給的 www.weiz.com.tw，補上 https:// 和既有的轉換來源追蹤參數（utm_source/medium/campaign），方便之後在戰情室或 GA 分開看這個管道的轉換
 const MAIL_TEST_TO = '';                  // ⚠️ 上線前必填：你自己的信箱，供 sendTestMail 收預覽信
 const MAIL_BATCH_SIZE = 40;               // 每次執行最多寄幾封（時間驅動觸發器每次執行有時間上限，分批較穩）
 const ERA_LABEL = {"1995-2004": "撥接時代", "2005-2010": "MSN 時代", "2011-2016": "LINE 時代", "2017-2021": "5G 前夕", "2022-2026": "AI 時代"};

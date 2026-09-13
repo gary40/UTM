@@ -299,8 +299,9 @@ body.paused .oa-cta,body.paused .oa-cta::after,body.paused .oa-arrow,body.paused
 .pf:hover{border-color:var(--weiz-indigo-200)}
 .pf-ic{width:30px;height:30px;border-radius:8px;display:grid;place-items:center;font-weight:700;font-size:16px;color:#fff;flex:none}
 .pf-ic.th{background:#000;border:1px solid #666}.pf-ic.fb{background:#1877F2}.pf-ic.sy{background:var(--weiz-indigo-500)}
-.row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
-.row3 .btn{min-height:44px;font-size:13px;padding:0 6px}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.row2 .btn{min-height:44px;font-size:13px;padding:0 6px}
+.pf-full{grid-column:1/-1}
 .sheet-note{min-height:18px;font-size:12px;color:#FFE7A3}
 /* 懸浮 Z 圓標 */
 .fab{position:fixed;right:14px;bottom:calc(14px + env(safe-area-inset-bottom,0px));z-index:6;width:58px;height:58px;border-radius:50%;background:#fff;color:#333;box-shadow:0 0 0 3px #2C2C32,0 0 0 5px var(--weiz-gold),0 10px 26px rgba(93,89,255,.45);display:grid;place-items:center;animation:fabIn .4s var(--ease) both}
@@ -609,9 +610,9 @@ WEIBE！</span></span></button>
   <div class="platforms">
     <a class="pf" data-pf="threads" href="#" target="_blank" rel="noopener"><span class="pf-ic th">@</span>Threads</a>
     <a class="pf" data-pf="facebook" href="#" target="_blank" rel="noopener"><span class="pf-ic fb">f</span>Facebook</a>
-    <button class="pf" data-pf="system"><span class="pf-ic sy">⇪</span>系統分享</button>
+    <button class="pf pf-full" data-pf="system"><span class="pf-ic sy">⇪</span>手機直接分享</button>
   </div>
-  <div class="row3"><button class="btn btn-outline" data-pf="copy_text">複製文案</button><button class="btn btn-outline" data-pf="copy_link">複製連結</button><button class="btn btn-outline" data-pf="save_image">存證書</button></div>
+  <div class="row2"><button class="btn btn-outline" data-pf="copy_text">複製文案</button><button class="btn btn-outline" data-pf="save_image">存證書</button></div>
   <p class="sheet-note" id="sheetNote"></p>
   <button class="btn btn-ghost" id="sheetClose">關閉</button>
 </div></div>
@@ -1164,21 +1165,30 @@ async function handlePlatform(pf, ev){
   const needImg = type==='certificate';
   const ensureImg = async () => { try { await prepareCertificate(lastResult); return true; } catch(e){ note.textContent = '證書產生失敗，請稍後再試'; track('certificate_error', { where:'share' }); return false; } };
   if (pf==='threads' || pf==='facebook') { // <a> 本身會開新分頁；曬證書時先把圖存下來
-    if (needImg && await ensureImg()) { saveCertificateBlob(); note.textContent = pf==='threads' ? '證書已下載，發文時記得附上圖片' : '證書已下載，貼文時可附上圖片'; }
+    if (needImg && await ensureImg()) saveCertificateBlob();
+    let copied = true;
+    if (pf==='facebook') { // FB 網址不支援帶文案，改成先幫你複製好，貼文框長按貼上即可
+      const fbUrl = new URL($('[data-pf="facebook"]').href).searchParams.get('u');
+      copied = await copyText(sheetText() + '\n' + fbUrl + '\n' + HASHTAG);
+    }
+    note.textContent = pf==='threads'
+      ? (needImg ? '證書已下載，發文時記得附上圖片' : '')
+      : (needImg
+          ? (copied ? '證書已下載、文案已複製，貼文時貼上文字並附上圖片' : '證書已下載，貼文時可附上圖片')
+          : (copied ? '文案已複製，貼到 Facebook 貼文框就可以了' : '請自行輸入文案'));
     track('share_handoff', { platform_selected:pf, content_type:type }); return;
   }
   if (pf==='system') {
     ev.preventDefault(); const url = shareUrl(lastResult, 'system', type), text = sheetText();
-    if (!navigator.share) { note.textContent = '這個瀏覽器沒有系統分享，請用複製文案或複製連結。'; return; }
+    if (!navigator.share) { note.textContent = '這支手機不支援直接分享，請用複製文案。'; return; }
     try {
       let data = { title:'WEiZ 數位年齡測驗', text, url };
       if (needImg && await ensureImg()) { const file = new File([cardBlob], certFileName(lastResult), { type:'image/png' }); if (navigator.canShare && navigator.canShare({ files:[file] })) data = { files:[file], title:'WEiZ 數位年齡測驗', text: text + '\n' + url }; }
       await navigator.share(data); track('share_handoff', { platform_selected:'system', content_type:type });
-    } catch(e){ if (e.name==='AbortError') { track('share_cancel', { platform_selected:'system', content_type:type }); note.textContent = '已取消分享。'; } else note.textContent = '系統分享失敗，請改用複製文案。'; }
+    } catch(e){ if (e.name==='AbortError') { track('share_cancel', { platform_selected:'system', content_type:type }); note.textContent = '已取消分享。'; } else note.textContent = '直接分享失敗，請改用複製文案。'; }
     return;
   }
   if (pf==='copy_text') { ev.preventDefault(); const ok = await copyText(sheetText() + '\n' + shareUrl(lastResult, 'copy', type) + '\n' + HASHTAG); note.textContent = ok ? '文案與連結已複製，貼到任何平台都可以。' : '無法自動複製，請長按選取。'; if (ok) track('copy_text', { content_type:type }); return; }
-  if (pf==='copy_link') { ev.preventDefault(); const ok = await copyText(shareUrl(lastResult, 'copy', type)); note.textContent = ok ? '挑戰連結已複製。' : '無法自動複製，請長按網址列複製。'; if (ok) track('copy_link', { content_type:type }); return; }
   if (pf==='save_image') { ev.preventDefault(); if (await ensureImg()) { saveCertificateBlob(); note.textContent = '證書已下載。'; } return; }
 }
 document.querySelectorAll('#shareSheet [data-pf]').forEach(b => b.addEventListener('click', e => handlePlatform(b.dataset.pf, e)));

@@ -29,6 +29,18 @@
 ## Code.gs v1.2 部署後可以強化
 `answers`／`events`／`question_stats` 分頁上線後，可以擴充 parse.py 加入：每題正確率與超時率、平均反應時間、類型標籤分布、結果頁停留數據。屆時記得同步更新這份文件與戰情室頁面上的「更完整的資料等你部署」提示卡。
 
+## 手動更新按鈕（2026-09-13 起）
+戰情室頁面右上角新增「🔄 手動更新」按鈕，讓 Gary 想看的時候可以立刻更新，不用等每小時排程。
+這個按鈕**不經過 Claude**，完全在瀏覽器裡完成：
+1. 按下後，頁面透過 `mcp` capability 呼叫 Gary 自己 claude.ai 帳號裡的「Google Drive」連接器的 `read_file_content` 工具，讀取上面固定的試算表 fileId。
+2. 頁面內用 JavaScript 把 markdown 表格解析、彙總成跟 `parse.py` 完全對應的邏輯（排除測試資料、依台北時區分日分小時、寄信統計等規則都同步維護，兩邊改動時要一起改）。
+3. 彙總結果直接寫回 `dashboard/latest`（`db` capability），並立刻重新渲染畫面。
+
+注意事項：
+- 第一次按需要 Gary 在 claude.ai 同意這個頁面使用 Google Drive 連接器（跳出的授權提示同意即可）；如果 Gary 的 claude.ai 帳號還沒加過 Google Drive 連接器，按鈕會提示去「設定 → 連接器」新增。
+- 這個功能還沒有真人實際點過確認，如果按下去出現非預期的錯誤訊息，把畫面截圖給 Claude 看，會依錯誤代碼調整（連接器工具名稱等在未實測前是依 Claude Code 這邊觀察到的慣例推斷，理論上正確但保留微調空間）。
+- 每小時的自動同步（Claude 執行 `parse.py`）繼續運作，不受這個按鈕影響；兩邊都是直接覆寫 `dashboard/latest`，沒有版本衝突的疑慮。
+
 ## 寄信統計（v1.3-draft，草稿，尚未部署）
 `Code.v1.3-draft.gs` 是加了「自動寄折扣碼信」的草稿版本（在 v1.2 基礎上疊加，MAIL_ENABLED 預設 false，部署了也不會馬上寄信，詳見檔頭「啟用寄信的步驟」）。**這份草稿沒有部署到正式後端，需要 Gary 親自決定並操作部署**，Claude 不會擅自替換正式的 Code.gs。
 

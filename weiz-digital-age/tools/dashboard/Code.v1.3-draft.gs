@@ -57,7 +57,8 @@ const MAIL_BACKFILL_EXISTING = false;     // true＝連啟用前累積的舊名�
 const MAIL_FROM_NAME = 'WEiZ 數位生活研究所';
 const MAIL_FROM_ADDRESS = 'info@weiz.com.tw'; // 要先在 Gmail「代表下列地址寄送」設定裡加好這個別名，GmailApp 才寄得出去（見檔頭步驟 0）
 const MAIL_SUBJECT = '你的 WEiZ 數位年齡限定折扣碼到囉！';
-const MAIL_COUPON_CODE = 'Zlab95off';
+const MAIL_COUPON_CODE = 'age95off';
+const MAIL_COUPON_DESC = '全館商品 95 折專屬優惠';
 const MAIL_COUPON_EXPIRE = '2026/10/31';
 const MAIL_SHOP_URL = 'https://www.weiz.com.tw/?utm_source=email&utm_medium=lead&utm_campaign=digital_age_quiz'; // 沿用 Gary 給的 www.weiz.com.tw，補上 https:// 和既有的轉換來源追蹤參數（utm_source/medium/campaign），方便之後在戰情室或 GA 分開看這個管道的轉換
 const MAIL_TEST_TO = 'wwisky77@gmail.com'; // 供 sendTestMail 收預覽信
@@ -205,6 +206,7 @@ function buildMailHtml_(row) {
       <p>Hi，謝謝你來參加「WEiZ 數位年齡測驗」！${ageLine}
       這是測驗才有的隱藏版限時折扣碼：</p>
       <div style="background:#F3F3F7;border:1px dashed #5D59FF;border-radius:12px;padding:16px;text-align:center;margin:16px 0">
+        <div style="font-size:14px;font-weight:600;color:#1F1F24;margin-bottom:10px">${escapeHtml_(MAIL_COUPON_DESC)}</div>
         <div style="font-family:'SFMono-Regular',Consolas,Menlo,monospace;font-size:26px;font-weight:700;letter-spacing:2px;color:#5D59FF;background:#fff;border:1px solid #E1E0FF;border-radius:8px;padding:10px 16px;display:inline-block">${escapeHtml_(MAIL_COUPON_CODE)}</div>
         <div style="font-size:12px;color:#999;margin-top:8px">長按或點兩下即可選取複製・使用期限：${escapeHtml_(MAIL_COUPON_EXPIRE)}</div>
       </div>

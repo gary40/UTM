@@ -28,10 +28,14 @@ leads = find(['email','persona'])
 results = find(['centerYear','rightN'])
 
 def is_test(r): return str(r.get('test_mode','')).strip() == '1' or r.get('persona')=='測試資料' or 'test=1' in str(r.get('utm','')) or str(r.get('attempt_id','')).startswith('verifytest')
-TPE = timezone(timedelta(hours=8))
+TPE = timezone(timedelta(hours=8))  # 全系統時間顯示一律換算台灣時區 UTC+8，資料本身仍存 UTC ISO 不動
+def _tpe(ts): return datetime.fromisoformat(ts.replace('Z','+00:00')).astimezone(TPE)
 def day(ts):
-    try: return datetime.fromisoformat(ts.replace('Z','+00:00')).astimezone(TPE).strftime('%Y-%m-%d')
+    try: return _tpe(ts).strftime('%Y-%m-%d')
     except Exception: return ts[:10]
+def hour(ts):
+    try: return _tpe(ts).strftime('%Y-%m-%d %H:00')
+    except Exception: return ts[:13] + ':00'
 
 res_real = [r for r in results if not is_test(r)]
 ages = [float(r['age']) for r in res_real if r.get('age')]
@@ -40,6 +44,7 @@ sd = (sum((a-mean)**2 for a in ages)/len(ages))**0.5 if ages else 0
 persona_dist = Counter(r.get('persona','') for r in res_real)
 decade_dist = Counter(r.get('decade','') or '（略過）' for r in res_real)
 by_day = Counter(day(r['ts']) for r in res_real if r.get('ts'))
+by_hour = Counter(hour(r['ts']) for r in res_real if r.get('ts'))
 challenger_n = sum(1 for r in res_real if r.get('challenger'))
 avg_right = sum(float(r['rightN']) for r in res_real if r.get('rightN'))/len(res_real) if res_real else 0
 avg_newrate = sum(float(r['newRate']) for r in res_real if r.get('newRate') not in (None,''))/len(res_real) if res_real else 0
@@ -57,6 +62,7 @@ game = {
   'avg_age': round(mean,1), 'sd_age': round(sd,1), 'avg_right_n': round(avg_right,1), 'avg_new_rate': round(avg_newrate,1),
   'persona_dist': dict(persona_dist), 'decade_dist': dict(decade_dist),
   'by_day': dict(sorted(by_day.items())),
+  'by_hour': dict(sorted(by_hour.items())[-48:]),  # 近 48 小時，減少文件大小
   'challenger_n': challenger_n,
   'lead_conversion_pct': round(len(leads_real)/len(res_real)*100,1) if res_real else 0,
   'platform_dist': dict(platform_dist), 'content_type_dist': dict(content_dist),
